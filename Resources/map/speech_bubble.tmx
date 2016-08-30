@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="3" height="4" tilewidth="32" tileheight="32" nextobjectid="1">
+ <tileset firstgid="1" name="Sprite Sheet" tilewidth="32" tileheight="32" spacing="2" tilecount="45" columns="9">
+  <image source="Sprite Sheet.png" width="304" height="168"/>
+ </tileset>
+ <tileset firstgid="46" name="terrain_atlas" tilewidth="32" tileheight="32" tilecount="1024" columns="32">
+  <image source="terrain_atlas.png" width="1024" height="1024"/>
+ </tileset>
+ <tileset firstgid="1070" name="32x32_map_tile v3.1 [MARGINLESS]" tilewidth="32" tileheight="32" tilecount="667" columns="23">
+  <image source="32x32_map_tile v3.1 [MARGINLESS].png" width="736" height="928"/>
+ </tileset>
+ <layer name="bubble" width="3" height="4">
+  <data encoding="base64" compression="zlib">
+   eJxjZGBgYAJiZiDmAmJuIOYBYmEgFgFiWQYEUANiAAsIAJI=
+  </data>
+ </layer>
+ <layer name="content" width="3" height="4" offsetx="16" offsety="17">
+  <data encoding="base64" compression="zlib">
+   eJw7zcLAcA6IQeAkkP4BZeMCAIdcA2s=
+  </data>
+ </layer>
+ <layer name="nothing" width="3" height="4">
+  <data encoding="base64" compression="zlib">
+   eJxjYCANAAAAMAAB
+  </data>
+ </layer>
+</map>

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="20" height="10" tilewidth="32" tileheight="32" nextobjectid="28">
+ <tileset firstgid="1" name="wood" tilewidth="32" tileheight="32" tilecount="3" columns="3">
+  <image source="wood.png" width="96" height="32"/>
+ </tileset>
+ <tileset firstgid="4" name="grass" tilewidth="32" tileheight="32" tilecount="320" columns="16">
+  <image source="grass.png" width="512" height="640"/>
+ </tileset>
+ <tileset firstgid="324" name="terrain_atlas" tilewidth="32" tileheight="32" tilecount="1024" columns="32">
+  <image source="terrain_atlas.png" width="1024" height="1024"/>
+  <terraintypes>
+   <terrain name="水" tile="-1"/>
+  </terraintypes>
+  <tile id="291" terrain="0,0,0,0"/>
+  <tile id="355" terrain="0,0,0,"/>
+  <tile id="356" terrain="0,0,,"/>
+  <tile id="357" terrain="0,0,,0"/>
+  <tile id="387" terrain="0,,0,"/>
+  <tile id="389" terrain=",0,,0"/>
+  <tile id="419" terrain="0,,0,0"/>
+  <tile id="420" terrain=",,0,0"/>
+  <tile id="421" terrain=",0,0,0"/>
+  <tile id="437">
+   <animation>
+    <frame tileid="405" duration="300"/>
+    <frame tileid="437" duration="300"/>
+   </animation>
+  </tile>
+  <tile id="451" terrain="0,0,0,0"/>
+  <tile id="452" terrain="0,0,0,0"/>
+  <tile id="453" terrain="0,0,,0"/>
+ </tileset>
+ <tileset firstgid="1348" name="speech_bubble" tilewidth="32" tileheight="32" tilecount="4" columns="2">
+  <image source="speech_bubble.png" width="64" height="83"/>
+ </tileset>
+ <layer name="ground" width="20" height="10">
+  <data encoding="base64" compression="zlib">
+   eJzNzMsNglAQQFGKQdE9Au4VsS8+FiBqAX4oQNACRC1AwHK8y5dJ3mo2TnIWM5lcx/mfSZEhR4GNsrdFiR32OCh7R5xwxgWVsndFjQY33JW9B1o88cJb2fugQ48BX4wwhoeJZTdvU9F0xf8MAUJElt28zUXPF/9LxFghsezmbS16C/H/A/GSHzw=
+  </data>
+ </layer>
+ <layer name="wood" width="20" height="10">
+  <properties>
+   <property name="Action" value="Move"/>
+   <property name="Delay" type="float" value="2"/>
+   <property name="Duration" type="float" value="3"/>
+   <property name="IsWeather" type="bool" value="true"/>
+   <property name="RainyTileX" type="int" value="0"/>
+   <property name="RainyTileY" type="int" value="0"/>
+   <property name="SunnyTileX" type="int" value="0"/>
+   <property name="SunnyTileY" type="int" value="-2"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFo4C2gBGImYCYeaAdQgYAAAdoAAc=
+  </data>
+ </layer>
+ <layer name="water" width="20" height="10" opacity="0.5">
+  <properties>
+   <property name="Action" value="Move"/>
+   <property name="Delay" type="float" value="2"/>
+   <property name="Duration" type="float" value="3"/>
+   <property name="IsWeather" type="bool" value="true"/>
+   <property name="RainyTileX" type="int" value="0"/>
+   <property name="RainyTileY" type="int" value="0"/>
+   <property name="SunnyTileX" type="int" value="0"/>
+   <property name="SunnyTileY" type="int" value="-2"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFo4C2QJKZYcFNJoYFIJoa5kkxIzCtzQMAR6wDog==
+  </data>
+ </layer>
+ <layer name="panel" width="20" height="10">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFwxFMZKaueduobN5QAQB0AQFO
+  </data>
+ </layer>
+ <objectgroup name="roles">
+  <object id="1" name="doll" type="Position" x="20" y="225.713"/>
+ </objectgroup>
+ <objectgroup name="interaction">
+  <object id="27" name="panel" type="Message" x="576.143" y="174.793" width="32" height="26.0868">
+   <properties>
+    <property name="LayerName" value="message_1"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <layer name="message_1" width="20" height="10" visible="0">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFAw1cWBkYXFmpZ54b0Cx3Kpo3kgEAsSsBKw==
+  </data>
+ </layer>
+ <layer name="barrier" width="20" height="10" visible="0" opacity="0.24">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFwwGwUNEsfyYEHukAAAMhAPg=
+  </data>
+ </layer>
+</map>
