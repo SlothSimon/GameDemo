@@ -16,7 +16,11 @@ class GameRole : public Sprite
 public:
     static GameRole * create(const string & roleName);
     
-    void walkTo(const Vec2 & pos);
+    void startWalk(const Vec2 & pos);
+    
+    void turnAround();
+    
+    void stopWalk();
     
 private:
     Texture2D* origText;

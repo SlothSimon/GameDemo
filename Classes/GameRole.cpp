@@ -27,8 +27,12 @@ GameRole* GameRole::create(const string & roleName)
         role->initAnim();
         role->setAnchorPoint(Vec2(0.5,0));
         role->origText = role->getTexture();
-//        auto body = PhysicsBody::createCircle(role->getContentSize().width / 2);//创建一个附加在精灵身体上的圆形物理body
-//        role->setPhysicsBody(body);
+        auto body = PhysicsBody::createCircle(role->getContentSize().width / 2, PhysicsMaterial(1, 0, 1));//创建一个附加在精灵身体上的圆形物理body
+        body->setContactTestBitmask(true);
+        
+        
+        body->setRotationEnable(false);
+        role->setPhysicsBody(body);
         
         return role;
     }
@@ -57,32 +61,19 @@ void GameRole::addAnim(const string & animName){
     AnimationCache::getInstance()->addAnimation(anim, getName() + "_" + animName);
 }
 
-void GameRole::walkTo(const Vec2 & pos){
-    // 如果正在行走，停止action
-    if (getActionByTag(1010)){
-        stopActionByTag(1010);
-        setTexture(origText);
-    }
-    
+void GameRole::startWalk(const Vec2 & pos){
     // 判断左右
     auto dist = pos.x - getPosition().x;
-    if (dist > 0){
+    if (dist >= 0){
         setFlippedX(false);
     }else{
         setFlippedX(true);
     }
     
-    // 设置速度
-    float speed = 100.0;
-    dist = abs(dist);
-    MoveTo* m = MoveTo::create(dist/speed, Vec2(pos.x, getPosition().y));
+    float speedX = 100.0;
+    float speedY = getPhysicsBody()->getVelocity().y;
+    getPhysicsBody()->setVelocity(Vec2(speedX*(dist>0 ? (dist=0 ? 0 : 1) : -1), speedY));
     
-    Sequence* seq = Sequence::create(m,
-                                     CallFunc::create([this](){
-                                        this->stopActionByTag(1011);
-                                        this->setTexture(this->origText);}),
-                                     NULL);
-    seq->setTag(1010);
     
     // 如果没有走动的动画，生成动画
     if (!getActionByTag(1011)){
@@ -91,5 +82,22 @@ void GameRole::walkTo(const Vec2 & pos){
         runAction(walk);
     }
 
-    runAction(seq);
+}
+
+void GameRole::turnAround(){
+    if (isFlippedX()){
+        setFlippedX(false);
+    }else{
+        setFlippedX(true);
+    }
+    float speedX = -getPhysicsBody()->getVelocity().x;
+    float speedY = getPhysicsBody()->getVelocity().y;
+    getPhysicsBody()->setVelocity(Vec2(speedX, speedY));
+}
+
+void GameRole::stopWalk(){
+    stopActionByTag(1011);
+    float speedY = getPhysicsBody()->getVelocity().y;
+    getPhysicsBody()->setVelocity(Vec2(0, speedY));
+    setTexture(origText);
 }

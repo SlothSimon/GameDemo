@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="20" height="10" tilewidth="32" tileheight="32" nextobjectid="28">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="20" height="10" tilewidth="32" tileheight="32" nextobjectid="36">
  <tileset firstgid="1" name="wood" tilewidth="32" tileheight="32" tilecount="3" columns="3">
   <image source="wood.png" width="96" height="32"/>
  </tileset>
@@ -11,6 +11,11 @@
   <terraintypes>
    <terrain name="水" tile="-1"/>
   </terraintypes>
+  <tile id="267">
+   <properties>
+    <property name="Collidable" type="bool" value="true"/>
+   </properties>
+  </tile>
   <tile id="291" terrain="0,0,0,0"/>
   <tile id="355" terrain="0,0,0,"/>
   <tile id="356" terrain="0,0,,"/>
@@ -88,9 +93,13 @@
    eJxjYBgFAw1cWBkYXFmpZ54b0Cx3Kpo3kgEAsSsBKw==
   </data>
  </layer>
- <layer name="barrier" width="20" height="10" visible="0" opacity="0.24">
-  <data encoding="base64" compression="zlib">
-   eJxjYBgFwwGwUNEsfyYEHukAAAMhAPg=
-  </data>
- </layer>
+ <objectgroup color="#000000" name="barriers">
+  <object id="28" name="g_1" type="Ground" x="0" y="224" width="416" height="96"/>
+  <object id="29" name="g_2" type="Ground" x="512" y="224" width="128" height="96"/>
+  <object id="31" name="w_1" type="Water" x="416" y="224" width="96" height="96">
+   <properties>
+    <property name="parentLayer" value="water"/>
+   </properties>
+  </object>
+ </objectgroup>
 </map>

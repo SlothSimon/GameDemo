@@ -11,6 +11,7 @@
 
 #define WEATHER_SUNNY "Sunny"
 #define WEATHER_RAINY "Rainy"
+#define INTERACTION_RANGE 30
 
 USING_NS_CC;
 using namespace std;
@@ -34,6 +35,7 @@ private:
     map<string, unsigned int> effects;  // 音效ID集合
     bool initialized;   // 天气是否已初始化
     PhysicsWorld* m_world;  // 物理系统
+    Map<string, Node*> collisionNodeWithAction; // 具有action的node
     
     
     void beSunny();
@@ -47,6 +49,8 @@ private:
     bool initMap(const string &);
     
     bool initInteraction();
+    
+    bool initCollision();
     
     bool initSideBar();
     

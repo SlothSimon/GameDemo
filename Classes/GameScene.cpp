@@ -18,9 +18,11 @@ using namespace cocos2d::ui;
 
 Scene* GameScene::createScene()
 {
-    auto scene = Scene::create();
+    auto scene = Scene::createWithPhysics();
+    scene->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_CONTACT);//调试
     
     auto layer = GameScene::create();
+    layer->setPhyWorld(scene->getPhysicsWorld());//将创建的物理世界传递到子层中
     
     scene->addChild(layer);
     
@@ -35,15 +37,13 @@ bool GameScene::init(std::string w)
     }
     
 
+    
+
+
+    
+
     initialized = false;
     weather = w;
-    
-//    Vec2 origin = Director::getInstance()->getVisibleOrigin();
-//    auto visibleSize = Director::getInstance()->getVisibleSize();
-//    auto touchLayer = LayerColor::create(cocos2d::Color4B::WHITE, visibleSize.width, visibleSize.height);
-//    touchLayer->setPosition(origin + Vec2(100,100));
-//    touchLayer->setVisible(true);
-//    addChild(touchLayer, 1);
     
     initMap("1_1");
     
@@ -54,11 +54,6 @@ bool GameScene::init(std::string w)
     initDoll();
     
     initListener();
-    
-    if (weather == WEATHER_SUNNY)
-        beSunny();
-    else if (weather == WEATHER_RAINY)
-        beRainy();
 
 
     
@@ -149,22 +144,33 @@ void GameScene::beSunnyGround(){
 
 void GameScene::beRainyGround(){
     auto visibleSize = Director::getInstance()->getVisibleSize();
-    float pixelPerTile = visibleSize.width/tileMap->getTileSize().width;
+    float pixelPerTile = tileMap->getContentSize().width/tileMap->getMapSize().width;
 
     auto layers = tileMap->getLayerWithWeather();
     for (auto i = 0; i < layers.size(); i++){
         auto action = layers.at(i)->getProperty("Action").asString();
         if (action == "Move"){
             
-            auto x = layers.at(i)->getProperty(weather + "TileX").asInt() * pixelPerTile;
-            auto y = layers.at(i)->getProperty(weather + "TileY").asInt() * pixelPerTile;
+            auto deltaDist = Vec2(layers.at(i)->getProperty(weather + "TileX").asInt() * pixelPerTile ,
+                                  layers.at(i)->getProperty(weather + "TileY").asInt() * pixelPerTile) - layers.at(i)->getPosition();
             
             if (initialized){
                 
-                auto m = MoveTo::create(layers.at(i)->getProperty("Duration").asFloat(), Vec2(x, y));
-                layers.at(i)->runAction(Sequence::create(DelayTime::create(layers.at(i)->getProperty("Delay").asFloat()), EaseSineInOut::create(m), NULL));
+                auto m = MoveBy::create(layers.at(i)->getProperty("Duration").asFloat(), deltaDist);
+                auto seq = Sequence::create(DelayTime::create(layers.at(i)->getProperty("Delay").asFloat()), EaseSineInOut::create(m), NULL);
+                layers.at(i)->runAction(seq);
+                auto lname = layers.at(i)->getLayerName();
+                if (collisionNodeWithAction.find(lname) != collisionNodeWithAction.cend()){
+                    auto m = MoveBy::create(layers.at(i)->getProperty("Duration").asFloat(), deltaDist);
+                    auto seq = Sequence::create(DelayTime::create(layers.at(i)->getProperty("Delay").asFloat()), EaseSineInOut::create(m), NULL);
+                    collisionNodeWithAction.at(lname)->runAction(seq);
+                }
             }else{
-                layers.at(i)->setPosition(Vec2(x,y));
+                layers.at(i)->setPosition(layers.at(i)->getPosition() + deltaDist);
+                auto lname = layers.at(i)->getLayerName();
+                if (collisionNodeWithAction.find(lname) != collisionNodeWithAction.cend()){
+                    collisionNodeWithAction.at(lname)->setPosition(collisionNodeWithAction.at(lname)->getPosition() + deltaDist);
+                }
                 if (i == layers.size() - 1)
                     initialized = true;
             }
@@ -189,6 +195,9 @@ bool GameScene::initMap(const string & mapName){
     
     initInteraction();
     
+    initCollision();
+    
+    
     addChild(tileMap, 10);
     
     return true;
@@ -200,8 +209,6 @@ bool GameScene::initInteraction(){
     if (objs == nullptr)
         return false;
     
-//    auto visibleSize = Director::getInstance()->getVisibleSize();
-//    float pixelPerTile = visibleSize.width/tileMap->getTileSize().width;
     
     for (const auto & obj : (objs->getObjects())){
         auto uiInfo = obj.asValueMap();
@@ -216,22 +223,100 @@ bool GameScene::initInteraction(){
         auto touchLayerListener = EventListenerTouchOneByOne::create();
         touchLayerListener->setSwallowTouches(true);
         
-        touchLayerListener->onTouchBegan = [targetLayer, touchLayer](Touch* touch, Event* event){
+        touchLayerListener->onTouchBegan = [=](Touch* touch, Event* event){
             Vec2 locationInNode = touchLayer->convertToNodeSpace(touch->getLocation());
             Size s = touchLayer->getContentSize();
             Rect rect = Rect(0, 0, s.width, s.height);
             //判断触摸区域是否在目标上
             if (rect.containsPoint(locationInNode)){
-                targetLayer->stopAllActions();
-                targetLayer->runAction(Sequence::create(Show::create(),
-                                                        DelayTime::create(5),
-                                                        Hide::create(),
-                                                        NULL));
+                
+                // 判断交互对象和主角的距离
+                auto doll = static_cast<GameRole*>(getChildByName("doll"));
+                auto dist = doll->getPosition().distance(touchLayer->getPosition());
+                if (dist <= INTERACTION_RANGE){
+                    targetLayer->stopAllActions();
+                    targetLayer->runAction(Sequence::create(Show::create(),
+                                                            DelayTime::create(5),
+                                                            Hide::create(),
+                                                            NULL));
+                }else{
+//                    doll->think("walk");
+                    log("doll think walk");
+                }
+                
+                
                 return true;    // return true 会使其他listener失效
             }
             return false;       // return false 会继续执行其他listener
         };
         _eventDispatcher->addEventListenerWithSceneGraphPriority(touchLayerListener, touchLayer);
+    }
+    
+    return true;
+}
+
+bool GameScene::initCollision(){
+    float scale = tileMap->getScale();
+    auto visibleSize = Director::getInstance()->getVisibleSize();
+    auto body = PhysicsBody::createEdgeBox(visibleSize);
+    setPhysicsBody(body);
+    
+    auto barriers = tileMap->getObjectGroup("barriers")->getObjects();
+    for (auto & b : barriers){
+        auto bInfo = b.asValueMap();
+        auto parentLayerName = bInfo["parentLayer"].asString();
+        float x = bInfo["x"].asFloat(), y = bInfo["y"].asFloat(), width = bInfo["width"].asFloat(), height = bInfo["height"].asFloat();
+
+        auto body = PhysicsBody::createBox(Size(width, height), PhysicsMaterial(0,0,0));
+        body->setDynamic(false);
+        body->setPositionOffset(Vec2(width/2, height/2)*scale);     // 刚体的锚点在重心，因此要调整到左下角
+        
+        
+        auto n = Sprite::create();
+        n->setPosition(Vec2(x, y));
+        n->setAnchorPoint(Vec2(0,0));
+        n->setPhysicsBody(body);
+        tileMap->addChild(n);
+        
+        
+        if (parentLayerName != ""){
+            collisionNodeWithAction.insert(parentLayerName, n);
+            
+            // TODO：如何使人物与木头一体，在水位下降时不会弹跳？
+//            body->setContactTestBitmask(true);
+//            auto listener = EventListenerPhysicsContact::create();
+//            listener->onContactBegin = [](PhysicsContact & contact){
+//                auto body1 = contact.getShapeA()->getBody();
+//                auto body2 = contact.getShapeB()->getBody();
+//                
+//                if (body1->isDynamic())
+////                    body1->setVelocity(Vec2::ZERO);
+//                    body1->setDynamic(false);
+//                if (body2->isDynamic())
+////                    body2->setVelocity(Vec2::ZERO);
+//                    body2->setDynamic(false);
+//                
+////                body1->resetForces();
+////                body2->resetForces();
+//                
+//                return true;
+//            };
+//            
+//            listener->onContactSeparate = [](PhysicsContact & contact){
+//                auto role1 = static_cast<GameRole*>(contact.getShapeA()->getBody()->getNode());
+//                auto role2 = static_cast<GameRole*>(contact.getShapeB()->getBody()->getNode());
+//                
+//                if (role1->getName() == "doll")
+//                    role1->getPhysicsBody()->setDynamic(true);
+//                if (role2->getName() == "doll")
+//                    role2->getPhysicsBody()->setDynamic(true);
+//                
+//                
+//                return true;
+//            };
+//            Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, n);
+        }
+ 
     }
     
     return true;
@@ -313,6 +398,11 @@ bool GameScene::initWeather(){
                      origin.y + visibleSize.height - sun->getContentSize().height*sun->getScale());
     weatherLayer->addChild(sun, 1, "sun");
     
+    if (weather == WEATHER_SUNNY)
+        beSunny();
+    else if (weather == WEATHER_RAINY)
+        beRainy();
+    
     return true;
 }
 
@@ -326,7 +416,6 @@ bool GameScene::initDoll(){
     doll->setPosition(origin + Vec2(dollPoint["x"].asInt()*tileMap->getScale(), dollPoint["y"].asInt()*tileMap->getScale()));
     doll->setScale((dollPoint["y"].asInt()*tileMap->getScale()/2)/doll->getContentSize().height);
     addChild(doll, 1000, "doll");
-//    doll->runAction(dollWalkAnim);
     
     return true;
 }
@@ -338,25 +427,31 @@ bool GameScene::initListener(){
     touchLayerListener->onTouchBegan = [this](Touch* touch, Event* event){
         auto doll = static_cast<GameRole*>(this->getChildByName("doll"));
         
-        // TODO: 判断边界和障碍物
-        auto visibleSize = Director::getInstance()->getVisibleSize();
-        Vec2 origin = Director::getInstance()->getVisibleOrigin();
-        
-        auto targetX = touch->getLocation().x;
-        auto dollWidth = doll->getContentSize().width*doll->getScale()/2;
-        
-        if (targetX < origin.x + dollWidth){
-            targetX = 0 + dollWidth;
-        }else if (targetX > origin.x + visibleSize.width - dollWidth){
-            targetX = origin.x + visibleSize.width - dollWidth;
-        }
-        
-        doll->walkTo(Vec2(targetX,touch->getLocation().y));
+        doll->startWalk(touch->getLocation());
         
         return true;
     };
+    
+    touchLayerListener->onTouchMoved = [this](Touch* touch, Event* event){
+        auto doll = static_cast<GameRole*>(this->getChildByName("doll"));
+        
+        auto velocity = doll->getPhysicsBody()->getVelocity();
+        auto turnAround = ((touch->getLocation().x - doll->getPosition().x) * int(velocity.x)) >= 0 ? false : true;
+        if (turnAround)
+            doll->turnAround();
+        else if(int(velocity.x) == 0)
+            doll->stopWalk();
+        
+        return true;
+    };
+
+    
+    touchLayerListener->onTouchEnded = [this](Touch* touch, Event* event){
+        auto doll = static_cast<GameRole*>(this->getChildByName("doll"));
+        doll->stopWalk();
+    };
+    
     _eventDispatcher->addEventListenerWithSceneGraphPriority(touchLayerListener, this);
-    _eventDispatcher->addEventListenerWithSceneGraphPriority(touchLayerListener->clone(), getChildByName("panel"));
     
     return true;
 }
