@@ -22,41 +22,40 @@ Scene* GameScene::createScene()
     scene->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_CONTACT);//调试
     
     auto layer = GameScene::create();
-    layer->setPhyWorld(scene->getPhysicsWorld());//将创建的物理世界传递到子层中
+    if (layer != nullptr)
+        layer->setPhyWorld(scene->getPhysicsWorld());//将创建的物理世界传递到子层中
     
     scene->addChild(layer);
     
     return scene;
 }
 
-bool GameScene::init(std::string w)
+bool GameScene::init()
 {
     if ( !Layer::init() )
     {
         return false;
     }
     
-
-    
-
-
-    
+    currentStage = UserDefault::getInstance()->getIntegerForKey("currentStage", 1);
 
     initialized = false;
-    weather = w;
     
-    initMap("1_1");
+    stageLayer = Layer::create();
     
-    initSideBar();
+    if (!initSideBar())
+        return false;
     
-    initWeather();
+    if (!initMap(to_string(currentStage)))
+        return false;
     
-    initDoll();
-    
-    initListener();
+    if (!initListener())
+        return false;
 
-
+    if (!initBGM())
+        return false;
     
+    addChild(stageLayer, 10, "stageLayer");
     
     return true;
 }
@@ -190,6 +189,7 @@ bool GameScene::initMap(const string & mapName){
     if (tileMap == nullptr)
         return false;
     
+    weather = tileMap->getProperty("Weather").asString();
     tileMap->setPosition(origin);
     tileMap->setScale(visibleSize.width/(tileMap->getContentSize().width));
     
@@ -197,8 +197,11 @@ bool GameScene::initMap(const string & mapName){
     
     initCollision();
     
+    initWeather();
     
-    addChild(tileMap, 10);
+    initDoll();
+    
+    stageLayer->addChild(tileMap, 10);
     
     return true;
 }
@@ -219,7 +222,7 @@ bool GameScene::initInteraction(){
         auto touchLayer = LayerColor::create(Color4B::RED, uiInfo["width"].asFloat() * tileMap->getScale(), uiInfo["height"].asFloat()*tileMap->getScale());
         touchLayer->setPosition(origin + Vec2(uiInfo["x"].asFloat(), uiInfo["y"].asFloat())*tileMap->getScale());
         touchLayer->setVisible(false);
-        addChild(touchLayer, 999, "panel");
+        stageLayer->addChild(touchLayer, 999);
         auto touchLayerListener = EventListenerTouchOneByOne::create();
         touchLayerListener->setSwallowTouches(true);
         
@@ -258,8 +261,35 @@ bool GameScene::initInteraction(){
 bool GameScene::initCollision(){
     float scale = tileMap->getScale();
     auto visibleSize = Director::getInstance()->getVisibleSize();
-    auto body = PhysicsBody::createEdgeBox(visibleSize);
-    setPhysicsBody(body);
+    collisionNodeWithAction.clear();
+    
+    // TODO: stageLayer的physicsbody是否需要每次进入关卡时初始化？？
+    if (getPhysicsBody() == nullptr){
+        auto body = PhysicsBody::createEdgeBox(visibleSize);
+        setPhysicsBody(body);
+        body->setCollisionBitmask(false);
+        body->setContactTestBitmask(true);
+        auto listener = EventListenerPhysicsContact::create();
+        listener->onContactBegin = [visibleSize,this](PhysicsContact& contact){
+            auto pos = contact.getContactData()->points[0];
+            if (pos.x > visibleSize.width/2){
+                UserDefault::getInstance()->setIntegerForKey("currentStage", currentStage + 1);
+                Director::getInstance()->replaceScene(TransitionFade::create(2, GameScene::createScene()));
+                return false;
+            }
+            return true;
+        };
+        
+        Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, this);
+    }
+    
+    auto body = PhysicsBody::createBox(Size(1, visibleSize.height));
+    body->setDynamic(false);
+    auto n = Sprite::create();
+    n->setPosition(Vec2::ZERO);
+    n->setAnchorPoint(Vec2(1,0));
+    n->setPhysicsBody(body);
+    stageLayer->addChild(n);
     
     auto barriers = tileMap->getObjectGroup("barriers")->getObjects();
     for (auto & b : barriers){
@@ -282,39 +312,6 @@ bool GameScene::initCollision(){
         if (parentLayerName != ""){
             collisionNodeWithAction.insert(parentLayerName, n);
             
-            // TODO：如何使人物与木头一体，在水位下降时不会弹跳？
-//            body->setContactTestBitmask(true);
-//            auto listener = EventListenerPhysicsContact::create();
-//            listener->onContactBegin = [](PhysicsContact & contact){
-//                auto body1 = contact.getShapeA()->getBody();
-//                auto body2 = contact.getShapeB()->getBody();
-//                
-//                if (body1->isDynamic())
-////                    body1->setVelocity(Vec2::ZERO);
-//                    body1->setDynamic(false);
-//                if (body2->isDynamic())
-////                    body2->setVelocity(Vec2::ZERO);
-//                    body2->setDynamic(false);
-//                
-////                body1->resetForces();
-////                body2->resetForces();
-//                
-//                return true;
-//            };
-//            
-//            listener->onContactSeparate = [](PhysicsContact & contact){
-//                auto role1 = static_cast<GameRole*>(contact.getShapeA()->getBody()->getNode());
-//                auto role2 = static_cast<GameRole*>(contact.getShapeB()->getBody()->getNode());
-//                
-//                if (role1->getName() == "doll")
-//                    role1->getPhysicsBody()->setDynamic(true);
-//                if (role2->getName() == "doll")
-//                    role2->getPhysicsBody()->setDynamic(true);
-//                
-//                
-//                return true;
-//            };
-//            Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, n);
         }
  
     }
@@ -373,30 +370,33 @@ bool GameScene::initSideBar(){
 }
 
 bool GameScene::initWeather(){
-    // initialize weatherLayer
-    auto visibleSize = Director::getInstance()->getVisibleSize();
-    Vec2 origin = Director::getInstance()->getVisibleOrigin();
-    weatherLayer = cocos2d::LayerColor::create(cocos2d::Color4B::WHITE, visibleSize.width, visibleSize.height);
-    weatherLayer->setPosition(origin);
-    this->addChild(weatherLayer, 0);
-    
-    // particleRain sys
-    ParticleSystem* rain = ParticleRain::create();
-    rain->setSpeed(0.0f);
-    rain->setEmissionRate(0);
-    this->addChild(rain, 10, "rain");
-    
-    // rain effect
-    SimpleAudioEngine::getInstance()->preloadEffect("music/rain.wav");
-    SimpleAudioEngine::getInstance()->setEffectsVolume(0);
-    
-    // sun
-    auto sun = Sprite::create("sun.png");
-    sun->setOpacity(0);
-    sun->setScale(0.5);
-    sun->setPosition(origin.x + visibleSize.width - sun->getContentSize().width*sun->getScale(),
-                     origin.y + visibleSize.height - sun->getContentSize().height*sun->getScale());
-    weatherLayer->addChild(sun, 1, "sun");
+    if (getChildByName("weatherLayer") == nullptr){
+        // initialize weatherLayer
+        auto visibleSize = Director::getInstance()->getVisibleSize();
+        Vec2 origin = Director::getInstance()->getVisibleOrigin();
+        weatherLayer = cocos2d::LayerColor::create(cocos2d::Color4B::WHITE, visibleSize.width, visibleSize.height);
+        weatherLayer->setPosition(origin);
+        this->addChild(weatherLayer, 0, "weatherLayer");
+        
+        // particleRain sys
+        ParticleSystem* rain = ParticleRain::create();
+        rain->setSpeed(0.0f);
+        rain->setEmissionRate(0);
+        this->addChild(rain, 10, "rain");
+        
+        // rain effect
+        SimpleAudioEngine::getInstance()->preloadEffect("music/rain.wav");
+        SimpleAudioEngine::getInstance()->setEffectsVolume(0);
+        
+        // sun
+        auto sun = Sprite::create("sun.png");
+        sun->setOpacity(0);
+        sun->setScale(0.5);
+        sun->setPosition(origin.x + visibleSize.width - sun->getContentSize().width*sun->getScale(),
+                         origin.y + visibleSize.height - sun->getContentSize().height*sun->getScale());
+        weatherLayer->addChild(sun, 1, "sun");
+            
+    }
     
     if (weather == WEATHER_SUNNY)
         beSunny();
@@ -407,15 +407,20 @@ bool GameScene::initWeather(){
 }
 
 bool GameScene::initDoll(){
-    
+    float pixelPerTile = tileMap->getContentSize().width/tileMap->getMapSize().width;
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
+    GameRole* doll;
+    
+    if (getChildByName("doll") != nullptr){
+        removeChildByName("doll");
+        
+    }
+        doll = GameRole::create("doll");
+        addChild(doll, 1000, "doll");
+        doll->setScale((2*pixelPerTile)/doll->getContentSize().height);
+    
     auto dollPoint = tileMap->getObjectGroup("roles")->getObject("doll");
-    
-    
-    auto doll = GameRole::create("doll");
     doll->setPosition(origin + Vec2(dollPoint["x"].asInt()*tileMap->getScale(), dollPoint["y"].asInt()*tileMap->getScale()));
-    doll->setScale((dollPoint["y"].asInt()*tileMap->getScale()/2)/doll->getContentSize().height);
-    addChild(doll, 1000, "doll");
     
     return true;
 }
@@ -455,3 +460,28 @@ bool GameScene::initListener(){
     
     return true;
 }
+
+bool GameScene::initBGM(){
+    if (!SimpleAudioEngine::getInstance()->isBackgroundMusicPlaying()){
+        SimpleAudioEngine::getInstance()->preloadBackgroundMusic("music/firstlove_light.mp3");
+        SimpleAudioEngine::getInstance()->playBackgroundMusic("music/firstlove_light.mp3", true);
+    }
+    
+    return true;
+}
+
+void GameScene::enterStage(const int & stage){
+    _eventDispatcher->pauseEventListenersForTarget(this);
+    removeChildByName("stageLayer");
+    stageLayer = Layer::create();
+    
+//    UserDefault::getInstance()->setIntegerForKey("currentStage", stage);
+    currentStage = stage;
+    initialized = false;
+    initMap(to_string(stage));
+    
+    
+    addChild(stageLayer, 10, "stageLayer");
+    
+    _eventDispatcher->resumeEventListenersForTarget(this);
+};

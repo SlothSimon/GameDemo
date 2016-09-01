@@ -27,12 +27,7 @@ GameRole* GameRole::create(const string & roleName)
         role->initAnim();
         role->setAnchorPoint(Vec2(0.5,0));
         role->origText = role->getTexture();
-        auto body = PhysicsBody::createCircle(role->getContentSize().width / 2, PhysicsMaterial(1, 0, 1));//创建一个附加在精灵身体上的圆形物理body
-        body->setContactTestBitmask(true);
-        
-        
-        body->setRotationEnable(false);
-        role->setPhysicsBody(body);
+        role->initPhysicsBody();
         
         return role;
     }
@@ -42,6 +37,15 @@ GameRole* GameRole::create(const string & roleName)
 
 void GameRole::initAnim(){
     addAnim("walk");
+}
+
+void GameRole::initPhysicsBody(){
+    auto body = PhysicsBody::createCircle(getContentSize().width / 2, PhysicsMaterial(1, 0, 1));//创建一个附加在精灵身体上的圆形物理body
+    body->setContactTestBitmask(true);
+    
+    
+    body->setRotationEnable(false);
+    setPhysicsBody(body);
 }
 
 void GameRole::addAnim(const string & animName){

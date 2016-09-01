@@ -27,6 +27,8 @@ private:
     
     void initAnim();
     
+    void initPhysicsBody();
+    
     void addAnim(const string &);
 };
 

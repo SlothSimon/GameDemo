@@ -21,7 +21,7 @@ class GameScene : public cocos2d::Layer
 public:
     static cocos2d::Scene* createScene();
     
-    virtual bool init(string w = WEATHER_SUNNY);
+    virtual bool init();
     
     // implement the "static create()" method manually
     CREATE_FUNC(GameScene);
@@ -32,19 +32,22 @@ private:
     std::string weather;
     cocos2d::LayerColor* weatherLayer;
     TMXTiledMap* tileMap;
+    Layer* stageLayer;
     map<string, unsigned int> effects;  // 音效ID集合
     bool initialized;   // 天气是否已初始化
     PhysicsWorld* m_world;  // 物理系统
     Map<string, Node*> collisionNodeWithAction; // 具有action的node
+    int currentStage;
     
+    void enterStage(const int &);
     
     void beSunny();
     
     void beRainy();
     
-    void beSunnyGround();
+    virtual void beSunnyGround();
     
-    void beRainyGround();
+    virtual void beRainyGround();
     
     bool initMap(const string &);
     
@@ -59,6 +62,8 @@ private:
     bool initDoll();
     
     bool initListener();
+    
+    bool initBGM();
     
     void updateWeather(float dt);
     

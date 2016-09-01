@@ -94,7 +94,9 @@ bool AppDelegate::applicationDidFinishLaunching() {
     register_all_packages();
 
     // create a scene. it's an autorelease object
-    auto scene = GameScene::createScene();
+    
+    UserDefault::getInstance()->setIntegerForKey("currentStage", 1);
+    auto scene = TransitionFade::create(2, GameScene::createScene());
 
     // run
     director->runWithScene(scene);

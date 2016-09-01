@@ -14,10 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "5087E73D17EB910900C73F5D"
-               BuildableName = "Escape-desktop.app"
-               BlueprintName = "Escape-desktop"
-               ReferencedContainer = "container:Escape.xcodeproj">
+               BlueprintIdentifier = "1D6058900D05DD3D006BFB54"
+               BuildableName = "Sunny Doll-mobile.app"
+               BlueprintName = "Sunny Doll-mobile"
+               ReferencedContainer = "container:Sunny Doll.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -32,10 +32,10 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "5087E73D17EB910900C73F5D"
-            BuildableName = "Escape-desktop.app"
-            BlueprintName = "Escape-desktop"
-            ReferencedContainer = "container:Escape.xcodeproj">
+            BlueprintIdentifier = "1D6058900D05DD3D006BFB54"
+            BuildableName = "Sunny Doll-mobile.app"
+            BlueprintName = "Sunny Doll-mobile"
+            ReferencedContainer = "container:Sunny Doll.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -55,10 +55,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "5087E73D17EB910900C73F5D"
-            BuildableName = "Escape-desktop.app"
-            BlueprintName = "Escape-desktop"
-            ReferencedContainer = "container:Escape.xcodeproj">
+            BlueprintIdentifier = "1D6058900D05DD3D006BFB54"
+            BuildableName = "Sunny Doll-mobile.app"
+            BlueprintName = "Sunny Doll-mobile"
+            ReferencedContainer = "container:Sunny Doll.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -74,10 +74,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "5087E73D17EB910900C73F5D"
-            BuildableName = "Escape-desktop.app"
-            BlueprintName = "Escape-desktop"
-            ReferencedContainer = "container:Escape.xcodeproj">
+            BlueprintIdentifier = "1D6058900D05DD3D006BFB54"
+            BuildableName = "Sunny Doll-mobile.app"
+            BlueprintName = "Sunny Doll-mobile"
+            ReferencedContainer = "container:Sunny Doll.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
