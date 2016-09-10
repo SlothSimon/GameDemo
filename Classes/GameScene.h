@@ -12,6 +12,10 @@
 #define WEATHER_SUNNY "Sunny"
 #define WEATHER_RAINY "Rainy"
 #define INTERACTION_RANGE 30
+#define DOLL_ZORDER 1001
+#define ROLE_ZORDER 1000
+#define INTERACTION_ZORDER 999
+#define ENDSTAGE 2
 
 USING_NS_CC;
 using namespace std;
@@ -36,7 +40,7 @@ private:
     map<string, unsigned int> effects;  // 音效ID集合
     bool initialized;   // 天气是否已初始化
     PhysicsWorld* m_world;  // 物理系统
-    Map<string, Node*> collisionNodeWithAction; // 具有action的node
+    multimap<string, Node*> collisionNodeWithAction; // 具有action的node
     int currentStage;
     
     void enterStage(const int &);

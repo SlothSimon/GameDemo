@@ -1,5 +1,7 @@
 #include "AppDelegate.h"
 #include "GameScene.h"
+#include "HelloWorldScene.h"
+#include "EndScene.h"
 
 USING_NS_CC;
 
@@ -95,8 +97,18 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
     // create a scene. it's an autorelease object
     
-    UserDefault::getInstance()->setIntegerForKey("currentStage", 1);
-    auto scene = TransitionFade::create(2, GameScene::createScene());
+    
+    
+    Scene* scene;
+    if (DEBUG){
+        UserDefault::getInstance()->setIntegerForKey("currentStage", 2);
+//        scene = GameScene::createScene();
+        scene = GameScene::createScene();
+    }
+    else{
+        UserDefault::getInstance()->setIntegerForKey("currentStage", 1);
+        scene = HelloWorld::createScene();
+    }
 
     // run
     director->runWithScene(scene);

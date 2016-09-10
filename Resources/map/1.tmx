@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="20" height="10" tilewidth="32" tileheight="32" nextobjectid="36">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="20" height="10" tilewidth="32" tileheight="32" nextobjectid="37">
  <properties>
   <property name="Weather" value="Sunny"/>
  </properties>
@@ -82,7 +82,11 @@
   </data>
  </layer>
  <objectgroup name="roles">
-  <object id="1" name="doll" type="Position" x="20" y="224"/>
+  <object id="1" name="doll" type="Position" x="20" y="224">
+   <properties>
+    <property name="Collision" type="bool" value="false"/>
+   </properties>
+  </object>
  </objectgroup>
  <objectgroup name="interaction">
   <object id="27" name="panel" type="Message" x="576.143" y="174.793" width="32" height="26.0868">
@@ -97,11 +101,20 @@
   </data>
  </layer>
  <objectgroup color="#000000" name="barriers">
-  <object id="28" name="g_1" type="Ground" x="0" y="224" width="416" height="96"/>
-  <object id="29" name="g_2" type="Ground" x="512" y="224" width="128" height="96"/>
+  <object id="28" name="g_1" type="Ground" x="0" y="224" width="416" height="96">
+   <properties>
+    <property name="VecPoints" value="(0,0);(0,3);(13,3);(13,0)"/>
+   </properties>
+  </object>
+  <object id="29" name="g_2" type="Ground" x="512" y="224" width="128" height="96">
+   <properties>
+    <property name="VecPoints" value="(16,0);(16,3);(20,3);(20,0)"/>
+   </properties>
+  </object>
   <object id="31" name="w_1" type="Water" x="416" y="224" width="96" height="96">
    <properties>
-    <property name="parentLayer" value="water"/>
+    <property name="VecPoints" value="(13,0);(13,3);(16,3);(16,0)"/>
+    <property name="parentLayer" value="wood"/>
    </properties>
   </object>
  </objectgroup>

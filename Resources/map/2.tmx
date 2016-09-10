@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="20" height="10" tilewidth="32" tileheight="32" nextobjectid="36">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="20" height="10" tilewidth="32" tileheight="32" nextobjectid="57">
  <properties>
   <property name="Weather" value="Rainy"/>
  </properties>
@@ -8,6 +8,9 @@
  </tileset>
  <tileset firstgid="4" name="grass" tilewidth="32" tileheight="32" tilecount="320" columns="16">
   <image source="grass.png" width="512" height="640"/>
+  <tile id="55">
+   <objectgroup draworder="index"/>
+  </tile>
  </tileset>
  <tileset firstgid="324" name="terrain_atlas" tilewidth="32" tileheight="32" tilecount="1024" columns="32">
   <image source="terrain_atlas.png" width="1024" height="1024"/>
@@ -41,24 +44,12 @@
  <tileset firstgid="1348" name="speech_bubble" tilewidth="32" tileheight="32" tilecount="4" columns="2">
   <image source="speech_bubble.png" width="64" height="83"/>
  </tileset>
- <layer name="ground" width="20" height="10">
+ <tileset firstgid="1352" name="sheet" tilewidth="70" tileheight="70" tilecount="98" columns="14">
+  <image source="sheet.png" width="980" height="490"/>
+ </tileset>
+ <layer name="grass" width="20" height="10">
   <data encoding="base64" compression="zlib">
-   eJzNzMsNglAQQFGKQdE9Au4VsS8+FiBqAX4oQNACRC1AwHK8y5dJ3mo2TnIWM5lcx/mfSZEhR4GNsrdFiR32OCh7R5xwxgWVsndFjQY33JW9B1o88cJb2fugQ48BX4wwhoeJZTdvU9F0xf8MAUJElt28zUXPF/9LxFghsezmbS16C/H/A/GSHzw=
-  </data>
- </layer>
- <layer name="wood" width="20" height="10" visible="0">
-  <properties>
-   <property name="Action" value="Move"/>
-   <property name="Delay" type="float" value="2"/>
-   <property name="Duration" type="float" value="3"/>
-   <property name="IsWeather" type="bool" value="true"/>
-   <property name="RainyTileX" type="int" value="0"/>
-   <property name="RainyTileY" type="int" value="0"/>
-   <property name="SunnyTileX" type="int" value="0"/>
-   <property name="SunnyTileY" type="int" value="-2"/>
-  </properties>
-  <data encoding="base64" compression="zlib">
-   eJxjYBgFo4C2gBGImYCYeaAdQgYAAAdoAAc=
+   eJxjYBgFowAB2ICYnQrmSAGxNBCLAbE4FcwbKAAAWzQAcA==
   </data>
  </layer>
  <layer name="water" width="20" height="10" opacity="0.5">
@@ -70,38 +61,92 @@
    <property name="RainyTileX" type="int" value="0"/>
    <property name="RainyTileY" type="int" value="0"/>
    <property name="SunnyTileX" type="int" value="0"/>
-   <property name="SunnyTileY" type="int" value="-2"/>
+   <property name="SunnyTileY" type="int" value="-3"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJxjYBgFo4C2YAsTAlMDlDAhMK3NAwA8nATn
+   eJxjYBgFIx1IMePGxKonRw0+9YMFAAAKuwJi
   </data>
  </layer>
- <layer name="panel" width="20" height="10">
+ <layer name="ground" width="20" height="10">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFwxFMZKaueduobN5QAQB0AQFO
+   eJxjYBgFIxHMZ2BIUAXSGkDch0NNLxCD1KgBsTpUrSoW9XOAeC4QmwKxBxCvB2I9INaHyusAsTUQrwFiHyD2BWI/IPaH6pmHZCbMrHVo6gKA2B7qBhs0c2KBOA6I44HYFap2HtTdIDv3AvE+NHUJQJwLxHlINEwexs8HYgCvHBib
+  </data>
+ </layer>
+ <layer name="wall" width="20" height="10">
+  <data encoding="base64" compression="zlib">
+   eJxjYBh8wJ8Vlaa2udQyh9ruoxbIZoXgUUA5AADGiQKF
+  </data>
+ </layer>
+ <layer name="house" width="20" height="10">
+  <data encoding="base64" compression="zlib">
+   eJxjYKAcVLKi0iMBBA1yvyYNcvcNFQAA+akBuw==
   </data>
  </layer>
  <objectgroup name="roles">
-  <object id="1" name="doll" type="Position" x="20" y="224"/>
+  <object id="1" name="doll" type="Position" x="14.8582" y="224.556">
+   <properties>
+    <property name="IsDynamic" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="38" name="girl" type="Position" x="254" y="192">
+   <properties>
+    <property name="IsDynamic" type="bool" value="false"/>
+   </properties>
+  </object>
  </objectgroup>
- <objectgroup name="interaction">
+ <objectgroup name="interaction" visible="0">
   <object id="27" name="panel" type="Message" x="576.143" y="174.793" width="32" height="26.0868">
    <properties>
     <property name="LayerName" value="message_1"/>
    </properties>
   </object>
  </objectgroup>
- <layer name="message_1" width="20" height="10" visible="0">
-  <data encoding="base64" compression="zlib">
-   eJxjYBgFAw1cWBkYXFmpZ54b0Cx3Kpo3kgEAsSsBKw==
-  </data>
- </layer>
  <objectgroup color="#000000" name="barriers">
-  <object id="28" name="g_1" type="Ground" x="0" y="224" width="416" height="96"/>
-  <object id="29" name="g_2" type="Ground" x="512" y="224" width="128" height="96"/>
-  <object id="31" name="w_1" type="Water" x="416" y="224" width="96" height="96">
+  <object id="28" name="g_1" type="Slope" x="0" y="289" width="94.2456" height="31">
    <properties>
+    <property name="VecPoints" value="(0,0);(0,3);(1,3);(3,1);(3,0)"/>
+   </properties>
+  </object>
+  <object id="31" name="w_2" type="Water" x="31" y="224.54" width="160" height="62.46">
+   <properties>
+    <property name="VecPoints" value="(1,1);(1,2.8);(6,2.8);(6,1)"/>
     <property name="parentLayer" value="water"/>
+   </properties>
+  </object>
+  <object id="36" name="w_2" type="Water" x="288" y="191.507" width="224" height="64.4927">
+   <properties>
+    <property name="VecPoints" value="(9,2);(9,3.8);(16,3.8);(16,2)"/>
+    <property name="parentLayer" value="water"/>
+   </properties>
+  </object>
+  <object id="45" type="Slope" x="133.144" y="247.993" width="188.027" height="72.1618">
+   <properties>
+    <property name="VecPoints" value="(4,0);(4,1);(7,4);(9,4);(10,3);(10,0)"/>
+   </properties>
+  </object>
+  <object id="47" type="Slope" x="480.74" y="217.502" width="157.933" height="100">
+   <properties>
+    <property name="VecPoints" value="(15,0);(15,3);(16,4);(20,4);(20,0)"/>
+   </properties>
+  </object>
+  <object id="48" x="98.5873" y="290.68" width="28.4582" height="26.4254">
+   <properties>
+    <property name="VecPoints" value="(3,0);(3,1);(4,1);(4,0)"/>
+   </properties>
+  </object>
+  <object id="49" type="Slope" x="321.171" y="245.96" width="47.7691" height="75.2109">
+   <properties>
+    <property name="VecPoints" value="(10,0);(10,3);(12,2);(12,0)"/>
+   </properties>
+  </object>
+  <object id="51" x="374.53" y="256.124" width="47.7691" height="75.2109">
+   <properties>
+    <property name="VecPoints" value="(12,0);(12,2);(13,2);(13,0)"/>
+   </properties>
+  </object>
+  <object id="52" type="Slope" x="430.43" y="249.009" width="47.7691" height="75.2109">
+   <properties>
+    <property name="VecPoints" value="(13,0);(13,2);(15,3);(15,0)"/>
    </properties>
   </object>
  </objectgroup>

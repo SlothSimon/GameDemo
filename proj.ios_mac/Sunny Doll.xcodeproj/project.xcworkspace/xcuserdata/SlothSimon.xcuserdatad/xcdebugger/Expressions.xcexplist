@@ -23,7 +23,7 @@
          contextName = "GameScene::beRainyGround():GameScene.cpp">
          <PersistentStrings>
             <PersistentString
-               value = "collisionNodeWithAction.at(lname)-&gt;getPosition()">
+               value = "iter.first-&gt;second-&gt;getPhysicsBody()">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -45,9 +45,6 @@
          contextName = "cocos2d::ActionManager::addAction(cocos2d::Action*, cocos2d::Node*, bool):CCActionManager.cpp">
       </ContextState>
       <ContextState
-         contextName = "GameScene::beRainy():GameScene.cpp">
-      </ContextState>
-      <ContextState
          contextName = "GameScene::enterStage(int const&amp;):GameScene.cpp">
          <PersistentStrings>
             <PersistentString
@@ -56,16 +53,13 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
+         contextName = "GameScene::beRainy():GameScene.cpp">
+      </ContextState>
+      <ContextState
          contextName = "GameScene::initCollision():GameScene.cpp">
          <PersistentStrings>
             <PersistentString
-               value = "body-&gt;_positionOffset">
-            </PersistentString>
-            <PersistentString
-               value = "tileMap-&gt;getLayer(parentLayerName)-&gt;getTileAt(Vec2(13, 7))-&gt;getPhysicsBody()">
-            </PersistentString>
-            <PersistentString
-               value = "body-&gt;getPosition()">
+               value = "n-&gt;_name">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -78,13 +72,19 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "cocos2d::TMXTiledMap::getLayer(std::__1::basic_string&lt;char, std::__1::char_traits&lt;char&gt;, std::__1::allocator&lt;char&gt; &gt; const&amp;) const:CCTMXTiledMap.cpp">
-      </ContextState>
-      <ContextState
-         contextName = "GameScene::initInteraction():GameScene.cpp">
+         contextName = "cocos2d::PhysicsBody::beforeSimulation(cocos2d::Mat4 const&amp;, cocos2d::Mat4 const&amp;, float, float, float):CCPhysicsBody.cpp">
          <PersistentStrings>
             <PersistentString
-               value = "touchLayer-&gt;getContentSize()">
+               value = "_owner-&gt;getName()">
+            </PersistentString>
+            <PersistentString
+               value = "_owner-&gt;getPosition()">
+            </PersistentString>
+            <PersistentString
+               value = "_owner-&gt;getAnchorPoint()">
+            </PersistentString>
+            <PersistentString
+               value = "_offset">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -97,7 +97,21 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
+         contextName = "GameScene::initInteraction():GameScene.cpp">
+         <PersistentStrings>
+            <PersistentString
+               value = "touchLayer-&gt;getContentSize()">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "cocos2d::TMXTiledMap::getLayer(std::__1::basic_string&lt;char, std::__1::char_traits&lt;char&gt;, std::__1::allocator&lt;char&gt; &gt; const&amp;) const:CCTMXTiledMap.cpp">
+      </ContextState>
+      <ContextState
          contextName = "GameScene::updateWeather(float):GameScene.cpp">
+      </ContextState>
+      <ContextState
+         contextName = "cocos2d::TMXTiledMap::getLayerWithWeather() const:CCTMXTiledMap.cpp">
       </ContextState>
       <ContextState
          contextName = "GameScene::initListener()::$_6::operator()(cocos2d::Touch*, cocos2d::Event*) const:GameScene.cpp">
@@ -119,6 +133,9 @@
          contextName = "GameRole::initAnim():GameRole.cpp">
       </ContextState>
       <ContextState
+         contextName = "GameScene::initListener()::$_5::operator()(cocos2d::Touch*, cocos2d::Event*) const:GameScene.cpp">
+      </ContextState>
+      <ContextState
          contextName = "cocos2d::TMXTiledMap::buildWithMapInfo(cocos2d::TMXMapInfo*):CCTMXTiledMap.cpp">
       </ContextState>
       <ContextState
@@ -133,13 +150,18 @@
          contextName = "cocos2d::TMXObjectGroup::getObject(std::__1::basic_string&lt;char, std::__1::char_traits&lt;char&gt;, std::__1::allocator&lt;char&gt; &gt; const&amp;) const:CCTMXObjectGroup.cpp">
       </ContextState>
       <ContextState
+         contextName = "StringToPoints(std::__1::basic_string&lt;char, std::__1::char_traits&lt;char&gt;, std::__1::allocator&lt;char&gt; &gt; const&amp;):GameScene.cpp">
+         <PersistentStrings>
+            <PersistentString
+               value = "result[1]">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "GameScene::initDoll():GameScene.cpp">
          <PersistentStrings>
             <PersistentString
-               value = "getChildByName(&quot;doll&quot;)">
-            </PersistentString>
-            <PersistentString
-               value = "Vec2(dollPoint[&quot;x&quot;].asInt()*tileMap-&gt;getScale(), dollPoint[&quot;y&quot;].asInt()*tileMap-&gt;getScale())">
+               value = "role.at(&quot;IsDynamic&quot;).isNull()">
             </PersistentString>
          </PersistentStrings>
       </ContextState>

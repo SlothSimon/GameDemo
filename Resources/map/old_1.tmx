@@ -46,7 +46,7 @@
    eJzNzMsNglAQQFGKQdE9Au4VsS8+FiBqAX4oQNACRC1AwHK8y5dJ3mo2TnIWM5lcx/mfSZEhR4GNsrdFiR32OCh7R5xwxgWVsndFjQY33JW9B1o88cJb2fugQ48BX4wwhoeJZTdvU9F0xf8MAUJElt28zUXPF/9LxFghsezmbS16C/H/A/GSHzw=
   </data>
  </layer>
- <layer name="wood" width="20" height="10" visible="0">
+ <layer name="wood" width="20" height="10">
   <properties>
    <property name="Action" value="Move"/>
    <property name="Delay" type="float" value="2"/>
@@ -62,8 +62,18 @@
   </data>
  </layer>
  <layer name="water" width="20" height="10" opacity="0.5">
+  <properties>
+   <property name="Action" value="Move"/>
+   <property name="Delay" type="float" value="2"/>
+   <property name="Duration" type="float" value="3"/>
+   <property name="IsWeather" type="bool" value="true"/>
+   <property name="RainyTileX" type="int" value="0"/>
+   <property name="RainyTileY" type="int" value="0"/>
+   <property name="SunnyTileX" type="int" value="0"/>
+   <property name="SunnyTileY" type="int" value="-2"/>
+  </properties>
   <data encoding="base64" compression="zlib">
-   eJxjYBgFo4C24C0jKj2UzAMAR1gFlQ==
+   eJxjYBgFo4C2QJKZYcFNJoYFIJoa5kkxIzCtzQMAR6wDog==
   </data>
  </layer>
  <layer name="panel" width="20" height="10">
@@ -89,5 +99,10 @@
  <objectgroup color="#000000" name="barriers">
   <object id="28" name="g_1" type="Ground" x="0" y="224" width="416" height="96"/>
   <object id="29" name="g_2" type="Ground" x="512" y="224" width="128" height="96"/>
+  <object id="31" name="w_1" type="Water" x="416" y="224" width="96" height="96">
+   <properties>
+    <property name="parentLayer" value="water"/>
+   </properties>
+  </object>
  </objectgroup>
 </map>

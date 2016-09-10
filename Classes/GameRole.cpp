@@ -41,9 +41,18 @@ void GameRole::initAnim(){
 
 void GameRole::initPhysicsBody(){
     auto body = PhysicsBody::createCircle(getContentSize().width / 2, PhysicsMaterial(1, 0, 1));//创建一个附加在精灵身体上的圆形物理body
-    body->setContactTestBitmask(true);
+    if (getName() == "doll"){
+        body->setContactTestBitmask(0xFF);
+        body->setCategoryBitmask(0x0F);
+        body->setCollisionBitmask(0xF0);
+    }else{
+        body->setContactTestBitmask(0xFF);
+        body->setCategoryBitmask(0x0E);
+        body->setCollisionBitmask(0xF0);
+    }
     
-    
+    body->setMass(999);
+    body->setVelocityLimit(100);
     body->setRotationEnable(false);
     setPhysicsBody(body);
 }
@@ -67,14 +76,15 @@ void GameRole::addAnim(const string & animName){
 
 void GameRole::startWalk(const Vec2 & pos){
     // 判断左右
-    auto dist = pos.x - getPosition().x;
+    auto visibleSize = Director::getInstance()->getVisibleSize();
+    int dist = pos.x - visibleSize.width/2;
     if (dist >= 0){
         setFlippedX(false);
     }else{
         setFlippedX(true);
     }
     
-    float speedX = 100.0;
+    float speedX = 50.0;
     float speedY = getPhysicsBody()->getVelocity().y;
     getPhysicsBody()->setVelocity(Vec2(speedX*(dist>0 ? (dist=0 ? 0 : 1) : -1), speedY));
     
