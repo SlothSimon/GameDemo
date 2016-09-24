@@ -84,9 +84,16 @@ void GameRole::startWalk(const Vec2 & pos){
         setFlippedX(true);
     }
     
-    float speedX = 50.0;
-    float speedY = getPhysicsBody()->getVelocity().y;
-    getPhysicsBody()->setVelocity(Vec2(speedX*(dist>0 ? (dist=0 ? 0 : 1) : -1), speedY));
+//    auto force = getPhysicsBody()->getForce();
+//    auto velocityDirection = (force == Vec2::ZERO) ? Vec2(1,0) : Vec2(force.y, -force.x)/sqrt(force.x * force.x + force.y * force.y);
+//    
+//    if (velocityDirection.y / velocityDirection.x > 1 )
+//        velocityDirection = Vec2(0.5, 0.5);
+    
+    float speed = 100.0;
+//    float speedY = getPhysicsBody()->getVelocity().y;
+//    getPhysicsBody()->setVelocity(Vec2(speed * (dist>0 ? (dist=0 ? 0 : 1) : -1), speedY));
+    getPhysicsBody()->setSurfaceVelocity(Vec2(speed * (dist>0 ? (dist=0 ? 0 : -1) : 1), 0));
     
     
     // 如果没有走动的动画，生成动画
@@ -112,6 +119,8 @@ void GameRole::turnAround(){
 void GameRole::stopWalk(){
     stopActionByTag(1011);
     float speedY = getPhysicsBody()->getVelocity().y;
+    speedY = speedY <= 0 ? speedY : 0;
     getPhysicsBody()->setVelocity(Vec2(0, speedY));
+    getPhysicsBody()->setSurfaceVelocity(Vec2(0, 0));
     setTexture(origText);
 }

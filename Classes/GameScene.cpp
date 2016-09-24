@@ -46,6 +46,8 @@ std::vector<Vec2> StringToPoints(const string & str){
 Scene* GameScene::createScene()
 {
     auto scene = Scene::createWithPhysics();
+    log("Gravity:");
+    scene->getPhysicsWorld()->setGravity(Vec2(0, -200));
     if (DEBUG)
         scene->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);//调试
     
@@ -87,7 +89,6 @@ bool GameScene::init()
 
     if (!initBGM())
         return false;
-    
     
     return true;
 }
@@ -357,14 +358,16 @@ bool GameScene::initCollision(){
             exit(0);
         }
             
-        auto body = PhysicsBody::createPolygon(&vecArr[0], int(vecArr.size()), PhysicsMaterial(0,0,0));
+        auto body = PhysicsBody::createPolygon(&vecArr[0], int(vecArr.size()), PhysicsMaterial(0,0,1.0f));
         
         body->setDynamic(false);
 //        body->setPositionOffset(Vec2(width/2, height/2)*scale);     // TODO: 若为规则形状，刚体的锚点在重心，因此要调整到左下角
         for (auto &s : body->getShapes()){
             s->setRestitution(0);       // TODO: 禁止弹跳，根本不起作用，可能是引擎bug
             if (bInfo["type"].asString() == "Water")
-                s->setFriction(1.0f);
+                s->setFriction(0.0f);
+            else if(bInfo["type"].asString() == "Slope")
+                s->setFriction(2.0f);
         }
         
         
@@ -392,6 +395,7 @@ bool GameScene::initCollision(){
                     
                     if (role1->getName() == "doll" && role2->getName() == "Water"){
                         role1->getPhysicsBody()->setVelocity(Vec2::ZERO);
+                        role1->getPhysicsBody()->setSurfaceVelocity(Vec2::ZERO);
                         role1->stopAllActions();
                         Director::getInstance()->getEventDispatcher()->pauseEventListenersForTarget(this);
                     }

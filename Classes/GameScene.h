@@ -36,7 +36,6 @@ private:
     std::string weather;
     cocos2d::LayerColor* weatherLayer;
     TMXTiledMap* tileMap;
-    Layer* stageLayer;
     map<string, unsigned int> effects;  // 音效ID集合
     bool initialized;   // 天气是否已初始化
     PhysicsWorld* m_world;  // 物理系统

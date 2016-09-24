@@ -111,7 +111,7 @@
     <property name="VecPoints" value="(16,0);(16,3);(20,3);(20,0)"/>
    </properties>
   </object>
-  <object id="31" name="w_1" type="Water" x="416" y="224" width="96" height="96">
+  <object id="31" name="w_1" type="Wood" x="416" y="224" width="96" height="96">
    <properties>
     <property name="VecPoints" value="(13,0);(13,3);(16,3);(16,0)"/>
     <property name="parentLayer" value="wood"/>

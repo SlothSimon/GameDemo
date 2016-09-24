@@ -31,7 +31,7 @@ bool EndScene::init()
     bg->setPosition(origin);
     addChild(bg);
     
-    auto message = Text::create("TO BE CONTINUED...", "arial", 20);
+    auto message = Text::create("TO BE CONTINUED...", "fonts/arial.ttf", 20);
     
     message->setPosition(origin + visibleSize/2);
     message->setAnchorPoint(Vec2(0.5, 0.5));

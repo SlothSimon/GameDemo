@@ -1,0 +1,48 @@
+%class GameRole
+
+%header GameRole.h
+
+%start GameRoleMap::IDLE
+
+%map GameRoleMap
+%%
+IDLE
+Entry {
+    idle();
+}
+Exit {
+    exit();
+}
+{
+    walk WALK {}
+}
+
+WALK
+Entry {
+    walk();
+}
+Exit {
+    exit();
+}
+{
+    idle IDLE()
+    drown DROWN()
+}
+
+DROWN
+Entry {
+    drown();
+}
+Exit {
+    exit();
+}
+{
+    idle IDLE()
+}
+
+THINK
+Entry {
+    think();
+}
+
+%%

@@ -8,6 +8,8 @@
 
 #ifndef GameRole_h
 #define GameRole_h
+
+#include "GameRoleFSM.h"
 using namespace std;
 USING_NS_CC;
 
@@ -21,6 +23,14 @@ public:
     void turnAround();
     
     void stopWalk();
+    
+    void idle();
+    
+    void walk();
+    
+    void drown();
+    
+    GameRoleFSM* getFSM();
     
 private:
     Texture2D* origText;
