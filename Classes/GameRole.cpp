@@ -28,6 +28,10 @@ GameRole* GameRole::create(const string & roleName)
         role->setAnchorPoint(Vec2(0.5,0));
         role->origText = role->getTexture();
         role->initPhysicsBody();
+        if (roleName == "doll"){
+            role->mFSM = GameRoleFSM::createWithGameRole(role);
+            role->addChild(role->mFSM);
+        }
         
         return role;
     }
@@ -52,7 +56,6 @@ void GameRole::initPhysicsBody(){
     }
     
     body->setMass(999);
-    body->setVelocityLimit(100);
     body->setRotationEnable(false);
     setPhysicsBody(body);
 }
@@ -84,15 +87,7 @@ void GameRole::startWalk(const Vec2 & pos){
         setFlippedX(true);
     }
     
-//    auto force = getPhysicsBody()->getForce();
-//    auto velocityDirection = (force == Vec2::ZERO) ? Vec2(1,0) : Vec2(force.y, -force.x)/sqrt(force.x * force.x + force.y * force.y);
-//    
-//    if (velocityDirection.y / velocityDirection.x > 1 )
-//        velocityDirection = Vec2(0.5, 0.5);
-    
     float speed = 100.0;
-//    float speedY = getPhysicsBody()->getVelocity().y;
-//    getPhysicsBody()->setVelocity(Vec2(speed * (dist>0 ? (dist=0 ? 0 : 1) : -1), speedY));
     getPhysicsBody()->setSurfaceVelocity(Vec2(speed * (dist>0 ? (dist=0 ? 0 : -1) : 1), 0));
     
     
@@ -123,4 +118,24 @@ void GameRole::stopWalk(){
     getPhysicsBody()->setVelocity(Vec2(0, speedY));
     getPhysicsBody()->setSurfaceVelocity(Vec2(0, 0));
     setTexture(origText);
+}
+
+void GameRole::walk(const Vec2 & pos){
+    startWalk(pos);
+}
+
+void GameRole::idle(){
+    stopWalk();
+}
+
+void GameRole::drown(){
+    log("I'm drowning...");
+    getPhysicsBody()->setVelocity(Vec2::ZERO);
+    getPhysicsBody()->setSurfaceVelocity(Vec2::ZERO);
+    stopAllActions();
+    Director::getInstance()->getEventDispatcher()->pauseEventListenersForTarget(mFSM);
+}
+
+GameRoleFSM* GameRole::getFSM(){
+    return mFSM;
 }

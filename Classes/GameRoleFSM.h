@@ -25,9 +25,9 @@ public:
     void changeState(State* state);
     
 private:
-    void onRecvWalk(Ref* obj);
-    void onRecvIdle(Ref* obj);
-    void onRecvDrown(Ref* obj);
+    void onRecvWalk(EventCustom* event);
+    void onRecvIdle(EventCustom* event);
+    void onRecvDrown(EventCustom* event);
     
     State* curState;
     

@@ -14,6 +14,7 @@
 #include "ui/UILayout.h"
 #include "GameRole.h"
 #include "AppDelegate.h"
+#include "EnumMsgType.h"
 
 USING_NS_CC;
 using namespace CocosDenshion;
@@ -46,7 +47,6 @@ std::vector<Vec2> StringToPoints(const string & str){
 Scene* GameScene::createScene()
 {
     auto scene = Scene::createWithPhysics();
-    log("Gravity:");
     scene->getPhysicsWorld()->setGravity(Vec2(0, -200));
     if (DEBUG)
         scene->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);//调试
@@ -361,7 +361,6 @@ bool GameScene::initCollision(){
         auto body = PhysicsBody::createPolygon(&vecArr[0], int(vecArr.size()), PhysicsMaterial(0,0,1.0f));
         
         body->setDynamic(false);
-//        body->setPositionOffset(Vec2(width/2, height/2)*scale);     // TODO: 若为规则形状，刚体的锚点在重心，因此要调整到左下角
         for (auto &s : body->getShapes()){
             s->setRestitution(0);       // TODO: 禁止弹跳，根本不起作用，可能是引擎bug
             if (bInfo["type"].asString() == "Water")
@@ -387,17 +386,18 @@ bool GameScene::initCollision(){
                 body->setCollisionBitmask(0xFF);
                 body->setContactTestBitmask(0x02);
                 
-                // 沾水不能动
+                // 沾水不能动  TODO: 这个listener应该放在gamerole中
                 auto listener = EventListenerPhysicsContact::create();
                 listener->onContactBegin = [this](PhysicsContact & contact){
                     auto role1 = contact.getShapeA()->getBody()->getNode();
                     auto role2 = contact.getShapeB()->getBody()->getNode();
                     
                     if (role1->getName() == "doll" && role2->getName() == "Water"){
-                        role1->getPhysicsBody()->setVelocity(Vec2::ZERO);
-                        role1->getPhysicsBody()->setSurfaceVelocity(Vec2::ZERO);
-                        role1->stopAllActions();
-                        Director::getInstance()->getEventDispatcher()->pauseEventListenersForTarget(this);
+//                        role1->getPhysicsBody()->setVelocity(Vec2::ZERO);
+//                        role1->getPhysicsBody()->setSurfaceVelocity(Vec2::ZERO);
+//                        role1->stopAllActions();
+//                        Director::getInstance()->getEventDispatcher()->pauseEventListenersForTarget(this);
+                        Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(to_string(en_Msg_Drown));
                     }
                     
                     return true;
@@ -408,7 +408,8 @@ bool GameScene::initCollision(){
                     auto role2 = contact.getShapeB()->getBody()->getNode();
                     
                     if (role1->getName() == "doll" && role2->getName() == "Water"){
-                        Director::getInstance()->getEventDispatcher()->resumeEventListenersForTarget(this);
+                        Director::getInstance()->getEventDispatcher()->resumeEventListenersForTarget(static_cast<GameRole*>(role1)->getFSM());
+//                        Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(to_string(en_Msg_Idle));
                     }
                     
                     return true;
@@ -536,16 +537,17 @@ bool GameScene::initListener(){
     touchLayerListener->setSwallowTouches(true);
     
     touchLayerListener->onTouchBegan = [this](Touch* touch, Event* event){
-        auto doll = static_cast<GameRole*>(this->getChildByName("doll"));
         
-        doll->startWalk(touch->getLocation());
+        EventCustom eve = EventCustom(to_string(en_Msg_Walk));
+        eve.setUserData(new Vec2(touch->getLocation()));
+        Director::getInstance()->getEventDispatcher()->dispatchEvent(&eve);
         
         return true;
     };
     
     touchLayerListener->onTouchEnded = [this](Touch* touch, Event* event){
-        auto doll = static_cast<GameRole*>(this->getChildByName("doll"));
-        doll->stopWalk();
+        
+        Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(to_string(en_Msg_Idle));
     };
     
     _eventDispatcher->addEventListenerWithSceneGraphPriority(touchLayerListener, this);

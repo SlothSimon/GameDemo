@@ -10,7 +10,9 @@
 #include "StateDrown.h"
 #include "StateIdle.h"
 
-void StateWalk::execute(GameRole* role, EnumMsgType enMsgType){
+void StateWalk::execute(GameRole* role, EventCustom* event){
+    auto enMsgType = stoi(event->getEventName());
+    
     switch (enMsgType) {
         case en_Msg_Idle:
             role->idle();
@@ -19,6 +21,8 @@ void StateWalk::execute(GameRole* role, EnumMsgType enMsgType){
         case en_Msg_Drown:
             role->drown();
             role->getFSM()->changeState(new StateDrown());
+            break;
+        default:
             break;
     }
 }

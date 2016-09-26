@@ -11,11 +11,11 @@
 
 #include "State.h"
 #include "GameRole.h"
-#include "EnumMsgType.h"
 
 class StateIdle: public State {
 public:
-    virtual void execute(GameRole* role, EnumMsgType enMsgType);
+    virtual void execute(GameRole* role, EventCustom* event);
+    
 };
 
 #endif /* StateIdle_h */

@@ -26,7 +26,7 @@ public:
     
     void idle();
     
-    void walk();
+    void walk(const Vec2 &);
     
     void drown();
     
@@ -34,6 +34,7 @@ public:
     
 private:
     Texture2D* origText;
+    GameRoleFSM* mFSM;
     
     void initAnim();
     
