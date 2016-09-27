@@ -10,11 +10,10 @@
 #define StateIdle_h
 
 #include "State.h"
-#include "GameRole.h"
 
 class StateIdle: public State {
 public:
-    virtual void execute(GameRole* role, EventCustom* event);
+    virtual void execute(GameRole* role, cocos2d::EventCustom* event);
     
 };
 

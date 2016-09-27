@@ -8,9 +8,7 @@
 
 #include "GameRoleFSM.h"
 #include "GameRole.h"
-#include "State.h"
 #include "StateIdle.h"
-#include "EnumMsgType.h"
 
 #define DISPATCH Director::getInstance()->getEventDispatcher()
 
@@ -38,13 +36,13 @@ bool GameRoleFSM::initWithGameRole(GameRole *role){
     role->retain();
     
     
-    auto listener = EventListenerCustom::create(to_string(en_Msg_Walk), CC_CALLBACK_1(GameRoleFSM::onRecvWalk, this));
+    auto listener = EventListenerCustom::create(StateToString(role, Walk), CC_CALLBACK_1(GameRoleFSM::onRecvWalk, this));
     DISPATCH->addEventListenerWithSceneGraphPriority(listener, this);
     
-    listener = EventListenerCustom::create(to_string(en_Msg_Idle), CC_CALLBACK_1(GameRoleFSM::onRecvIdle, this));
+    listener = EventListenerCustom::create(StateToString(role, Idle), CC_CALLBACK_1(GameRoleFSM::onRecvIdle, this));
     DISPATCH->addEventListenerWithSceneGraphPriority(listener, this);
     
-    listener = EventListenerCustom::create(to_string(en_Msg_Drown), CC_CALLBACK_1(GameRoleFSM::onRecvDrown, this));
+    listener = EventListenerCustom::create(StateToString(role, Drown), CC_CALLBACK_1(GameRoleFSM::onRecvDrown, this));
     DISPATCH->addEventListenerWithSceneGraphPriority(listener, this);
     
     return true;
@@ -67,3 +65,6 @@ void GameRoleFSM::onRecvWalk(cocos2d::EventCustom *event){
 void GameRoleFSM::onRecvDrown(cocos2d::EventCustom *event){
     this->curState->execute(role, event);
 }
+
+#undef DISPATCH
+#undef StateToString

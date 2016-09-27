@@ -10,6 +10,7 @@
 #define GameRole_h
 
 #include "GameRoleFSM.h"
+
 using namespace std;
 USING_NS_CC;
 
@@ -18,11 +19,7 @@ class GameRole : public Sprite
 public:
     static GameRole * create(const string & roleName);
     
-    void startWalk(const Vec2 & pos);
-    
     void turnAround();
-    
-    void stopWalk();
     
     void idle();
     
@@ -39,6 +36,8 @@ private:
     void initAnim();
     
     void initPhysicsBody();
+    
+    void initListener();
     
     void addAnim(const string &);
 };

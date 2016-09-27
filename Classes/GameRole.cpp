@@ -7,6 +7,7 @@
 //
 
 #include "GameRole.h"
+#include "Constants.h"
 
 constexpr static int PATH_SIZE = 50;
 constexpr static int MAX_ANIM_SIZE = 10;
@@ -28,10 +29,10 @@ GameRole* GameRole::create(const string & roleName)
         role->setAnchorPoint(Vec2(0.5,0));
         role->origText = role->getTexture();
         role->initPhysicsBody();
-        if (roleName == "doll"){
-            role->mFSM = GameRoleFSM::createWithGameRole(role);
-            role->addChild(role->mFSM);
-        }
+        role->mFSM = GameRoleFSM::createWithGameRole(role);
+        role->addChild(role->mFSM);
+        if (roleName == "doll")
+            role->initListener();
         
         return role;
     }
@@ -64,6 +65,7 @@ void GameRole::addAnim(const string & animName){
     auto anim = Animation::create();
     for (int i = 1; i <= MAX_ANIM_SIZE; ++i){
         char path[PATH_SIZE] = {0};
+        // TODO: 路径移到Constants.h
         sprintf(path, "roles/%s_%s_%d.png", getName().c_str(), animName.c_str(), i);
         if (FileUtils::getInstance()->isFileExist(path)){
             anim->addSpriteFrameWithFile(path);
@@ -77,29 +79,6 @@ void GameRole::addAnim(const string & animName){
     AnimationCache::getInstance()->addAnimation(anim, getName() + "_" + animName);
 }
 
-void GameRole::startWalk(const Vec2 & pos){
-    // 判断左右
-    auto visibleSize = Director::getInstance()->getVisibleSize();
-    int dist = pos.x - visibleSize.width/2;
-    if (dist >= 0){
-        setFlippedX(false);
-    }else{
-        setFlippedX(true);
-    }
-    
-    float speed = 100.0;
-    getPhysicsBody()->setSurfaceVelocity(Vec2(speed * (dist>0 ? (dist=0 ? 0 : -1) : 1), 0));
-    
-    
-    // 如果没有走动的动画，生成动画
-    if (!getActionByTag(1011)){
-        auto walk = Animate::create(AnimationCache::getInstance()->getAnimation(getName() + "_walk"));
-        walk->setTag(1011);
-        runAction(walk);
-    }
-
-}
-
 void GameRole::turnAround(){
     if (isFlippedX()){
         setFlippedX(false);
@@ -111,31 +90,73 @@ void GameRole::turnAround(){
     getPhysicsBody()->setVelocity(Vec2(speedX, speedY));
 }
 
-void GameRole::stopWalk(){
+void GameRole::walk(const Vec2 & pos){
+    // 判断左右
+    auto visibleSize = Director::getInstance()->getVisibleSize();
+    int dist = pos.x - visibleSize.width/2;
+    if (dist >= 0){
+        setFlippedX(false);
+    }else{
+        setFlippedX(true);
+    }
+    
+    float speed = 100.0;
+    getPhysicsBody()->setSurfaceVelocity(Vec2(speed * (dist>0 ? ((dist==0) ? 0 : -1) : 1), 0));
+    
+    
+    // 如果没有走动的动画，生成动画
+    if (!getActionByTag(1011)){
+        auto walk = Animate::create(AnimationCache::getInstance()->getAnimation(getName() + "_walk"));
+        walk->setTag(1011);
+        runAction(walk);
+    }
+}
+
+void GameRole::idle(){
     stopActionByTag(1011);
     float speedY = getPhysicsBody()->getVelocity().y;
     speedY = speedY <= 0 ? speedY : 0;
     getPhysicsBody()->setVelocity(Vec2(0, speedY));
     getPhysicsBody()->setSurfaceVelocity(Vec2(0, 0));
     setTexture(origText);
-}
-
-void GameRole::walk(const Vec2 & pos){
-    startWalk(pos);
-}
-
-void GameRole::idle(){
-    stopWalk();
+    
+    Director::getInstance()->getEventDispatcher()->resumeEventListenersForTarget(this->getParent());
 }
 
 void GameRole::drown(){
-    log("I'm drowning...");
     getPhysicsBody()->setVelocity(Vec2::ZERO);
     getPhysicsBody()->setSurfaceVelocity(Vec2::ZERO);
     stopAllActions();
-    Director::getInstance()->getEventDispatcher()->pauseEventListenersForTarget(mFSM);
+    Director::getInstance()->getEventDispatcher()->pauseEventListenersForTarget(this->getParent());
 }
 
 GameRoleFSM* GameRole::getFSM(){
     return mFSM;
+}
+
+void GameRole::initListener(){
+    auto contactListener = EventListenerPhysicsContact::create();
+    contactListener->onContactBegin = [this](PhysicsContact & contact){
+        auto role1 = contact.getShapeA()->getBody()->getNode();
+        auto role2 = contact.getShapeB()->getBody()->getNode();
+        
+        if (role1->getName() == "doll" && role2->getName() == "Water"){
+            Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(GameRoleState::toString(this, GameRoleState::State::Drown));
+        }
+        
+        return true;
+    };
+    
+    contactListener->onContactSeparate = [this](PhysicsContact & contact){
+        auto role1 = contact.getShapeA()->getBody()->getNode();
+        auto role2 = contact.getShapeB()->getBody()->getNode();
+        
+        if (role1->getName() == "doll" && role2->getName() == "Water"){
+            Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(GameRoleState::toString(this, GameRoleState::State::Idle));
+        }
+        
+        return true;
+    };
+    
+    Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(contactListener, this);
 }

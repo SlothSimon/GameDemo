@@ -10,11 +10,10 @@
 #define StateWalk_h
 
 #include "State.h"
-#include "GameRole.h"
 
 class StateWalk: public State {
 public:
-    virtual void execute(GameRole* role, EventCustom* event);
+    virtual void execute(GameRole* role, cocos2d::EventCustom* event);
 };
 
 #endif /* StateWalk_h */

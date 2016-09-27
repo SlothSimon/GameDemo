@@ -3,7 +3,6 @@
 
 #include "cocos2d.h"
 
-#define DEBUG true
 
 /**
 @brief    The cocos2d Application.

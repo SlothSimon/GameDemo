@@ -15,7 +15,6 @@
 #define DOLL_ZORDER 1001
 #define ROLE_ZORDER 1000
 #define INTERACTION_ZORDER 999
-#define ENDSTAGE 2
 
 USING_NS_CC;
 using namespace std;

@@ -8,12 +8,13 @@
 
 #include "StateDrown.h"
 #include "StateIdle.h"
+#include "GameRole.h"
 
 void StateDrown::execute(GameRole* role, EventCustom* event){
-    auto enMsgType = stoi(event->getEventName());
+    auto enMsgType = (int)GameRoleState::toEnum(event->getEventName());
     
     switch (enMsgType) {
-        case en_Msg_Idle:
+        case GameRoleState::State::Idle:
             role->idle();
             role->getFSM()->changeState(new StateIdle());
             break;

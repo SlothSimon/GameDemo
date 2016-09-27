@@ -10,11 +10,10 @@
 #define StateDrown_h
 
 #include "State.h"
-#include "GameRole.h"
 
 class StateDrown: public State {
 public:
-    virtual void execute(GameRole* role, EventCustom* event);
+    virtual void execute(GameRole* role, cocos2d::EventCustom* event);
 };
 
 #endif /* StateDrown_h */

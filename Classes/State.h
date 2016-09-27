@@ -9,7 +9,8 @@
 #ifndef State_h
 #define State_h
 
-#include "EnumMsgType.h"
+#include "Constants.h"
+USING_NS_CC;
 
 class GameRole;
 

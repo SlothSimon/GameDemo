@@ -2,6 +2,7 @@
 #include "GameScene.h"
 #include "HelloWorldScene.h"
 #include "EndScene.h"
+#include "Constants.h"
 
 USING_NS_CC;
 
@@ -100,8 +101,8 @@ bool AppDelegate::applicationDidFinishLaunching() {
     
     
     Scene* scene;
-    if (DEBUG){
-        UserDefault::getInstance()->setIntegerForKey("currentStage", 2);
+    if (DebugParameters::DoDebug){
+        UserDefault::getInstance()->setIntegerForKey("currentStage", DebugParameters::StartStage);
 //        scene = GameScene::createScene();
         scene = GameScene::createScene();
     }

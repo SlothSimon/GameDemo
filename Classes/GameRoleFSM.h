@@ -9,7 +9,6 @@
 #ifndef GameRoleFSM_h
 #define GameRoleFSM_h
 
-#include "cocos2d.h"
 USING_NS_CC;
 
 class State;

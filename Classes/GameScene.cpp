@@ -13,8 +13,7 @@
 #include "ui/UIButton.h"
 #include "ui/UILayout.h"
 #include "GameRole.h"
-#include "AppDelegate.h"
-#include "EnumMsgType.h"
+#include "Constants.h"
 
 USING_NS_CC;
 using namespace CocosDenshion;
@@ -48,7 +47,7 @@ Scene* GameScene::createScene()
 {
     auto scene = Scene::createWithPhysics();
     scene->getPhysicsWorld()->setGravity(Vec2(0, -200));
-    if (DEBUG)
+    if (DebugParameters::DoDebug)
         scene->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);//调试
     
     auto layer = GameScene::create();
@@ -163,6 +162,7 @@ void GameScene::beRainy(){
     schedule(schedule_selector(GameScene::updateWeather), 1.0f, kRepeatForever, 0);
     
     // rain effect
+    // TODO: 路径移到Constants.h
     effects["rain"] = SimpleAudioEngine::getInstance()->playEffect("music/rain.wav", true);
     runAction(EffectTo::create(4.0f, 1.0));
     
@@ -220,6 +220,7 @@ bool GameScene::initMap(const string & mapName){
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
     
+    // TODO: 路径移到Constants.h
     string path = "map/";
     path = path + mapName + ".tmx";
     
@@ -281,8 +282,8 @@ bool GameScene::initInteraction(){
                                                             Hide::create(),
                                                             NULL));
                 }else{
-//                    doll->think("walk");
                     log("doll think walk");
+                    Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(StateToString(doll, Think), (void*)"Walk");
                 }
                 
                 
@@ -303,7 +304,6 @@ bool GameScene::initCollision(){
     
     // 边界
     auto body = PhysicsBody::createEdgeSegment(Vec2(visibleSize.width, 0), Vec2(visibleSize.width, visibleSize.height));
-//    setPhysicsBody(body);
     body->setCategoryBitmask(0x10);
     body->setCollisionBitmask(0x01);
     body->setContactTestBitmask(0x01);
@@ -313,7 +313,7 @@ bool GameScene::initCollision(){
     auto listener = EventListenerPhysicsContact::create();
     listener->onContactBegin = [visibleSize,this](PhysicsContact& contact){
         if (contact.getShapeB()->getBody()->getNode()->getName() == "edge"){
-            if (currentStage == ENDSTAGE){
+            if (currentStage == DebugParameters::EndStage){
                 SimpleAudioEngine::getInstance()->stopAllEffects();
                 SimpleAudioEngine::getInstance()->stopBackgroundMusic();
                 Director::getInstance()->replaceScene(TransitionFade::create(2, EndScene::createScene()));
@@ -363,10 +363,7 @@ bool GameScene::initCollision(){
         body->setDynamic(false);
         for (auto &s : body->getShapes()){
             s->setRestitution(0);       // TODO: 禁止弹跳，根本不起作用，可能是引擎bug
-            if (bInfo["type"].asString() == "Water")
-                s->setFriction(0.0f);
-            else if(bInfo["type"].asString() == "Slope")
-                s->setFriction(2.0f);
+            s->setFriction(PhysicsBodyParameters::getFriction(bInfo["type"].asString()));
         }
         
         
@@ -385,37 +382,6 @@ bool GameScene::initCollision(){
                 body->setCategoryBitmask(0xFF);
                 body->setCollisionBitmask(0xFF);
                 body->setContactTestBitmask(0x02);
-                
-                // 沾水不能动  TODO: 这个listener应该放在gamerole中
-                auto listener = EventListenerPhysicsContact::create();
-                listener->onContactBegin = [this](PhysicsContact & contact){
-                    auto role1 = contact.getShapeA()->getBody()->getNode();
-                    auto role2 = contact.getShapeB()->getBody()->getNode();
-                    
-                    if (role1->getName() == "doll" && role2->getName() == "Water"){
-//                        role1->getPhysicsBody()->setVelocity(Vec2::ZERO);
-//                        role1->getPhysicsBody()->setSurfaceVelocity(Vec2::ZERO);
-//                        role1->stopAllActions();
-//                        Director::getInstance()->getEventDispatcher()->pauseEventListenersForTarget(this);
-                        Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(to_string(en_Msg_Drown));
-                    }
-                    
-                    return true;
-                };
-                
-                listener->onContactSeparate = [this](PhysicsContact & contact){
-                    auto role1 = contact.getShapeA()->getBody()->getNode();
-                    auto role2 = contact.getShapeB()->getBody()->getNode();
-                    
-                    if (role1->getName() == "doll" && role2->getName() == "Water"){
-                        Director::getInstance()->getEventDispatcher()->resumeEventListenersForTarget(static_cast<GameRole*>(role1)->getFSM());
-//                        Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(to_string(en_Msg_Idle));
-                    }
-                    
-                    return true;
-                };
-                
-                Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, n);
             }
         }
  
@@ -439,6 +405,7 @@ bool GameScene::initSideBar(){
     
     this->addChild(sideBar, 20, "sideBar");
     
+    // TODO: 路径移到Constants.h
     auto ButtonSun = Button::create("button_sun.png");
     ButtonSun->setVisible(false);
     ButtonSun->setLayoutParameter(sideBarPatameters);
@@ -490,6 +457,7 @@ bool GameScene::initWeather(){
         this->addChild(rain, 11, "rain");
         
         // rain effect
+        // TODO: 路径移到Constants.h
         SimpleAudioEngine::getInstance()->preloadEffect("music/rain.wav");
         SimpleAudioEngine::getInstance()->setEffectsVolume(0);
         
@@ -537,17 +505,15 @@ bool GameScene::initListener(){
     touchLayerListener->setSwallowTouches(true);
     
     touchLayerListener->onTouchBegan = [this](Touch* touch, Event* event){
-        
-        EventCustom eve = EventCustom(to_string(en_Msg_Walk));
-        eve.setUserData(new Vec2(touch->getLocation()));
-        Director::getInstance()->getEventDispatcher()->dispatchEvent(&eve);
-        
+        auto role = static_cast<GameRole*>(getChildByName("doll"));
+        Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(StateToString(role, Walk), new Vec2(touch->getLocation()));
         return true;
     };
     
     touchLayerListener->onTouchEnded = [this](Touch* touch, Event* event){
         
-        Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(to_string(en_Msg_Idle));
+        auto role = static_cast<GameRole*>(getChildByName("doll"));
+        Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(StateToString(role, Idle));
     };
     
     _eventDispatcher->addEventListenerWithSceneGraphPriority(touchLayerListener, this);
@@ -557,6 +523,7 @@ bool GameScene::initListener(){
 
 bool GameScene::initBGM(){
     if (!SimpleAudioEngine::getInstance()->isBackgroundMusicPlaying()){
+        // TODO: 路径移到Constants.h
         SimpleAudioEngine::getInstance()->preloadBackgroundMusic("music/firstlove_light.mp3");
         SimpleAudioEngine::getInstance()->playBackgroundMusic("music/firstlove_light.mp3", true);
     }
