@@ -13,8 +13,18 @@
 class GameRole;
 using namespace std;
 
-#define StateToString(vGameRole, vState) GameRoleState::toString(vGameRole, GameRoleState::State::vState)
+/**
+ * Constants about debug, development and system
+ */
+struct DebugParameters{
+    const static int StartStage = 1;
+    const static bool DoDebug = true;
+    const static int EndStage = 2;
+};
 
+/**
+ * Constants about Physics
+ */
 class PhysicsBodyParameters {
 public:
     const static map<string, float> MapFriction;
@@ -25,20 +35,22 @@ private:
 
 };
 
-struct DebugParameters{
-    const static int StartStage = 2;
-    const static bool DoDebug = true;
-    const static int EndStage = 2;
-};
-
-struct ThinkContent{
-    const static string Walk;
-    const static string Drown;
+/**
+ * Constants about GameRole
+ */
+struct GameRoleName {
+    const static string Doll;
+    const static string Girl;
 };
 
 class GameRoleState {
 public:
-    enum State {Error, Walk, Idle, Drown, Think};
+    enum class State {Error, Walk, Idle, Drown, Think};
+    
+    struct ThinkContent{
+        const static string Walk;
+        const static string Drown;
+    };
     
     const static std::map<string, State> StateMap;
     
@@ -52,5 +64,27 @@ private:
     
 };
 
+#define StateToString(vGameRole, vState) GameRoleState::toString(vGameRole, GameRoleState::State::vState)
+
+/**
+ * Constants about filepath
+ */
+struct MusicPath {
+    const static char* normalBGM;
+    const static char* RainEffect;
+    
+};
+
+struct ImagePath {
+    const static char* MenuButton;
+    const static char* SunnyButton;
+    const static char* RainyButton;
+    const static char* Sun;
+    const static string getMapPath(const string& mapName);
+    const static char* getRoleFramePath(const string& roleName, const string& animName, const int& frameIndex);
+    const static map<string, const char*> BubbleMap;
+private:
+    const static map<string, const char*> CreateBubbleMap();
+};
 
 #endif /* Constants_h */

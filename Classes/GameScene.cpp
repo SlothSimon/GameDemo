@@ -162,8 +162,7 @@ void GameScene::beRainy(){
     schedule(schedule_selector(GameScene::updateWeather), 1.0f, kRepeatForever, 0);
     
     // rain effect
-    // TODO: 路径移到Constants.h
-    effects["rain"] = SimpleAudioEngine::getInstance()->playEffect("music/rain.wav", true);
+    effects["rain"] = SimpleAudioEngine::getInstance()->playEffect(MusicPath::RainEffect, true);
     runAction(EffectTo::create(4.0f, 1.0));
     
     // rain change
@@ -220,11 +219,7 @@ bool GameScene::initMap(const string & mapName){
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
     
-    // TODO: 路径移到Constants.h
-    string path = "map/";
-    path = path + mapName + ".tmx";
-    
-    tileMap = TMXTiledMap::create(path);
+    tileMap = TMXTiledMap::create(ImagePath::getMapPath(mapName));
     if (tileMap == nullptr)
         return false;
     
@@ -276,14 +271,27 @@ bool GameScene::initInteraction(){
                 auto doll = static_cast<GameRole*>(getChildByName("doll"));
                 auto dist = doll->getPosition().distance(touchLayer->getPosition());
                 if (dist <= INTERACTION_RANGE){
-                    targetLayer->stopAllActions();
+//                    targetLayer->stopAllActions();
+//                    targetLayer->runAction(Sequence::create(Show::create(),
+//                                                            DelayTime::create(5),
+//                                                            Hide::create(),
+//                                                            NULL));
+                    
+                    targetLayer->setScale(targetLayer->getScale()/4);
+                    auto scale = ScaleBy::create(0.1f, 4.0f);
                     targetLayer->runAction(Sequence::create(Show::create(),
-                                                            DelayTime::create(5),
+                                                            scale,
+                                                            DelayTime::create(2.0f),
+                                                            scale->reverse(),
                                                             Hide::create(),
                                                             NULL));
+                    // TODO: 没有position的输出，需要设断点调试
+                    log("=======Position=======");
+                    log(targetLayer->getPosition().x);
+                    log(targetLayer->getPosition().y);
+                    log("==========End=========");
                 }else{
-                    log("doll think walk");
-                    Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(StateToString(doll, Think), (void*)"Walk");
+                    Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(StateToString(doll, Think), (void*)&GameRoleState::ThinkContent::Walk);
                 }
                 
                 
@@ -298,7 +306,6 @@ bool GameScene::initInteraction(){
 }
 
 bool GameScene::initCollision(){
-//    float scale = tileMap->getScale();
     auto visibleSize = Director::getInstance()->getVisibleSize();
     float pixelPerTile = tileMap->getContentSize().width/tileMap->getMapSize().width;
     
@@ -405,8 +412,7 @@ bool GameScene::initSideBar(){
     
     this->addChild(sideBar, 20, "sideBar");
     
-    // TODO: 路径移到Constants.h
-    auto ButtonSun = Button::create("button_sun.png");
+    auto ButtonSun = Button::create(ImagePath::SunnyButton);
     ButtonSun->setVisible(false);
     ButtonSun->setLayoutParameter(sideBarPatameters);
     ButtonSun->addClickEventListener([this](Ref* psender){
@@ -414,7 +420,7 @@ bool GameScene::initSideBar(){
             beSunny();
     });
     
-    auto ButtonRain = Button::create("button_rain.png");
+    auto ButtonRain = Button::create(ImagePath::RainyButton);
     ButtonRain->setVisible(false);
     ButtonRain->setLayoutParameter(sideBarPatameters);
     ButtonRain->addClickEventListener([this](Ref* psender){
@@ -422,7 +428,7 @@ bool GameScene::initSideBar(){
             beRainy();
     });
     
-    auto ButtonMenu = Button::create("button_menu.png");
+    auto ButtonMenu = Button::create(ImagePath::MenuButton);
     ButtonMenu->setLayoutParameter(sideBarPatameters);
     ButtonMenu->addClickEventListener([ButtonSun, ButtonRain](Ref* psender){
         if (ButtonSun->isVisible()){
@@ -441,6 +447,7 @@ bool GameScene::initSideBar(){
     return true;
 }
 
+
 bool GameScene::initWeather(){
     if (getChildByName("weatherLayer") == nullptr){
         // initialize weatherLayer
@@ -457,12 +464,11 @@ bool GameScene::initWeather(){
         this->addChild(rain, 11, "rain");
         
         // rain effect
-        // TODO: 路径移到Constants.h
-        SimpleAudioEngine::getInstance()->preloadEffect("music/rain.wav");
+        SimpleAudioEngine::getInstance()->preloadEffect(MusicPath::RainEffect);
         SimpleAudioEngine::getInstance()->setEffectsVolume(0);
         
         // sun
-        auto sun = Sprite::create("sun.png");
+        auto sun = Sprite::create(ImagePath::Sun);
         sun->setOpacity(0);
         sun->setScale(0.5);
         sun->setPosition(origin.x + visibleSize.width - sun->getContentSize().width*sun->getScale(),
@@ -488,7 +494,7 @@ bool GameScene::initDoll(){
     for (auto & r : roles){
         auto role = r.asValueMap();
         auto roleSprite = GameRole::create(role["name"].asString());
-        if (role["name"].asString() == "doll")
+        if (role["name"].asString() == GameRoleName::Doll)
             addChild(roleSprite, DOLL_ZORDER, role["name"].asString());
         else
             addChild(roleSprite, ROLE_ZORDER, role["name"].asString());
@@ -505,27 +511,31 @@ bool GameScene::initListener(){
     touchLayerListener->setSwallowTouches(true);
     
     touchLayerListener->onTouchBegan = [this](Touch* touch, Event* event){
-        auto role = static_cast<GameRole*>(getChildByName("doll"));
-        Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(StateToString(role, Walk), new Vec2(touch->getLocation()));
+        auto role = static_cast<GameRole*>(getChildByName(GameRoleName::Doll));
+        if (role->IsMovable())
+            Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(StateToString(role, Walk), new Vec2(touch->getLocation()));
+        else
+            Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(StateToString(role, Think), (void*)&GameRoleState::ThinkContent::Drown);
         return true;
     };
     
     touchLayerListener->onTouchEnded = [this](Touch* touch, Event* event){
         
-        auto role = static_cast<GameRole*>(getChildByName("doll"));
-        Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(StateToString(role, Idle));
+        auto role = static_cast<GameRole*>(getChildByName(GameRoleName::Doll));
+        if (role->IsMovable())
+            Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(StateToString(role, Idle));
     };
     
     _eventDispatcher->addEventListenerWithSceneGraphPriority(touchLayerListener, this);
+    
     
     return true;
 }
 
 bool GameScene::initBGM(){
     if (!SimpleAudioEngine::getInstance()->isBackgroundMusicPlaying()){
-        // TODO: 路径移到Constants.h
-        SimpleAudioEngine::getInstance()->preloadBackgroundMusic("music/firstlove_light.mp3");
-        SimpleAudioEngine::getInstance()->playBackgroundMusic("music/firstlove_light.mp3", true);
+        SimpleAudioEngine::getInstance()->preloadBackgroundMusic(MusicPath::normalBGM);
+        SimpleAudioEngine::getInstance()->playBackgroundMusic(MusicPath::normalBGM, true);
     }
     
     return true;

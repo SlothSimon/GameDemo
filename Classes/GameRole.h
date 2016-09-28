@@ -27,11 +27,16 @@ public:
     
     void drown();
     
-    GameRoleFSM* getFSM();
+    void think(const string &);
+    
+    GameRoleFSM* getFSM() const;
+    
+    bool IsMovable() const;
     
 private:
     Texture2D* origText;
     GameRoleFSM* mFSM;
+    bool _isMovable = true;
     
     void initAnim();
     

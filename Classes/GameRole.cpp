@@ -64,9 +64,7 @@ void GameRole::initPhysicsBody(){
 void GameRole::addAnim(const string & animName){
     auto anim = Animation::create();
     for (int i = 1; i <= MAX_ANIM_SIZE; ++i){
-        char path[PATH_SIZE] = {0};
-        // TODO: 路径移到Constants.h
-        sprintf(path, "roles/%s_%s_%d.png", getName().c_str(), animName.c_str(), i);
+        auto path = ImagePath::getRoleFramePath(getName(), animName, i);
         if (FileUtils::getInstance()->isFileExist(path)){
             anim->addSpriteFrameWithFile(path);
         }else{
@@ -119,7 +117,7 @@ void GameRole::idle(){
     getPhysicsBody()->setVelocity(Vec2(0, speedY));
     getPhysicsBody()->setSurfaceVelocity(Vec2(0, 0));
     setTexture(origText);
-    
+    _isMovable = true;
     Director::getInstance()->getEventDispatcher()->resumeEventListenersForTarget(this->getParent());
 }
 
@@ -127,11 +125,36 @@ void GameRole::drown(){
     getPhysicsBody()->setVelocity(Vec2::ZERO);
     getPhysicsBody()->setSurfaceVelocity(Vec2::ZERO);
     stopAllActions();
+    _isMovable = false;
     Director::getInstance()->getEventDispatcher()->pauseEventListenersForTarget(this->getParent());
 }
 
-GameRoleFSM* GameRole::getFSM(){
+void GameRole::think(const string & content){
+    if (ImagePath::BubbleMap.find(content) != ImagePath::BubbleMap.cend()){
+        auto thinkbubble = Sprite::create(ImagePath::BubbleMap.at(content));
+        thinkbubble->setPosition(Vec2(-30, 200));  // TODO: 需要相对位置
+        thinkbubble->setScale(this->getContentSize().width/thinkbubble->getContentSize().width/4);
+        
+        addChild(thinkbubble);
+        auto scale = ScaleBy::create(0.1f, 4.0f);
+        thinkbubble->runAction(Sequence::create(scale,
+                                                DelayTime::create(2.0f),
+                                                scale->reverse(),
+                                                CallFunc::create([thinkbubble](){
+                                                    thinkbubble->removeFromParent();
+                                                }),
+                                                NULL));
+    }else{
+        log("Error: There is no such bubble!");
+    }
+}
+
+GameRoleFSM* GameRole::getFSM() const{
     return mFSM;
+}
+
+bool GameRole::IsMovable() const {
+    return _isMovable;
 }
 
 void GameRole::initListener(){

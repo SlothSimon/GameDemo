@@ -11,7 +11,7 @@
 #include "GameRole.h"
 
 void StateDrown::execute(GameRole* role, EventCustom* event){
-    auto enMsgType = (int)GameRoleState::toEnum(event->getEventName());
+    auto enMsgType = GameRoleState::toEnum(event->getEventName());
     
     switch (enMsgType) {
         case GameRoleState::State::Idle:

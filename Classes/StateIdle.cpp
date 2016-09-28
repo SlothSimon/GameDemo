@@ -26,6 +26,10 @@ void StateIdle::execute(GameRole* role, EventCustom* event){
             role->getFSM()->changeState(new StateDrown());
             break;
         }
+        case GameRoleState::State::Think:{
+            string* cont = static_cast<string*>(event->getUserData());
+            role->think(*cont);
+        }
         default:
             break;
     }

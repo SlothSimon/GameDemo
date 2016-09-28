@@ -22,6 +22,7 @@ public:
     bool initWithGameRole(GameRole* role);
     
     void changeState(State* state);
+    const State* getCurrentState() const;
     
 private:
     void onRecvWalk(EventCustom* event);

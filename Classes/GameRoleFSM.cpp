@@ -44,6 +44,8 @@ bool GameRoleFSM::initWithGameRole(GameRole *role){
     
     listener = EventListenerCustom::create(StateToString(role, Drown), CC_CALLBACK_1(GameRoleFSM::onRecvDrown, this));
     DISPATCH->addEventListenerWithSceneGraphPriority(listener, this);
+    listener = EventListenerCustom::create(StateToString(role, Think), CC_CALLBACK_1(GameRoleFSM::onRecvDrown, this));
+    DISPATCH->addEventListenerWithSceneGraphPriority(listener, this);
     
     return true;
 }
@@ -64,6 +66,10 @@ void GameRoleFSM::onRecvWalk(cocos2d::EventCustom *event){
 
 void GameRoleFSM::onRecvDrown(cocos2d::EventCustom *event){
     this->curState->execute(role, event);
+}
+
+const State* GameRoleFSM::getCurrentState() const{
+    return curState;
 }
 
 #undef DISPATCH
