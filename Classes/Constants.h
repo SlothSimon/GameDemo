@@ -17,7 +17,7 @@ using namespace std;
  * Constants about debug, development and system
  */
 struct DebugParameters{
-    const static int StartStage = 1;
+    const static int StartStage = 2;
     const static bool DoDebug = true;
     const static int EndStage = 2;
 };
@@ -45,26 +45,24 @@ struct GameRoleName {
 
 class GameRoleState {
 public:
-    enum class State {Error, Walk, Idle, Drown, Think};
+    struct State {
+        const static string Error;
+        const static string Walk;
+        const static string Idle;
+        const static string Drown;
+        const static string Think;
+    };
     
     struct ThinkContent{
         const static string Walk;
         const static string Drown;
     };
     
-    const static std::map<string, State> StateMap;
-    
-    const static string toString(GameRole* role, const State s);
-    
-    const static State toEnum(const string &s);
+    const static string convertToEventName(const GameRole* role, const string s);
 
-private:
-    const static char* StateName[];
-    const static map<string, State> CreateStateMap();
+    const static string convertToStateName(const string &s);
     
 };
-
-#define StateToString(vGameRole, vState) GameRoleState::toString(vGameRole, GameRoleState::State::vState)
 
 /**
  * Constants about filepath
@@ -81,7 +79,7 @@ struct ImagePath {
     const static char* RainyButton;
     const static char* Sun;
     const static string getMapPath(const string& mapName);
-    const static char* getRoleFramePath(const string& roleName, const string& animName, const int& frameIndex);
+    const static char* getRoleFramePath(const string& roleName, const string& animName, const int& frameIndex = NULL);
     const static map<string, const char*> BubbleMap;
 private:
     const static map<string, const char*> CreateBubbleMap();

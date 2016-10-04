@@ -249,57 +249,61 @@ bool GameScene::initInteraction(){
     
     for (const auto & obj : (objs->getObjects())){
         auto uiInfo = obj.asValueMap();
-        auto targetLayer = tileMap->getLayer(uiInfo["LayerName"].asString());
-        if (targetLayer == nullptr)
+        auto msg = Sprite::create(uiInfo["ImagePath"].asString());
+        if (msg == nullptr)
             return false;
+        msg->setPosition(Vec2(0, 20));
         
-        auto touchLayer = LayerColor::create(Color4B::RED, uiInfo["width"].asFloat() * tileMap->getScale(), uiInfo["height"].asFloat()*tileMap->getScale());
-        touchLayer->setPosition(origin + Vec2(uiInfo["x"].asFloat(), uiInfo["y"].asFloat())*tileMap->getScale());
-        touchLayer->setVisible(false);
-        addChild(touchLayer, INTERACTION_ZORDER);
-        auto touchLayerListener = EventListenerTouchOneByOne::create();
-        touchLayerListener->setSwallowTouches(true);
+        auto touchNode = Node::create();
+        touchNode->setContentSize(Size(uiInfo["width"].asFloat() * tileMap->getScale(), uiInfo["height"].asFloat()*tileMap->getScale()));
+        touchNode->setPosition(origin + Vec2(uiInfo["x"].asFloat(), uiInfo["y"].asFloat())*tileMap->getScale());
+        touchNode->setVisible(false);
+        addChild(touchNode, INTERACTION_ZORDER);
+        touchNode->addChild(msg);
         
-        touchLayerListener->onTouchBegan = [=](Touch* touch, Event* event){
-            Vec2 locationInNode = touchLayer->convertToNodeSpace(touch->getLocation());
-            Size s = touchLayer->getContentSize();
+        auto touchNodeListener = EventListenerTouchOneByOne::create();
+        touchNodeListener->setSwallowTouches(true);
+        
+        touchNodeListener->onTouchBegan = [=](Touch* touch, Event* event){
+            Vec2 locationInNode = touchNode->convertToNodeSpace(touch->getLocation());
+            Size s = touchNode->getContentSize();
             Rect rect = Rect(0, 0, s.width, s.height);
             //判断触摸区域是否在目标上
             if (rect.containsPoint(locationInNode)){
                 
                 // 判断交互对象和主角的距离
                 auto doll = static_cast<GameRole*>(getChildByName("doll"));
-                auto dist = doll->getPosition().distance(touchLayer->getPosition());
+                auto dist = doll->getPosition().distance(touchNode->getPosition());
                 if (dist <= INTERACTION_RANGE){
-//                    targetLayer->stopAllActions();
-//                    targetLayer->runAction(Sequence::create(Show::create(),
-//                                                            DelayTime::create(5),
-//                                                            Hide::create(),
-//                                                            NULL));
-                    
-                    targetLayer->setScale(targetLayer->getScale()/4);
+                    msg->stopAllActions();
                     auto scale = ScaleBy::create(0.1f, 4.0f);
-                    targetLayer->runAction(Sequence::create(Show::create(),
-                                                            scale,
-                                                            DelayTime::create(2.0f),
-                                                            scale->reverse(),
-                                                            Hide::create(),
-                                                            NULL));
-                    // TODO: 没有position的输出，需要设断点调试
-                    log("=======Position=======");
-                    log(targetLayer->getPosition().x);
-                    log(targetLayer->getPosition().y);
-                    log("==========End=========");
+                    auto callfunc1 = CallFunc::create([touchNode]{touchNode->setVisible(true);});
+                    auto callfunc2 = CallFunc::create([touchNode]{touchNode->setVisible(false);});
+                    
+                    // 若对话气泡已经显示，则再次点击会延长显示时间，否则进行显示  TODO: 若在缩放过程中stopAllActions，会造成缩放状态延长时间
+                    if (touchNode->isVisible()){
+                        msg->runAction(Sequence::create(DelayTime::create(2.0f),
+                                                       scale->reverse(),
+                                                       callfunc2,
+                                                       NULL));
+                    }else{
+                        msg->setScale(0.25);
+                        msg->runAction(Sequence::create(callfunc1,
+                                                        scale,
+                                                        DelayTime::create(2.0f),
+                                                        scale->reverse(),
+                                                        callfunc2,
+                                                        NULL));
+                    }
                 }else{
-                    Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(StateToString(doll, Think), (void*)&GameRoleState::ThinkContent::Walk);
+                    Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(GameRoleState::convertToEventName(doll, GameRoleState::State::Think), (void*)&GameRoleState::ThinkContent::Walk);
                 }
-                
-                
+
                 return true;    // return true 会使其他listener失效
             }
             return false;       // return false 会继续执行其他listener
         };
-        _eventDispatcher->addEventListenerWithSceneGraphPriority(touchLayerListener, touchLayer);
+        _eventDispatcher->addEventListenerWithSceneGraphPriority(touchNodeListener, touchNode);
     }
     
     return true;
@@ -513,9 +517,9 @@ bool GameScene::initListener(){
     touchLayerListener->onTouchBegan = [this](Touch* touch, Event* event){
         auto role = static_cast<GameRole*>(getChildByName(GameRoleName::Doll));
         if (role->IsMovable())
-            Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(StateToString(role, Walk), new Vec2(touch->getLocation()));
+            Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(GameRoleState::convertToEventName(role, GameRoleState::State::Walk), new Vec2(touch->getLocation()));
         else
-            Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(StateToString(role, Think), (void*)&GameRoleState::ThinkContent::Drown);
+            Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(GameRoleState::convertToEventName(role, GameRoleState::State::Think), (void*)&GameRoleState::ThinkContent::Drown);
         return true;
     };
     
@@ -523,7 +527,7 @@ bool GameScene::initListener(){
         
         auto role = static_cast<GameRole*>(getChildByName(GameRoleName::Doll));
         if (role->IsMovable())
-            Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(StateToString(role, Idle));
+            Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(GameRoleState::convertToEventName(role, GameRoleState::State::Idle));
     };
     
     _eventDispatcher->addEventListenerWithSceneGraphPriority(touchLayerListener, this);

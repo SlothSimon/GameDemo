@@ -18,8 +18,7 @@ using namespace cocos2d::ui;
 GameRole* GameRole::create(const string & roleName)
 {
     GameRole *role = new (nothrow) GameRole();
-    char path[PATH_SIZE] = {0};
-    sprintf(path, "roles/%s_stand.png", roleName.c_str());
+    auto path = ImagePath::getRoleFramePath(roleName, "stand");
     if (role && role->initWithFile(path))
     {
         role->autorelease();
@@ -42,11 +41,13 @@ GameRole* GameRole::create(const string & roleName)
 
 void GameRole::initAnim(){
     addAnim("walk");
+    if (getName() == GameRoleName::Doll)
+        addAnim("drown");
 }
 
 void GameRole::initPhysicsBody(){
     auto body = PhysicsBody::createCircle(getContentSize().width / 2, PhysicsMaterial(1, 0, 1));//创建一个附加在精灵身体上的圆形物理body
-    if (getName() == "doll"){
+    if (getName() == GameRoleName::Doll){
         body->setContactTestBitmask(0xFF);
         body->setCategoryBitmask(0x0F);
         body->setCollisionBitmask(0xF0);
@@ -118,32 +119,48 @@ void GameRole::idle(){
     getPhysicsBody()->setSurfaceVelocity(Vec2(0, 0));
     setTexture(origText);
     _isMovable = true;
-    Director::getInstance()->getEventDispatcher()->resumeEventListenersForTarget(this->getParent());
+//    Director::getInstance()->getEventDispatcher()->resumeEventListenersForTarget(this->getParent());
 }
 
 void GameRole::drown(){
     getPhysicsBody()->setVelocity(Vec2::ZERO);
     getPhysicsBody()->setSurfaceVelocity(Vec2::ZERO);
     stopAllActions();
+//    auto drown = Animate::create(AnimationCache::getInstance()->getAnimation(getName() + "_drown"));
+//    runAction(drown);
     _isMovable = false;
-    Director::getInstance()->getEventDispatcher()->pauseEventListenersForTarget(this->getParent());
+//    Director::getInstance()->getEventDispatcher()->pauseEventListenersForTarget(this->getParent());
 }
 
 void GameRole::think(const string & content){
     if (ImagePath::BubbleMap.find(content) != ImagePath::BubbleMap.cend()){
-        auto thinkbubble = Sprite::create(ImagePath::BubbleMap.at(content));
-        thinkbubble->setPosition(Vec2(-30, 200));  // TODO: 需要相对位置
-        thinkbubble->setScale(this->getContentSize().width/thinkbubble->getContentSize().width/4);
-        
-        addChild(thinkbubble);
         auto scale = ScaleBy::create(0.1f, 4.0f);
-        thinkbubble->runAction(Sequence::create(scale,
-                                                DelayTime::create(2.0f),
-                                                scale->reverse(),
-                                                CallFunc::create([thinkbubble](){
-                                                    thinkbubble->removeFromParent();
-                                                }),
-                                                NULL));
+        if (getChildByName("bubble") == nullptr){
+            auto thinkbubble = Sprite::create(ImagePath::BubbleMap.at(content));
+            
+            // This is a relative postion
+            thinkbubble->setPosition(Vec2(-30, 200));
+            thinkbubble->setScale(this->getContentSize().width/thinkbubble->getContentSize().width/4);
+            
+            addChild(thinkbubble);
+            thinkbubble->setName("bubble");
+            thinkbubble->runAction(Sequence::create(scale,
+                                                    DelayTime::create(2.0f),
+                                                    scale->reverse(),
+                                                    CallFunc::create([thinkbubble](){
+                                                        thinkbubble->removeFromParent();
+                                                    }),
+                                                    NULL));
+        }else{
+            auto thinkbubble = getChildByName("bubble");
+            thinkbubble->stopAllActions();
+            thinkbubble->runAction(Sequence::create(DelayTime::create(2.0f),
+                                                    scale->reverse(),
+                                                    CallFunc::create([thinkbubble](){
+                                                        thinkbubble->removeFromParent();
+                                                    }),
+                                                    NULL));
+        }
     }else{
         log("Error: There is no such bubble!");
     }
@@ -164,7 +181,7 @@ void GameRole::initListener(){
         auto role2 = contact.getShapeB()->getBody()->getNode();
         
         if (role1->getName() == "doll" && role2->getName() == "Water"){
-            Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(GameRoleState::toString(this, GameRoleState::State::Drown));
+            Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(GameRoleState::convertToEventName(this, GameRoleState::State::Drown));
         }
         
         return true;
@@ -175,7 +192,7 @@ void GameRole::initListener(){
         auto role2 = contact.getShapeB()->getBody()->getNode();
         
         if (role1->getName() == "doll" && role2->getName() == "Water"){
-            Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(GameRoleState::toString(this, GameRoleState::State::Idle));
+            Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(GameRoleState::convertToEventName(this, GameRoleState::State::Idle));
         }
         
         return true;

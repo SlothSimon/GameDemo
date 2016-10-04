@@ -12,25 +12,20 @@
 #include "GameRole.h"
 
 void StateIdle::execute(GameRole* role, EventCustom* event){
-    auto enMsgType = GameRoleState::toEnum(event->getEventName());
+    auto eventName = GameRoleState::convertToStateName(event->getEventName());
     
-    switch (enMsgType) {
-        case GameRoleState::State::Walk:{
-            auto pos = static_cast<Vec2*>(event->getUserData());
-            role->walk(*pos);
-            role->getFSM()->changeState(new StateWalk());
-            break;
-        }
-        case GameRoleState::State::Drown:{
-            role->drown();
-            role->getFSM()->changeState(new StateDrown());
-            break;
-        }
-        case GameRoleState::State::Think:{
-            string* cont = static_cast<string*>(event->getUserData());
-            role->think(*cont);
-        }
-        default:
-            break;
+    if (eventName == GameRoleState::State::Walk){
+        auto pos = static_cast<Vec2*>(event->getUserData());
+        role->walk(*pos);
+        role->getFSM()->changeState(new StateWalk());
     }
+    else if (eventName == GameRoleState::State::Think){
+        string* cont = static_cast<string*>(event->getUserData());
+        role->think(*cont);
+    }
+    else if (eventName == GameRoleState::State::Drown){
+        role->drown();
+        role->getFSM()->changeState(new StateDrown());
+    }
+
 }

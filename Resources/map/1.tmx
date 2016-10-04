@@ -91,7 +91,7 @@
  <objectgroup name="interaction">
   <object id="27" name="panel" type="Message" x="576.143" y="174.793" width="32" height="26.0868">
    <properties>
-    <property name="LayerName" value="message_1"/>
+    <property name="ImagePath" value="map/speech_bubble.png"/>
    </properties>
   </object>
  </objectgroup>

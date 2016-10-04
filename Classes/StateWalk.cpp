@@ -12,18 +12,14 @@
 #include "GameRole.h"
 
 void StateWalk::execute(GameRole* role, EventCustom* event){
-    auto enMsgType = GameRoleState::toEnum(event->getEventName());
+    auto eventName = GameRoleState::convertToStateName(event->getEventName());
     
-    switch (enMsgType) {
-        case GameRoleState::State::Idle:
-            role->idle();
-            role->getFSM()->changeState(new StateIdle());
-            break;
-        case GameRoleState::State::Drown:
-            role->drown();
-            role->getFSM()->changeState(new StateDrown());
-            break;
-        default:
-            break;
+    if (eventName == GameRoleState::State::Idle){
+        role->idle();
+        role->getFSM()->changeState(new StateIdle());
+    }
+    else if (eventName == GameRoleState::State::Drown){
+        role->drown();
+        role->getFSM()->changeState(new StateDrown());
     }
 }
