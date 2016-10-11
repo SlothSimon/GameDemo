@@ -16,10 +16,10 @@ void StateWalk::execute(GameRole* role, EventCustom* event){
     
     if (eventName == GameRoleState::State::Idle){
         role->idle();
-        role->getFSM()->changeState(new StateIdle());
+        role->changeState(new StateIdle());
     }
     else if (eventName == GameRoleState::State::Drown){
         role->drown();
-        role->getFSM()->changeState(new StateDrown());
+        role->changeState(new StateDrown());
     }
 }

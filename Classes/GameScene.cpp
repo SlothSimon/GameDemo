@@ -41,14 +41,15 @@ std::vector<Vec2> StringToPoints(const string & str){
     return poss;
 }
 
-
-
 Scene* GameScene::createScene()
 {
     auto scene = Scene::createWithPhysics();
     scene->getPhysicsWorld()->setGravity(Vec2(0, -200));
     if (DebugParameters::DoDebug)
         scene->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);//调试
+    
+    // 设定每秒帧数，防止刚体乱跳
+    scene->getPhysicsWorld()->setFixedUpdateRate(50);
     
     auto layer = GameScene::create();
     if (layer != NULL){
@@ -88,6 +89,16 @@ bool GameScene::init()
 
     if (!initBGM())
         return false;
+    
+    
+//    auto listener = EventListenerTouchOneByOne::create();
+//    listener->setSwallowTouches(true);
+//    listener->onTouchBegan = [=](Touch* touch, Event* event){
+//#include "scripts/roles/test.cpp"
+//        return true;
+//    };
+//    
+//    Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, getChildByName("doll"));
     
     return true;
 }
@@ -296,7 +307,7 @@ bool GameScene::initInteraction(){
                                                         NULL));
                     }
                 }else{
-                    Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(GameRoleState::convertToEventName(doll, GameRoleState::State::Think), (void*)&GameRoleState::ThinkContent::Walk);
+                    doll->doAction(GameRoleState::State::Think, (void*)&GameRoleState::ThinkContent::Walk);
                 }
 
                 return true;    // return true 会使其他listener失效
@@ -517,9 +528,9 @@ bool GameScene::initListener(){
     touchLayerListener->onTouchBegan = [this](Touch* touch, Event* event){
         auto role = static_cast<GameRole*>(getChildByName(GameRoleName::Doll));
         if (role->IsMovable())
-            Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(GameRoleState::convertToEventName(role, GameRoleState::State::Walk), new Vec2(touch->getLocation()));
+            role->doAction(GameRoleState::State::Walk, new Vec2(touch->getLocation()));
         else
-            Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(GameRoleState::convertToEventName(role, GameRoleState::State::Think), (void*)&GameRoleState::ThinkContent::Drown);
+            role->doAction(GameRoleState::State::Think, (void*)&GameRoleState::ThinkContent::Drown);
         return true;
     };
     
@@ -527,7 +538,7 @@ bool GameScene::initListener(){
         
         auto role = static_cast<GameRole*>(getChildByName(GameRoleName::Doll));
         if (role->IsMovable())
-            Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(GameRoleState::convertToEventName(role, GameRoleState::State::Idle));
+            role->doAction(GameRoleState::State::Idle);
     };
     
     _eventDispatcher->addEventListenerWithSceneGraphPriority(touchLayerListener, this);

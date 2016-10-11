@@ -119,48 +119,43 @@ void GameRole::idle(){
     getPhysicsBody()->setSurfaceVelocity(Vec2(0, 0));
     setTexture(origText);
     _isMovable = true;
-//    Director::getInstance()->getEventDispatcher()->resumeEventListenersForTarget(this->getParent());
 }
 
 void GameRole::drown(){
     getPhysicsBody()->setVelocity(Vec2::ZERO);
     getPhysicsBody()->setSurfaceVelocity(Vec2::ZERO);
     stopAllActions();
-//    auto drown = Animate::create(AnimationCache::getInstance()->getAnimation(getName() + "_drown"));
-//    runAction(drown);
     _isMovable = false;
-//    Director::getInstance()->getEventDispatcher()->pauseEventListenersForTarget(this->getParent());
 }
 
-void GameRole::think(const string & content){
+void GameRole::think(const string & content, CallFunc* callback){
     if (ImagePath::BubbleMap.find(content) != ImagePath::BubbleMap.cend()){
         auto scale = ScaleBy::create(0.1f, 4.0f);
-        if (getChildByName("bubble") == nullptr){
-            auto thinkbubble = Sprite::create(ImagePath::BubbleMap.at(content));
-            
-            // This is a relative postion
-            thinkbubble->setPosition(Vec2(-30, 200));
-            thinkbubble->setScale(this->getContentSize().width/thinkbubble->getContentSize().width/4);
-            
-            addChild(thinkbubble);
-            thinkbubble->setName("bubble");
-            thinkbubble->runAction(Sequence::create(scale,
-                                                    DelayTime::create(2.0f),
-                                                    scale->reverse(),
-                                                    CallFunc::create([thinkbubble](){
-                                                        thinkbubble->removeFromParent();
-                                                    }),
-                                                    NULL));
-        }else{
-            auto thinkbubble = getChildByName("bubble");
-            thinkbubble->stopAllActions();
-            thinkbubble->runAction(Sequence::create(DelayTime::create(2.0f),
-                                                    scale->reverse(),
-                                                    CallFunc::create([thinkbubble](){
-                                                        thinkbubble->removeFromParent();
-                                                    }),
-                                                    NULL));
+        Node* thinkbubble = getChildByName("bubble");
+        if (thinkbubble != nullptr){
+            thinkbubble->removeFromParent();
         }
+        thinkbubble = Sprite::create(ImagePath::BubbleMap.at(content));
+        // This is a relative postion
+        thinkbubble->setPosition(Vec2(60, 200));
+        thinkbubble->setScale(this->getContentSize().width/thinkbubble->getContentSize().width/4);
+        
+        addChild(thinkbubble);
+        thinkbubble->setName("bubble");
+        auto act = Sequence::create(CallFunc::create([thinkbubble, scale]{
+                                        thinkbubble->runAction(Sequence::create(scale,
+                                                                                DelayTime::create(2.0f),
+                                                                                scale->reverse(),
+                                                                                CallFunc::create([thinkbubble](){
+                                                                                    thinkbubble->removeFromParent();
+                                                                                }),
+                                                                                NULL));
+                                    }),
+                                    callback == nullptr ? NULL : callback,
+                                    NULL);
+        string cont = content;
+        thinkbubble->setUserData((void*)&cont);
+        getActionManager()->addAction(act, this, false);
     }else{
         log("Error: There is no such bubble!");
     }
@@ -180,8 +175,8 @@ void GameRole::initListener(){
         auto role1 = contact.getShapeA()->getBody()->getNode();
         auto role2 = contact.getShapeB()->getBody()->getNode();
         
-        if (role1->getName() == "doll" && role2->getName() == "Water"){
-            Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(GameRoleState::convertToEventName(this, GameRoleState::State::Drown));
+        if (role1->getName() == GameRoleName::Doll && role2->getName() == "Water"){
+            doAction(GameRoleState::State::Drown);
         }
         
         return true;
@@ -191,12 +186,20 @@ void GameRole::initListener(){
         auto role1 = contact.getShapeA()->getBody()->getNode();
         auto role2 = contact.getShapeB()->getBody()->getNode();
         
-        if (role1->getName() == "doll" && role2->getName() == "Water"){
-            Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(GameRoleState::convertToEventName(this, GameRoleState::State::Idle));
+        if (role1->getName() == GameRoleName::Doll && role2->getName() == "Water"){
+            doAction(GameRoleState::State::Idle);
         }
         
         return true;
     };
     
     Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(contactListener, this);
+}
+
+void GameRole::changeState(State *state) const {
+    mFSM->changeState(state);
+}
+
+void GameRole::doAction(const string& action, void* userdata) const{
+    Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(GameRoleState::convertToEventName(this, action), userdata);
 }

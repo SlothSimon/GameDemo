@@ -15,7 +15,7 @@ void StateDrown::execute(GameRole* role, EventCustom* event){
     
     if (eventName == GameRoleState::State::Idle){
         role->idle();
-        role->getFSM()->changeState(new StateIdle());
+        role->changeState(new StateIdle());
     }
     else if (eventName == GameRoleState::State::Think){
         auto cont = static_cast<string*>(event->getUserData());

@@ -17,7 +17,6 @@ class GameRole;
 class State : public cocos2d::Ref{
 public:
     virtual void execute(GameRole* role, cocos2d::EventCustom* event) = 0;
-    
 };
 
 #endif /* State_h */

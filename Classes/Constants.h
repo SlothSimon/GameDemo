@@ -17,7 +17,7 @@ using namespace std;
  * Constants about debug, development and system
  */
 struct DebugParameters{
-    const static int StartStage = 2;
+    const static int StartStage = 1;
     const static bool DoDebug = true;
     const static int EndStage = 2;
 };
@@ -58,7 +58,7 @@ public:
         const static string Drown;
     };
     
-    const static string convertToEventName(const GameRole* role, const string s);
+    const static string convertToEventName(const GameRole* role, const string& s);
 
     const static string convertToStateName(const string &s);
     

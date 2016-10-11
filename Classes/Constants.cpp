@@ -31,7 +31,7 @@ const float PhysicsBodyParameters::getFriction(const string &k){
 const string GameRoleName::Doll = "doll";
 const string GameRoleName::Girl = "girl";
 
-const string GameRoleState::convertToEventName(const GameRole* role, const string s)
+const string GameRoleState::convertToEventName(const GameRole* role, const string& s)
 {
     return role->getName() + "_" + s;
 }
