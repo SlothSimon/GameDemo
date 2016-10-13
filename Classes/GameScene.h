@@ -9,6 +9,8 @@
 #ifndef GameScene_h
 #define GameScene_h
 
+#include "GameRole.h"
+
 #define WEATHER_SUNNY "Sunny"
 #define WEATHER_RAINY "Rainy"
 #define INTERACTION_RANGE 30
@@ -18,6 +20,15 @@
 
 USING_NS_CC;
 using namespace std;
+
+struct Cinematic{
+    // TODO: 可能需要兼容其他类型的动画，而不只是人物的状态机变化
+    Cinematic() = default;
+    Cinematic(GameRole* r, const string s, void* u = nullptr):role(r), action(s), userdata(u){};
+    GameRole* role;
+    const string action;
+    void* userdata = nullptr;
+};
 
 class GameScene : public cocos2d::Layer
 {
@@ -41,8 +52,17 @@ private:
     multimap<string, Node*> collisionNodeWithAction; // 具有action的node
     int currentStage;
     
+    // 剧情动画
+    bool isPlayCinematic = false;
+    queue<Cinematic> seqCinematic;
+    void playCinematic(Cinematic&);
+    void pushCinematic(Cinematic&);
+    void nextCinematic();
+    
+    // 场景变换
     void enterStage(const int &);
     
+    // weather change
     void beSunny();
     
     void beRainy();
@@ -51,6 +71,9 @@ private:
     
     virtual void beRainyGround();
     
+    void updateWeather(float dt);
+    
+    // initial
     bool initMap(const string &);
     
     bool initInteraction();
@@ -67,7 +90,6 @@ private:
     
     bool initBGM();
     
-    void updateWeather(float dt);
     
 };
 

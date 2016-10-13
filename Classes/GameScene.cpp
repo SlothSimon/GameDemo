@@ -90,15 +90,21 @@ bool GameScene::init()
     if (!initBGM())
         return false;
     
+    isPlayCinematic = false;
     
-//    auto listener = EventListenerTouchOneByOne::create();
-//    listener->setSwallowTouches(true);
-//    listener->onTouchBegan = [=](Touch* touch, Event* event){
-//#include "scripts/roles/test.cpp"
-//        return true;
-//    };
-//    
-//    Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, getChildByName("doll"));
+    
+    auto listener = EventListenerTouchOneByOne::create();
+    listener->setSwallowTouches(true);
+    listener->onTouchBegan = [=](Touch* touch, Event* event){
+        auto doll = static_cast<GameRole*>(getChildByName("doll"));
+        this->pushCinematic(*(new Cinematic(doll, GameRoleState::State::Think, (void*)&GameRoleState::ThinkContent::Walk)));
+        this->pushCinematic(*(new Cinematic(doll, GameRoleState::State::Think, (void*)&GameRoleState::ThinkContent::Drown)));
+        this->pushCinematic(*(new Cinematic(doll, GameRoleState::State::Walk)));
+        
+        return true;
+    };
+    
+    Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, getChildByName("doll"));
     
     return true;
 }
@@ -556,4 +562,28 @@ bool GameScene::initBGM(){
     return true;
 }
 
+void GameScene::playCinematic(Cinematic& cine){
+    map<string, void*> m;
+    m["Data"] = cine.userdata;
+    m["Callback"] = CallFunc::create([=]{this->nextCinematic();});
+    cine.role->doAction(cine.action, &m);
+}
 
+void GameScene::nextCinematic(){
+    if (seqCinematic.empty()){
+        isPlayCinematic = false;
+    }else{
+        auto func = seqCinematic.front();
+        playCinematic(func);
+        seqCinematic.pop();
+    }
+}
+
+void GameScene::pushCinematic(Cinematic& cine){
+    if (!isPlayCinematic){
+        isPlayCinematic = true;
+        playCinematic(cine);
+    }else{
+        seqCinematic.push(cine);
+    }
+}

@@ -142,16 +142,16 @@ void GameRole::think(const string & content, CallFunc* callback){
         
         addChild(thinkbubble);
         thinkbubble->setName("bubble");
-        auto act = Sequence::create(CallFunc::create([thinkbubble, scale]{
+        auto act = Sequence::create(CallFunc::create([thinkbubble, scale, callback]{
                                         thinkbubble->runAction(Sequence::create(scale,
                                                                                 DelayTime::create(2.0f),
                                                                                 scale->reverse(),
                                                                                 CallFunc::create([thinkbubble](){
                                                                                     thinkbubble->removeFromParent();
                                                                                 }),
+                                                                                callback == nullptr ? NULL : callback,
                                                                                 NULL));
                                     }),
-                                    callback == nullptr ? NULL : callback,
                                     NULL);
         string cont = content;
         thinkbubble->setUserData((void*)&cont);
@@ -202,4 +202,5 @@ void GameRole::changeState(State *state) const {
 
 void GameRole::doAction(const string& action, void* userdata) const{
     Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(GameRoleState::convertToEventName(this, action), userdata);
+    
 }

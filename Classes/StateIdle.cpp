@@ -20,8 +20,10 @@ void StateIdle::execute(GameRole* role, EventCustom* event){
         role->changeState(new StateWalk());
     }
     else if (eventName == GameRoleState::State::Think){
-        string* cont = static_cast<string*>(event->getUserData());
-        role->think(*cont);
+        auto m = static_cast<map<string, void*>*>(event->getUserData());
+        auto cont = static_cast<string*>(m->at("Data"));
+        auto callback = static_cast<CallFunc*>(m->at("Callback"));
+        role->think(*cont, callback);
     }
     else if (eventName == GameRoleState::State::Drown){
         role->drown();
