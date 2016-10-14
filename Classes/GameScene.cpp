@@ -15,6 +15,8 @@
 #include "GameRole.h"
 #include "Constants.h"
 
+#include "lua.hpp"
+
 USING_NS_CC;
 using namespace CocosDenshion;
 using namespace cocos2d::ui;
@@ -96,10 +98,28 @@ bool GameScene::init()
     auto listener = EventListenerTouchOneByOne::create();
     listener->setSwallowTouches(true);
     listener->onTouchBegan = [=](Touch* touch, Event* event){
-        auto doll = static_cast<GameRole*>(getChildByName("doll"));
-        this->pushCinematic(*(new Cinematic(doll, GameRoleState::State::Think, (void*)&GameRoleState::ThinkContent::Walk)));
-        this->pushCinematic(*(new Cinematic(doll, GameRoleState::State::Think, (void*)&GameRoleState::ThinkContent::Drown)));
-        this->pushCinematic(*(new Cinematic(doll, GameRoleState::State::Walk)));
+//        auto doll = static_cast<GameRole*>(getChildByName("doll"));
+//        this->pushCinematic(*(new Cinematic(doll, GameRoleState::State::Think, (void*)&GameRoleState::ThinkContent::Walk)));
+//        this->pushCinematic(*(new Cinematic(doll, GameRoleState::State::Think, (void*)&GameRoleState::ThinkContent::Drown)));
+//        this->pushCinematic(*(new Cinematic(doll, GameRoleState::State::Walk)));
+        
+        
+        lua_State* pL = luaL_newstate();
+        
+        luaopen_base(pL);
+        luaopen_math(pL);
+        luaopen_string(pL);
+        
+        int err = luaL_dofile(pL, "scripts/test.lua");
+        log("open : %d", err);
+        
+        lua_settop(pL, 0);
+        lua_getglobal(pL, "message");
+
+        const char* str = lua_tostring(pL, 1);
+        log("getStr = %s", str);
+        
+        lua_close(pL);
         
         return true;
     };
