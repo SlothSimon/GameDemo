@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" renderorder="right-down" width="20" height="10" tilewidth="32" tileheight="32" nextobjectid="57">
  <properties>
+  <property name="Script" value="map_2.lua"/>
   <property name="Weather" value="Rainy"/>
  </properties>
  <tileset firstgid="1" name="wood" tilewidth="32" tileheight="32" tilecount="3" columns="3">
@@ -83,16 +84,8 @@
   </data>
  </layer>
  <objectgroup name="roles">
-  <object id="1" name="doll" type="Position" x="14.8582" y="224.556">
-   <properties>
-    <property name="IsDynamic" type="bool" value="true"/>
-   </properties>
-  </object>
-  <object id="38" name="girl" type="Position" x="254" y="192">
-   <properties>
-    <property name="IsDynamic" type="bool" value="false"/>
-   </properties>
-  </object>
+  <object id="1" name="doll" type="Role" x="14.8582" y="224.556"/>
+  <object id="38" name="girl" type="Role" x="254" y="192"/>
  </objectgroup>
  <objectgroup name="interaction"/>
  <objectgroup color="#000000" name="barriers">

@@ -6,6 +6,7 @@
 //
 //
 #include <regex>
+#include <unistd.h>
 
 #include "GameScene.h"
 #include "EndScene.h"
@@ -92,41 +93,12 @@ bool GameScene::init()
     if (!initBGM())
         return false;
     
-    isPlayCinematic = false;
-    
-    
-    auto listener = EventListenerTouchOneByOne::create();
-    listener->setSwallowTouches(true);
-    listener->onTouchBegan = [=](Touch* touch, Event* event){
-//        auto doll = static_cast<GameRole*>(getChildByName("doll"));
-//        this->pushCinematic(*(new Cinematic(doll, GameRoleState::State::Think, (void*)&GameRoleState::ThinkContent::Walk)));
-//        this->pushCinematic(*(new Cinematic(doll, GameRoleState::State::Think, (void*)&GameRoleState::ThinkContent::Drown)));
-//        this->pushCinematic(*(new Cinematic(doll, GameRoleState::State::Walk)));
-        
-        
-        lua_State* pL = luaL_newstate();
-        
-        luaopen_base(pL);
-        luaopen_math(pL);
-        luaopen_string(pL);
-        
-        int err = luaL_dofile(pL, "scripts/test.lua");
-        log("open : %d", err);
-        
-        lua_settop(pL, 0);
-        lua_getglobal(pL, "message");
-
-        const char* str = lua_tostring(pL, 1);
-        log("getStr = %s", str);
-        
-        lua_close(pL);
-        
-        return true;
-    };
-    
-    Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, getChildByName("doll"));
-    
     return true;
+}
+
+void GameScene::onEnterTransitionDidFinish(){
+    if (!initCinematic())
+        log("Init Cinematic Error!");
 }
 
 void GameScene::updateWeather(float dt){
@@ -263,16 +235,19 @@ bool GameScene::initMap(const string & mapName){
     weather = tileMap->getProperty("Weather").asString();
     tileMap->setPosition(origin);
     tileMap->setScale(visibleSize.width/(tileMap->getContentSize().width));
-    
-    initInteraction();
-    
-    initCollision();
-    
-    initWeather();
-    
-    initDoll();
-    
     addChild(tileMap, 10);
+    
+    if (!initInteraction())
+        return false;
+    
+    if (!initCollision())
+        return false;
+    
+    if (!initWeather())
+        return false;
+    
+    if (!initDoll())
+        return false;
     
     return true;
 }
@@ -333,7 +308,7 @@ bool GameScene::initInteraction(){
                                                         NULL));
                     }
                 }else{
-                    doll->doAction(GameRoleState::State::Think, (void*)&GameRoleState::ThinkContent::Walk);
+                    doll->doAction(GameRoleState::State::Think, GameRoleState::ThinkContent::Walk);
                 }
 
                 return true;    // return true 会使其他listener失效
@@ -554,9 +529,10 @@ bool GameScene::initListener(){
     touchLayerListener->onTouchBegan = [this](Touch* touch, Event* event){
         auto role = static_cast<GameRole*>(getChildByName(GameRoleName::Doll));
         if (role->IsMovable())
-            role->doAction(GameRoleState::State::Walk, new Vec2(touch->getLocation()));
-        else
-            role->doAction(GameRoleState::State::Think, (void*)&GameRoleState::ThinkContent::Drown);
+            role->doAction(GameRoleState::State::Walk, touch->getLocation());
+        else{
+            role->doAction(GameRoleState::State::Think, GameRoleState::ThinkContent::Drown);
+        }
         return true;
     };
     
@@ -582,14 +558,91 @@ bool GameScene::initBGM(){
     return true;
 }
 
+bool GameScene::initCinematic(){
+    isPlayCinematic = false;
+    
+    lua_State* pL = luaL_newstate();
+    //
+    //    luaopen_base(pL);
+    //    luaopen_math(pL);
+    //    luaopen_string(pL);
+    
+    auto luaname = tileMap->getProperty("Script").asString();
+    auto path = FileUtils::getInstance()->fullPathForFilename(luaname);
+    
+    // 必须使用绝对路径
+    int err = luaL_dofile(pL, path.c_str());
+    if (err != 0){
+        log("Lua Open Error: %d", err);
+        return false;
+    }else{
+        log("Open %s successfully.", luaname.c_str());
+    }
+
+    lua_getglobal(pL, "EnterCinematic");
+    
+    int tableIdx = lua_gettop(pL);
+    lua_pushnil(pL);
+    
+    int count = 0;
+    while (lua_next(pL, tableIdx)){
+        // Every circle, push the key first then the value, so -1 --> value, -2 --> key
+        if (lua_istable(pL, -1)){
+            log("%s", to_string(count++).c_str());
+            int subtableIdx = lua_gettop(pL);
+            lua_pushnil(pL);
+            auto i = lua_getfield(pL, subtableIdx, "ObjectName");
+            auto role = static_cast<GameRole*>(getChildByName(lua_tostring(pL, -1)));
+            lua_pop(pL, 1);
+            
+            lua_getfield(pL, subtableIdx, "EventName");
+            string eventname = lua_tostring(pL, -1);
+            lua_pop(pL, 1);
+            
+            // lua_gettable 说是返回the type of value，但是是个int，未找到为0，字符串为4，数字为3
+            auto hasEventData = lua_getfield(pL, subtableIdx, "EventData");
+            string data = lua_tostring(pL, -1);
+            lua_pop(pL, 1);
+            
+            lua_getfield(pL, subtableIdx, "Delay");
+            double delay = lua_tonumber(pL, -1);
+            lua_pop(pL, 1);
+            
+            lua_pop(pL, 1);
+            pushCinematic(*(new Cinematic(role, eventname, delay, hasEventData ? data : NULL)));
+        }
+        lua_pop(pL, 1);
+    }
+    
+    lua_close(pL);
+    
+    
+    return true;
+}
+
 void GameScene::playCinematic(Cinematic& cine){
     map<string, void*> m;
-    m["Data"] = cine.userdata;
-    m["Callback"] = CallFunc::create([=]{this->nextCinematic();});
-    cine.role->doAction(cine.action, &m);
+    m["Data"] = &cine.userdata;
+    if (cine.delay < 0)
+        m["Callback"] = CallFunc::create([=]{this->nextCinematic();});
+    else if (cine.delay == 0){
+        thread mThread([this,cine]{
+            this->nextCinematic();
+        });
+        mThread.detach();
+    }
+    else {
+        thread mThread([this,cine]{
+            sleep(cine.delay);
+            this->nextCinematic();
+        });
+        mThread.detach();
+    }
+    cine.role->doAction(cine.action, m);
 }
 
 void GameScene::nextCinematic(){
+    // 会发生并发问题吗？
     if (seqCinematic.empty()){
         isPlayCinematic = false;
     }else{

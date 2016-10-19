@@ -131,31 +131,27 @@ void GameRole::drown(){
 void GameRole::think(const string & content, CallFunc* callback){
     if (ImagePath::BubbleMap.find(content) != ImagePath::BubbleMap.cend()){
         auto scale = ScaleBy::create(0.1f, 4.0f);
-        Node* thinkbubble = getChildByName("bubble");
+        Sprite* thinkbubble = static_cast<Sprite*>(getChildByName("bubble"));
         if (thinkbubble != nullptr){
             thinkbubble->removeFromParent();
         }
         thinkbubble = Sprite::create(ImagePath::BubbleMap.at(content));
         // This is a relative postion
-        thinkbubble->setPosition(Vec2(60, 200));
+        thinkbubble->setPosition(getContentSize().width/2, getContentSize().height*1.2);
         thinkbubble->setScale(this->getContentSize().width/thinkbubble->getContentSize().width/4);
         
         addChild(thinkbubble);
         thinkbubble->setName("bubble");
-        auto act = Sequence::create(CallFunc::create([thinkbubble, scale, callback]{
-                                        thinkbubble->runAction(Sequence::create(scale,
-                                                                                DelayTime::create(2.0f),
-                                                                                scale->reverse(),
-                                                                                CallFunc::create([thinkbubble](){
-                                                                                    thinkbubble->removeFromParent();
-                                                                                }),
-                                                                                callback == nullptr ? NULL : callback,
-                                                                                NULL));
-                                    }),
-                                    NULL);
+        thinkbubble->runAction(Sequence::create(scale,
+                                                DelayTime::create(2.0f),
+                                                scale->reverse(),
+                                                CallFunc::create([thinkbubble](){
+                                                    thinkbubble->removeFromParent();
+                                                }),
+                                                callback == nullptr ? NULL : callback,
+                                                NULL));
         string cont = content;
         thinkbubble->setUserData((void*)&cont);
-        getActionManager()->addAction(act, this, false);
     }else{
         log("Error: There is no such bubble!");
     }
@@ -200,7 +196,30 @@ void GameRole::changeState(State *state) const {
     mFSM->changeState(state);
 }
 
-void GameRole::doAction(const string& action, void* userdata) const{
-    Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(GameRoleState::convertToEventName(this, action), userdata);
-    
+void GameRole::doAction(const string& action, map<string, void*>& userdata) const{
+    Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(GameRoleState::convertToEventName(this, action), &userdata);
+}
+
+void GameRole::doAction(const string& action, string userdata) const{
+    map<string, void*> m;
+    if (userdata != "")
+        m["Data"] = &userdata;
+    Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(GameRoleState::convertToEventName(this, action), &m);
+}
+
+void GameRole::doAction(const string& action, Vec2 pos) const{
+    map<string, void*> m;
+    m["Data"] = &pos;
+    Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(GameRoleState::convertToEventName(this, action), &m);
+}
+
+//void GameRole::doAction(const string &action) const{
+//    map<string, void*> m;
+//    Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(GameRoleState::convertToEventName(this, action), &m);
+//}
+
+void GameRole::cry(){
+    log("The girl starts crying.");
+    // TODO: cry animation texture
+    think(GameRoleState::SayContent::Cry);
 }

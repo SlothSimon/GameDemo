@@ -21,13 +21,17 @@ public:
     
     GameRoleFSM* getFSM() const;
     
-    void doAction(const string& , void* userdata = nullptr) const;
+    void doAction(const string& , map<string, void*>& userdata) const;
+    void doAction(const string& , string userdata = "") const;
+    void doAction(const string& , Vec2 pos) const;
+//    void doAction(const string&) const;
     
     bool IsMovable() const;
     
     friend class StateDrown;
     friend class StateWalk;
     friend class StateIdle;
+    friend class StateCry;
     
 private:
     Texture2D* origText;
@@ -53,6 +57,8 @@ private:
     void walk(const Vec2 &);
     
     void drown();
+    
+    void cry();
     
     void think(const string &, CallFunc* callback = nullptr);
 };

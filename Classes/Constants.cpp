@@ -47,10 +47,15 @@ const string GameRoleState::convertToStateName(const string &s)
 
 const string GameRoleState::State::Idle = "idle";
 const string GameRoleState::State::Think = "think";
+const string GameRoleState::State::Say = "say";
 const string GameRoleState::State::Drown = "drown";
 const string GameRoleState::State::Walk  = "walk";
+const string GameRoleState::State::Cry = "cry";
 const string GameRoleState::ThinkContent::Drown = "think_drown";
 const string GameRoleState::ThinkContent::Walk  = "think_walk";
+const string GameRoleState::SayContent::Love = "say_love";
+const string GameRoleState::SayContent::Shock = "say_shock";
+const string GameRoleState::SayContent::Cry = "say_cry";
 
 
 const char* MusicPath::normalBGM   = "music/firstlove_light.mp3";
@@ -79,5 +84,8 @@ const map<string, const char*> ImagePath::CreateBubbleMap(){
     map<string, const char*> m;
     m[GameRoleState::ThinkContent::Drown] = "roles/bubble/think_nowalk.png";
     m[GameRoleState::ThinkContent::Walk]  = "roles/bubble/think_walk.png";
+    m[GameRoleState::SayContent::Love] = "roles/bubble/say_love.png";
+    m[GameRoleState::SayContent::Shock] = "roles/bubble/say_shock.png";
+    m[GameRoleState::SayContent::Cry] = "roles/bubble/say_cry.png";
     return m;
 }

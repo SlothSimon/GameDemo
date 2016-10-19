@@ -51,11 +51,19 @@ public:
         const static string Idle;
         const static string Drown;
         const static string Think;
+        const static string Say;
+        const static string Cry;
     };
     
     struct ThinkContent{
         const static string Walk;
         const static string Drown;
+    };
+    
+    struct SayContent{
+        const static string Love;
+        const static string Shock;
+        const static string Cry;
     };
     
     const static string convertToEventName(const GameRole* role, const string& s);

@@ -25,9 +25,7 @@ public:
     const State* getCurrentState() const;
     
 private:
-    void onRecvWalk(EventCustom* event);
-    void onRecvIdle(EventCustom* event);
-    void onRecvDrown(EventCustom* event);
+    void onRecvState(EventCustom* event);
     
     State* curState;
     

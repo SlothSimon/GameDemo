@@ -24,10 +24,11 @@ using namespace std;
 struct Cinematic{
     // TODO: 可能需要兼容其他类型的动画，而不只是人物的状态机变化
     Cinematic() = default;
-    Cinematic(GameRole* r, const string s, void* u = nullptr):role(r), action(s), userdata(u){};
+    Cinematic(GameRole* r, const string s, double d = -1, string u = NULL):role(r), action(s), userdata(u), delay(d){};
     GameRole* role;
     const string action;
-    void* userdata = nullptr;
+    string userdata;
+    double delay = -1;
 };
 
 class GameScene : public cocos2d::Layer
@@ -36,6 +37,8 @@ public:
     static cocos2d::Scene* createScene();
     
     virtual bool init();
+    
+    virtual void onEnterTransitionDidFinish();
     
     // implement the "static create()" method manually
     CREATE_FUNC(GameScene);
@@ -89,6 +92,8 @@ private:
     bool initListener();
     
     bool initBGM();
+    
+    bool initCinematic();
     
     
 };

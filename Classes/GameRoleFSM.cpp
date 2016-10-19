@@ -36,15 +36,17 @@ bool GameRoleFSM::initWithGameRole(GameRole *role){
     role->retain();
     
     
-    auto listener = EventListenerCustom::create(GameRoleState::convertToEventName(role, GameRoleState::State::Walk), CC_CALLBACK_1(GameRoleFSM::onRecvWalk, this));
+    auto listener = EventListenerCustom::create(GameRoleState::convertToEventName(role, GameRoleState::State::Walk), CC_CALLBACK_1(GameRoleFSM::onRecvState, this));
     DISPATCH->addEventListenerWithSceneGraphPriority(listener, this);
-    
-    listener = EventListenerCustom::create(GameRoleState::convertToEventName(role, GameRoleState::State::Idle), CC_CALLBACK_1(GameRoleFSM::onRecvIdle, this));
+    listener = EventListenerCustom::create(GameRoleState::convertToEventName(role, GameRoleState::State::Idle), CC_CALLBACK_1(GameRoleFSM::onRecvState, this));
     DISPATCH->addEventListenerWithSceneGraphPriority(listener, this);
-    
-    listener = EventListenerCustom::create(GameRoleState::convertToEventName(role, GameRoleState::State::Drown), CC_CALLBACK_1(GameRoleFSM::onRecvDrown, this));
+    listener = EventListenerCustom::create(GameRoleState::convertToEventName(role, GameRoleState::State::Drown), CC_CALLBACK_1(GameRoleFSM::onRecvState, this));
     DISPATCH->addEventListenerWithSceneGraphPriority(listener, this);
-    listener = EventListenerCustom::create(GameRoleState::convertToEventName(role, GameRoleState::State::Think), CC_CALLBACK_1(GameRoleFSM::onRecvDrown, this));
+    listener = EventListenerCustom::create(GameRoleState::convertToEventName(role, GameRoleState::State::Think), CC_CALLBACK_1(GameRoleFSM::onRecvState, this));
+    DISPATCH->addEventListenerWithSceneGraphPriority(listener, this);
+    listener = EventListenerCustom::create(GameRoleState::convertToEventName(role, GameRoleState::State::Cry), CC_CALLBACK_1(GameRoleFSM::onRecvState, this));
+    DISPATCH->addEventListenerWithSceneGraphPriority(listener, this);
+    listener = EventListenerCustom::create(GameRoleState::convertToEventName(role, GameRoleState::State::Say), CC_CALLBACK_1(GameRoleFSM::onRecvState, this));
     DISPATCH->addEventListenerWithSceneGraphPriority(listener, this);
     
     return true;
@@ -56,15 +58,7 @@ void GameRoleFSM::changeState(State *state){
     this->curState = state;
 }
 
-void GameRoleFSM::onRecvIdle(cocos2d::EventCustom *event){
-    this->curState->execute(role, event);
-}
-
-void GameRoleFSM::onRecvWalk(cocos2d::EventCustom *event){
-    this->curState->execute(role, event);
-}
-
-void GameRoleFSM::onRecvDrown(cocos2d::EventCustom *event){
+void GameRoleFSM::onRecvState(cocos2d::EventCustom *event){
     this->curState->execute(role, event);
 }
 
