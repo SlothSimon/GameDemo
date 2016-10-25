@@ -8,6 +8,9 @@
 
 #include "GameRole.h"
 #include "Constants.h"
+#include "lua.hpp"
+
+#include "GameScene.h"
 
 constexpr static int PATH_SIZE = 50;
 constexpr static int MAX_ANIM_SIZE = 10;
@@ -30,8 +33,7 @@ GameRole* GameRole::create(const string & roleName)
         role->initPhysicsBody();
         role->mFSM = GameRoleFSM::createWithGameRole(role);
         role->addChild(role->mFSM);
-        if (roleName == "doll")
-            role->initListener();
+        role->initListener();
         
         return role;
     }
@@ -63,6 +65,7 @@ void GameRole::initPhysicsBody(){
 }
 
 void GameRole::addAnim(const string & animName){
+    // TODO: 未来换成加载效率更高的plist方式
     auto anim = Animation::create();
     for (int i = 1; i <= MAX_ANIM_SIZE; ++i){
         auto path = ImagePath::getRoleFramePath(getName(), animName, i);
@@ -153,7 +156,7 @@ void GameRole::think(const string & content, CallFunc* callback){
         string cont = content;
         thinkbubble->setUserData((void*)&cont);
     }else{
-        log("Error: There is no such bubble!");
+        log("Error: There is no %s bubble!", content.c_str());
     }
 }
 
@@ -190,6 +193,25 @@ void GameRole::initListener(){
     };
     
     Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(contactListener, this);
+    
+    auto touchListener = EventListenerTouchOneByOne::create();
+    touchListener->setSwallowTouches(true);
+    
+    touchListener->onTouchBegan = [=](Touch * touch, Event * event){
+        auto loc = convertTouchToNodeSpace(touch);
+//        loc = this->convertToNodeSpace(loc);
+        log("OpenGL loc: %f, %f", loc.x, loc.y);
+        
+        auto rect = getTextureRect();
+        if (rect.containsPoint(loc)){
+            auto scene = static_cast<GameScene*>(getParent());
+            scene->createCinematic((getName() + "OnClick").c_str());
+            return true;
+        }
+        
+        return false;
+    };
+    Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(touchListener, this);
 }
 
 void GameRole::changeState(State *state) const {

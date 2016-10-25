@@ -97,8 +97,8 @@ bool GameScene::init()
 }
 
 void GameScene::onEnterTransitionDidFinish(){
-    if (!initCinematic())
-        log("Init Cinematic Error!");
+    if (!createCinematic("EnterCinematic"))
+        log("No Such Cinematics Or Init Cinematic Error!");
 }
 
 void GameScene::updateWeather(float dt){
@@ -277,7 +277,7 @@ bool GameScene::initInteraction(){
         touchNodeListener->setSwallowTouches(true);
         
         touchNodeListener->onTouchBegan = [=](Touch* touch, Event* event){
-            Vec2 locationInNode = touchNode->convertToNodeSpace(touch->getLocation());
+            Vec2 locationInNode = touchNode->convertTouchToNodeSpace(touch);
             Size s = touchNode->getContentSize();
             Rect rect = Rect(0, 0, s.width, s.height);
             //判断触摸区域是否在目标上
@@ -315,7 +315,7 @@ bool GameScene::initInteraction(){
             }
             return false;       // return false 会继续执行其他listener
         };
-        _eventDispatcher->addEventListenerWithSceneGraphPriority(touchNodeListener, touchNode);
+        Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(touchNodeListener, touchNode);
     }
     
     return true;
@@ -543,7 +543,7 @@ bool GameScene::initListener(){
             role->doAction(GameRoleState::State::Idle);
     };
     
-    _eventDispatcher->addEventListenerWithSceneGraphPriority(touchLayerListener, this);
+    Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(touchLayerListener, this);
     
     
     return true;
@@ -558,8 +558,7 @@ bool GameScene::initBGM(){
     return true;
 }
 
-bool GameScene::initCinematic(){
-    isPlayCinematic = false;
+bool GameScene::createCinematic(const string & cineName){
     
     lua_State* pL = luaL_newstate();
     //
@@ -574,12 +573,21 @@ bool GameScene::initCinematic(){
     int err = luaL_dofile(pL, path.c_str());
     if (err != 0){
         log("Lua Open Error: %d", err);
+        lua_close(pL);
         return false;
     }else{
         log("Open %s successfully.", luaname.c_str());
     }
 
-    lua_getglobal(pL, "EnterCinematic");
+    auto isExist = lua_getglobal(pL, cineName.c_str());
+    
+    if (isExist == 0){
+        log("%s Cinematic Doesn't Exist.", cineName.c_str());
+        lua_close(pL);
+        return false;
+    }else{
+        log("%s Cinematic Exists.", cineName.c_str());
+    }
     
     int tableIdx = lua_gettop(pL);
     lua_pushnil(pL);
@@ -623,6 +631,9 @@ bool GameScene::initCinematic(){
 void GameScene::playCinematic(Cinematic& cine){
     map<string, void*> m;
     m["Data"] = &cine.userdata;
+    
+    Director::getInstance()->getEventDispatcher()->pauseEventListenersForTarget(this);
+    
     if (cine.delay < 0)
         m["Callback"] = CallFunc::create([=]{this->nextCinematic();});
     else if (cine.delay == 0){
@@ -645,6 +656,7 @@ void GameScene::nextCinematic(){
     // 会发生并发问题吗？
     if (seqCinematic.empty()){
         isPlayCinematic = false;
+        Director::getInstance()->getEventDispatcher()->resumeEventListenersForTarget(this);
     }else{
         auto func = seqCinematic.front();
         playCinematic(func);

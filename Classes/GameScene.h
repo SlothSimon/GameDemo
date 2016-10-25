@@ -45,6 +45,8 @@ public:
     
     void setPhyWorld(PhysicsWorld* world){m_world = world;}
     
+    bool createCinematic(const string & cineName);
+    
 private:
     std::string weather;
     cocos2d::LayerColor* weatherLayer;
@@ -92,8 +94,6 @@ private:
     bool initListener();
     
     bool initBGM();
-    
-    bool initCinematic();
     
     
 };

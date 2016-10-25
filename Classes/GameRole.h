@@ -10,6 +10,7 @@
 #define GameRole_h
 
 #include "GameRoleFSM.h"
+#include "Constants.h"
 
 using namespace std;
 USING_NS_CC;

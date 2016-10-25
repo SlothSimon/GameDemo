@@ -17,9 +17,13 @@ void StateDrown::execute(GameRole* role, EventCustom* event){
         role->idle();
         role->changeState(new StateIdle());
     }
-    else if (eventName == GameRoleState::State::Think){
+    else if (eventName == GameRoleState::State::Think || eventName == GameRoleState::State::Say){
         auto m = static_cast<map<string, void*>*>(event->getUserData());
         auto cont = static_cast<string*>(m->at("Data"));
-        role->think(*cont);
+        if (m->find("Callback") != m->cend()){
+            auto callback = static_cast<CallFunc*>(m->at("Callback"));
+            role->think(*cont, callback);
+        }else
+            role->think(*cont);
     }
 }
