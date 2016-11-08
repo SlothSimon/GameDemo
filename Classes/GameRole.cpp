@@ -1,6 +1,6 @@
 //
 //  GameRole.cpp
-//  Escape
+//  Sunny Doll
 //
 //  Created by zhangsimon on 16/8/26.
 //
@@ -176,9 +176,30 @@ void GameRole::initListener(){
         
         if (role1->getName() == GameRoleName::Doll && role2->getName() == "Water"){
             doAction(GameRoleState::State::Drown);
+            return true;
         }
         
-        return true;
+        try {
+            auto r1 = dynamic_cast<GameRole*>(role1);
+            auto r2 = dynamic_cast<GameRole*>(role2);
+            
+            // TODO: 感觉依然是在lua中直接调用类比较方便，可是原理不甚懂
+            if (r1 == NULL || r2 == NULL)
+                return false;
+            
+            auto name = r1->getName() == GameRoleName::Doll ? r2->getName() : (r2->getName() == GameRoleName::Doll ? r1->getName() : "");
+            auto scene = dynamic_cast<GameScene*>(r1->getParent());
+            if (scene!= NULL && name != ""){
+                scene->createCinematic((name + "OnContact").c_str());
+                return true;
+            }
+            return false;
+        } catch (exception e) {
+            log("Warning when two roles contact! Error Message: %s", e.what());
+            return false;
+        }
+        
+        return false;
     };
     
     contactListener->onContactSeparate = [this](PhysicsContact & contact){
@@ -187,9 +208,10 @@ void GameRole::initListener(){
         
         if (role1->getName() == GameRoleName::Doll && role2->getName() == "Water"){
             doAction(GameRoleState::State::Idle);
+            return true;
         }
         
-        return true;
+        return false;
     };
     
     Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(contactListener, this);
@@ -199,13 +221,18 @@ void GameRole::initListener(){
     
     touchListener->onTouchBegan = [=](Touch * touch, Event * event){
         auto loc = convertTouchToNodeSpace(touch);
-//        loc = this->convertToNodeSpace(loc);
-        log("OpenGL loc: %f, %f", loc.x, loc.y);
         
         auto rect = getTextureRect();
         if (rect.containsPoint(loc)){
-            auto scene = static_cast<GameScene*>(getParent());
-            scene->createCinematic((getName() + "OnClick").c_str());
+            auto scene = dynamic_cast<GameScene*>(getParent());
+            auto doll = dynamic_cast<GameRole*>(scene->getChildByName(GameRoleName::Doll));
+            if (scene == NULL || doll == NULL)
+                return false;
+            
+            if (doll->getPosition().distance(touch->getLocation()) <= INTERACTION_RANGE)
+                scene->createCinematic((getName() + "OnClick").c_str());
+            else
+                doll->doAction(GameRoleState::State::Think, GameRoleState::ThinkContent::Walk);
             return true;
         }
         

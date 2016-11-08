@@ -1,6 +1,6 @@
 //
 //  GameScene.h
-//  Escape
+//  Sunny Doll
 //
 //  Created by zhangsimon on 16/8/19.
 //
@@ -10,10 +10,11 @@
 #define GameScene_h
 
 #include "GameRole.h"
+#include "Cinematic.hpp"
 
 #define WEATHER_SUNNY "Sunny"
 #define WEATHER_RAINY "Rainy"
-#define INTERACTION_RANGE 30
+#define INTERACTION_RANGE 50
 #define DOLL_ZORDER 1001
 #define ROLE_ZORDER 1000
 #define INTERACTION_ZORDER 999
@@ -21,19 +22,19 @@
 USING_NS_CC;
 using namespace std;
 
-struct Cinematic{
-    // TODO: 可能需要兼容其他类型的动画，而不只是人物的状态机变化
-    Cinematic() = default;
-    Cinematic(GameRole* r, const string s, double d = -1, string u = NULL):role(r), action(s), userdata(u), delay(d){};
-    GameRole* role;
-    const string action;
-    string userdata;
-    double delay = -1;
-};
-
 class GameScene : public cocos2d::Layer
 {
 public:
+    std::string weather;
+    cocos2d::LayerColor* weatherLayer;
+    TMXTiledMap* tileMap;
+    map<string, unsigned int> effects;  // 音效ID集合
+    bool initialized;   // 天气是否已初始化
+    PhysicsWorld* m_world;  // 物理系统
+    multimap<string, Node*> collisionNodeWithAction; // 具有action的node
+    int currentStage;
+    
+    
     static cocos2d::Scene* createScene();
     
     virtual bool init();
@@ -45,27 +46,18 @@ public:
     
     void setPhyWorld(PhysicsWorld* world){m_world = world;}
     
+    [[deprecated]]
     bool createCinematic(const string & cineName);
-    
-private:
-    std::string weather;
-    cocos2d::LayerColor* weatherLayer;
-    TMXTiledMap* tileMap;
-    map<string, unsigned int> effects;  // 音效ID集合
-    bool initialized;   // 天气是否已初始化
-    PhysicsWorld* m_world;  // 物理系统
-    multimap<string, Node*> collisionNodeWithAction; // 具有action的node
-    int currentStage;
     
     // 剧情动画
     bool isPlayCinematic = false;
     queue<Cinematic> seqCinematic;
-    void playCinematic(Cinematic&);
-    void pushCinematic(Cinematic&);
+    void playCinematic(Cinematic);
+    void pushCinematic(Cinematic*);
     void nextCinematic();
     
     // 场景变换
-    void enterStage(const int &);
+    virtual void enterStage();
     
     // weather change
     void beSunny();
@@ -95,6 +87,8 @@ private:
     
     bool initBGM();
     
+    // Each GameScene derived class should implement it: story cinematics and so on
+    virtual bool initSpecfic();
     
 };
 

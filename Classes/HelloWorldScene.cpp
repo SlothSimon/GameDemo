@@ -1,6 +1,6 @@
 #include "HelloWorldScene.h"
 #include "SimpleAudioEngine.h"
-#include "GameScene.h"
+#include "GameScene_1.hpp"
 
 USING_NS_CC;
 
@@ -39,7 +39,7 @@ bool HelloWorld::init()
     logo->runAction(Sequence::create(FadeIn::create(2),
                                      DelayTime::create(2),
                                      CallFunc::create([](){
-        Director::getInstance()->replaceScene(TransitionFade::create(2, GameScene::createScene()));
+        Director::getInstance()->replaceScene(TransitionFade::create(2, GameScene_1::createScene()));
     }), NULL));
     
     return true;

@@ -1,6 +1,6 @@
 //
 //  GameScene.cpp
-//  Escape
+//  Sunny Doll
 //
 //  Created by zhangsimon on 16/8/19.
 //
@@ -54,7 +54,7 @@ Scene* GameScene::createScene()
     // 设定每秒帧数，防止刚体乱跳
     scene->getPhysicsWorld()->setFixedUpdateRate(50);
     
-    auto layer = GameScene::create();
+    auto layer = create();
     if (layer != NULL){
         layer->setPhyWorld(scene->getPhysicsWorld());//将创建的物理世界传递到子层中
         scene->addChild(layer);
@@ -64,8 +64,6 @@ Scene* GameScene::createScene()
         Director::getInstance()->end();
         exit(0);
     }
-    
-    
     
     return scene;
 }
@@ -91,6 +89,14 @@ bool GameScene::init()
         return false;
 
     if (!initBGM())
+        return false;
+    
+    // TODO: 第一关新手指导，另外push一个scene，然后再pop
+    if (currentStage == 1){
+        ;
+    }
+    
+    if (!initSpecfic())
         return false;
     
     return true;
@@ -284,7 +290,10 @@ bool GameScene::initInteraction(){
             if (rect.containsPoint(locationInNode)){
                 
                 // 判断交互对象和主角的距离
-                auto doll = static_cast<GameRole*>(getChildByName("doll"));
+                auto doll = dynamic_cast<GameRole*>(getChildByName("doll"));
+                if (doll == NULL)
+                    return false;
+                
                 auto dist = doll->getPosition().distance(touchNode->getPosition());
                 if (dist <= INTERACTION_RANGE){
                     msg->stopAllActions();
@@ -341,8 +350,7 @@ bool GameScene::initCollision(){
                 SimpleAudioEngine::getInstance()->stopBackgroundMusic();
                 Director::getInstance()->replaceScene(TransitionFade::create(2, EndScene::createScene()));
             }else{
-                UserDefault::getInstance()->setIntegerForKey("currentStage", currentStage + 1);
-                Director::getInstance()->replaceScene(TransitionFade::create(2, GameScene::createScene()));
+                enterStage();
             }
             return false;
         }
@@ -527,7 +535,10 @@ bool GameScene::initListener(){
     touchLayerListener->setSwallowTouches(true);
     
     touchLayerListener->onTouchBegan = [this](Touch* touch, Event* event){
-        auto role = static_cast<GameRole*>(getChildByName(GameRoleName::Doll));
+        auto role = dynamic_cast<GameRole*>(getChildByName(GameRoleName::Doll));
+        if (role == NULL)
+            return false;
+        
         if (role->IsMovable())
             role->doAction(GameRoleState::State::Walk, touch->getLocation());
         else{
@@ -538,9 +549,10 @@ bool GameScene::initListener(){
     
     touchLayerListener->onTouchEnded = [this](Touch* touch, Event* event){
         
-        auto role = static_cast<GameRole*>(getChildByName(GameRoleName::Doll));
-        if (role->IsMovable())
-            role->doAction(GameRoleState::State::Idle);
+        auto role = dynamic_cast<GameRole*>(getChildByName(GameRoleName::Doll));
+        if (role != NULL)
+            if (role->IsMovable())
+                role->doAction(GameRoleState::State::Idle);
     };
     
     Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(touchLayerListener, this);
@@ -600,14 +612,17 @@ bool GameScene::createCinematic(const string & cineName){
             int subtableIdx = lua_gettop(pL);
             lua_pushnil(pL);
             auto i = lua_getfield(pL, subtableIdx, "ObjectName");
-            auto role = static_cast<GameRole*>(getChildByName(lua_tostring(pL, -1)));
+            auto role = dynamic_cast<GameRole*>(getChildByName(lua_tostring(pL, -1)));
+            if (role == NULL)
+                continue;
+            
             lua_pop(pL, 1);
             
             lua_getfield(pL, subtableIdx, "EventName");
             string eventname = lua_tostring(pL, -1);
             lua_pop(pL, 1);
             
-            // lua_gettable 说是返回the type of value，但是是个int，未找到为0，字符串为4，数字为3
+            // lua_gettable 说是返回the type of value，但是是个int，未找到为0，table为5，字符串为4，数字为3
             auto hasEventData = lua_getfield(pL, subtableIdx, "EventData");
             string data = lua_tostring(pL, -1);
             lua_pop(pL, 1);
@@ -617,7 +632,7 @@ bool GameScene::createCinematic(const string & cineName){
             lua_pop(pL, 1);
             
             lua_pop(pL, 1);
-            pushCinematic(*(new Cinematic(role, eventname, delay, hasEventData ? data : NULL)));
+            pushCinematic(new Cinematic(role, eventname, delay, hasEventData ? data : NULL));
         }
         lua_pop(pL, 1);
     }
@@ -628,7 +643,7 @@ bool GameScene::createCinematic(const string & cineName){
     return true;
 }
 
-void GameScene::playCinematic(Cinematic& cine){
+void GameScene::playCinematic(Cinematic cine){
     map<string, void*> m;
     m["Data"] = &cine.userdata;
     
@@ -664,11 +679,21 @@ void GameScene::nextCinematic(){
     }
 }
 
-void GameScene::pushCinematic(Cinematic& cine){
+void GameScene::pushCinematic(Cinematic* cine){
     if (!isPlayCinematic){
         isPlayCinematic = true;
-        playCinematic(cine);
+        playCinematic(*cine);
     }else{
-        seqCinematic.push(cine);
+        seqCinematic.push(*cine);
     }
+}
+
+bool GameScene::initSpecfic(){
+    return true;
+}
+
+// TODO: This function should be empty
+void GameScene::enterStage(){
+    UserDefault::getInstance()->setIntegerForKey("currentStage", currentStage + 1);
+    Director::getInstance()->replaceScene(TransitionFade::create(2, GameScene::createScene()));
 }
