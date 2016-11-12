@@ -5,9 +5,13 @@
 
 USING_NS_CC;
 using namespace cocos2d::ui;
+using namespace CocosDenshion;
 
 Scene* EndScene::createScene()
 {
+    SimpleAudioEngine::getInstance()->stopAllEffects();
+    SimpleAudioEngine::getInstance()->stopBackgroundMusic();
+    
     auto scene = Scene::create();
     
     auto layer = EndScene::create();

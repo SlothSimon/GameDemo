@@ -15,6 +15,8 @@ class GameScene_1 : public GameScene{
     bool initSpecfic();
     
     void onEnterTransitionDidFinish();
+    
+    void enterStage();
 };
 
 #endif /* GameScene_1_hpp */

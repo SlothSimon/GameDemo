@@ -12,9 +12,11 @@
 #include "GameScene.h"
 
 class GameScene_2 : public GameScene{
-    bool initSpecfic();
+    bool initSpecfic() override;
     
-    void onEnterTransitionDidFinish();
+    void onEnterTransitionDidFinish() override;
+    
+    void enterStage() override;
 };
 
 #endif /* GameScene_2_hpp */

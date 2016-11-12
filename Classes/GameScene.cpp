@@ -91,11 +91,6 @@ bool GameScene::init()
     if (!initBGM())
         return false;
     
-    // TODO: 第一关新手指导，另外push一个scene，然后再pop
-    if (currentStage == 1){
-        ;
-    }
-    
     if (!initSpecfic())
         return false;
     
@@ -346,8 +341,6 @@ bool GameScene::initCollision(){
     listener->onContactBegin = [visibleSize,this](PhysicsContact& contact){
         if (contact.getShapeB()->getBody()->getNode()->getName() == "edge"){
             if (currentStage == DebugParameters::EndStage){
-                SimpleAudioEngine::getInstance()->stopAllEffects();
-                SimpleAudioEngine::getInstance()->stopBackgroundMusic();
                 Director::getInstance()->replaceScene(TransitionFade::create(2, EndScene::createScene()));
             }else{
                 enterStage();
@@ -570,6 +563,7 @@ bool GameScene::initBGM(){
     return true;
 }
 
+// Deprecated Reason: 并不必须要热更新；实现复杂。
 bool GameScene::createCinematic(const string & cineName){
     
     lua_State* pL = luaL_newstate();

@@ -179,26 +179,6 @@ void GameRole::initListener(){
             return true;
         }
         
-        try {
-            auto r1 = dynamic_cast<GameRole*>(role1);
-            auto r2 = dynamic_cast<GameRole*>(role2);
-            
-            // TODO: 感觉依然是在lua中直接调用类比较方便，可是原理不甚懂
-            if (r1 == NULL || r2 == NULL)
-                return false;
-            
-            auto name = r1->getName() == GameRoleName::Doll ? r2->getName() : (r2->getName() == GameRoleName::Doll ? r1->getName() : "");
-            auto scene = dynamic_cast<GameScene*>(r1->getParent());
-            if (scene!= NULL && name != ""){
-                scene->createCinematic((name + "OnContact").c_str());
-                return true;
-            }
-            return false;
-        } catch (exception e) {
-            log("Warning when two roles contact! Error Message: %s", e.what());
-            return false;
-        }
-        
         return false;
     };
     
@@ -215,30 +195,6 @@ void GameRole::initListener(){
     };
     
     Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(contactListener, this);
-    
-    auto touchListener = EventListenerTouchOneByOne::create();
-    touchListener->setSwallowTouches(true);
-    
-    touchListener->onTouchBegan = [=](Touch * touch, Event * event){
-        auto loc = convertTouchToNodeSpace(touch);
-        
-        auto rect = getTextureRect();
-        if (rect.containsPoint(loc)){
-            auto scene = dynamic_cast<GameScene*>(getParent());
-            auto doll = dynamic_cast<GameRole*>(scene->getChildByName(GameRoleName::Doll));
-            if (scene == NULL || doll == NULL)
-                return false;
-            
-            if (doll->getPosition().distance(touch->getLocation()) <= INTERACTION_RANGE)
-                scene->createCinematic((getName() + "OnClick").c_str());
-            else
-                doll->doAction(GameRoleState::State::Think, GameRoleState::ThinkContent::Walk);
-            return true;
-        }
-        
-        return false;
-    };
-    Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(touchListener, this);
 }
 
 void GameRole::changeState(State *state) const {
