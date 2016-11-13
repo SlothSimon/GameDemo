@@ -11,6 +11,9 @@
 
 #include "GameScene.h"
 
-CREATE_GAMESCENE_SUBCLASS(GameScene_3);
+class GameScene_3: public GameScene{
+public:
+    CREATE_GAMESCENE_SUBCLASS(GameScene_3);
+};
 
 #endif /* GameScene_3_hpp */

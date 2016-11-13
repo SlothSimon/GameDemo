@@ -11,6 +11,12 @@
 
 #include "GameScene.h"
 
-CREATE_GAMESCENE_SUBCLASS(GameScene_2);
+class GameScene_2: public GameScene{
+public:
+    CREATE_GAMESCENE_SUBCLASS(GameScene_2);
+private:
+    bool isTogether = false;
+    bool isFirstTalk = true;
+};
 
 #endif /* GameScene_2_hpp */

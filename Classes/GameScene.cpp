@@ -527,8 +527,9 @@ bool GameScene::initListener(){
         if (role == NULL)
             return false;
         
-        if (role->IsMovable())
+        if (role->IsMovable()){
             role->doAction(GameRoleState::State::Walk, touch->getLocation());
+        }
         else{
             role->doAction(GameRoleState::State::Think, GameRoleState::ThinkContent::Drown);
         }

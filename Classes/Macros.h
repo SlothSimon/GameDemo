@@ -15,15 +15,16 @@
  * @param __TYPE__  class type name, such as GameScene_1.
  */
 #define CREATE_GAMESCENE_SUBCLASS(__TYPE__) \
-class __TYPE__ : public GameScene{ \
-public: \
     CREATE_GAMESCENE_SUBCLASS_FUNC(__TYPE__); \
     bool initSpecfic(); \
     void onEnterTransitionDidFinish(); \
     void enterStage(); \
-};
 
-
+/** @def CREATE_GAMESCENE_SUBCLASS(__TYPE__)
+ * Define a subclass's ceate functions for GameScene, such as createScene(), create().
+ *
+ * @param __TYPE__  class type name, such as GameScene_1.
+ */
 #define CREATE_GAMESCENE_SUBCLASS_FUNC(__TYPE__) \
 CREATE_FUNC(__TYPE__); \
 static Scene* createScene(){ \

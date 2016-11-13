@@ -95,7 +95,12 @@ void GameRole::turnAround(){
 void GameRole::walk(const Vec2 & pos){
     // 判断左右
     auto visibleSize = Director::getInstance()->getVisibleSize();
-    int dist = pos.x - visibleSize.width/2;
+    int dist = 0;
+    if (roleFollowed == nullptr)
+        dist = pos.x - visibleSize.width/2;
+    else
+        dist = pos.x - getPosition().x;
+    
     if (dist >= 0){
         setFlippedX(false);
     }else{
@@ -209,22 +214,46 @@ void GameRole::doAction(const string& action, string userdata) const{
     map<string, void*> m;
     if (userdata != "")
         m["Data"] = &userdata;
-    Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(GameRoleState::convertToEventName(this, action), &m);
+    doAction(action, m);
 }
 
 void GameRole::doAction(const string& action, Vec2 pos) const{
     map<string, void*> m;
     m["Data"] = &pos;
-    Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(GameRoleState::convertToEventName(this, action), &m);
+    doAction(action, m);
 }
 
-//void GameRole::doAction(const string &action) const{
-//    map<string, void*> m;
-//    Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(GameRoleState::convertToEventName(this, action), &m);
-//}
+void GameRole::doAction(const string& action, GameRole* role) const{
+    map<string, void*> m;
+    m["Data"] = role;
+    doAction(action, m);
+}
 
 void GameRole::cry(){
     log("The girl starts crying.");
     // TODO: cry animation texture
     think(GameRoleState::SayContent::Cry);
 }
+
+void GameRole::follow(GameRole *role){
+    roleFollowed = role;
+    schedule(schedule_selector(GameRole::updateFollow), 0.1f, kRepeatForever, 0);
+    doAction(GameRoleState::State::Idle);
+}
+
+void GameRole::unfollow(){
+    roleFollowed = nullptr;
+    unschedule(schedule_selector(GameRole::updateFollow));
+    doAction(GameRoleState::State::Idle);
+}
+
+void GameRole::updateFollow(float dt){
+    auto dist = getPosition().distance(roleFollowed->getPosition());
+    float followDist = getContentSize().width * getScale();
+    if (dist > followDist || dist < -followDist){
+        doAction(GameRoleState::State::Walk, roleFollowed->getPosition());
+    }else{
+        doAction(GameRoleState::State::Idle);
+    }
+}
+

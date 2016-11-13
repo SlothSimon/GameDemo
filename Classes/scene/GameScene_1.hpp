@@ -12,6 +12,9 @@
 #include "GameScene.h"
 
 // TODO: maybe I should merge all subclass declarations of chapter 1 into one header file.
-CREATE_GAMESCENE_SUBCLASS(GameScene_1);
-
+class GameScene_1: public GameScene{
+public:
+    CREATE_GAMESCENE_SUBCLASS(GameScene_1);
+};
+    
 #endif /* GameScene_1_hpp */

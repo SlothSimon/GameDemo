@@ -219,6 +219,7 @@
 		5BAF15CD1D797A1C0097902A /* sloth.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sloth.png; sourceTree = "<group>"; };
 		5BC6C8C41DD7700E0073DFEE /* GameScene_3.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameScene_3.cpp; sourceTree = "<group>"; };
 		5BC6C8C51DD7700E0073DFEE /* GameScene_3.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GameScene_3.hpp; sourceTree = "<group>"; };
+		5BC6C8CA1DD868710073DFEE /* Macros.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Macros.h; sourceTree = "<group>"; };
 		5BDD54AE1DCE0CD30000F6A1 /* GameScene_1.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameScene_1.cpp; sourceTree = "<group>"; };
 		5BDD54AF1DCE0CD30000F6A1 /* GameScene_1.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GameScene_1.hpp; sourceTree = "<group>"; };
 		5BDD54B11DCE25990000F6A1 /* GameScene_2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameScene_2.cpp; sourceTree = "<group>"; };
@@ -406,6 +407,7 @@
 				5B93D3631D7023FE00D882AD /* utils.h */,
 				5BDD54B41DCECC6C0000F6A1 /* Cinematic.cpp */,
 				5BDD54B51DCECC6C0000F6A1 /* Cinematic.hpp */,
+				5BC6C8CA1DD868710073DFEE /* Macros.h */,
 			);
 			name = Classes;
 			path = ../Classes;

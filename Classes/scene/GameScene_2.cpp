@@ -9,17 +9,38 @@
 #include "GameScene_2.hpp"
 #include "GameScene_3.hpp"
 
-// TODO:调用不到覆盖的函数，为什么？？？
 bool GameScene_2::initSpecfic(){
+    beSunny();
+    
     auto contactListener = EventListenerPhysicsContact::create();
     contactListener->onContactBegin = [this](PhysicsContact & contact){
-        auto doll = getChildByName(GameRoleName::Doll);
-        auto girl = getChildByName(GameRoleName::Girl);
+        if (isTogether)
+            return true;
         
-        if (doll == nullptr || girl == nullptr)
-            return false;
+        auto r1 = contact.getShapeA()->getBody()->getNode();
+        auto r2 = contact.getShapeB()->getBody()->getNode();
+        
+        GameRole* doll = nullptr;
+        GameRole* girl = nullptr;
+        
+        if (r1->getName() == GameRoleName::Doll)
+            doll = dynamic_cast<GameRole*>(r1);
+        else if (r2->getName() == GameRoleName::Doll)
+            doll = dynamic_cast<GameRole*>(r2);
+        
+        if (r2->getName() == GameRoleName::Girl)
+            girl = dynamic_cast<GameRole*>(r2);
+        else if (r1->getName() == GameRoleName::Girl)
+            girl = dynamic_cast<GameRole*>(r1);
+        
+        if (doll == NULL || girl == NULL)
+            return true;
         
         // TODO: contact cinematics
+        doll->doAction(GameRoleState::State::Idle);
+        pushCinematic(new Cinematic(girl, GameRoleState::State::Say, -1, GameRoleState::SayContent::Love));
+        girl->doAction(GameRoleState::State::Follow, doll);
+        isTogether = true;
         
         return true;
     };
@@ -44,12 +65,17 @@ bool GameScene_2::initSpecfic(){
                 return false;
             
             if (doll->getPosition().distance(touch->getLocation()) <= INTERACTION_RANGE){
-                pushCinematic(new Cinematic(doll, GameRoleState::State::Say, -1, GameRoleState::SayContent::Ask));
-                pushCinematic(new Cinematic(girl, GameRoleState::State::Say, -1, GameRoleState::SayContent::Think));
-                pushCinematic(new Cinematic(girl, GameRoleState::State::Say, -1, GameRoleState::SayContent::Story1));
-                pushCinematic(new Cinematic(girl, GameRoleState::State::Say, -1, GameRoleState::SayContent::Rain));
-                pushCinematic(new Cinematic(girl, GameRoleState::State::Say, -1, GameRoleState::SayContent::Story2));
-                pushCinematic(new Cinematic(girl, GameRoleState::State::Say, -1, GameRoleState::SayContent::Cry));
+                if (isFirstTalk){
+                    pushCinematic(new Cinematic(doll, GameRoleState::State::Say, -1, GameRoleState::SayContent::Ask));
+                    pushCinematic(new Cinematic(girl, GameRoleState::State::Say, -1, GameRoleState::SayContent::Think));
+                    pushCinematic(new Cinematic(girl, GameRoleState::State::Say, -1, GameRoleState::SayContent::Story1));
+                    pushCinematic(new Cinematic(girl, GameRoleState::State::Say, -1, GameRoleState::SayContent::Rain));
+                    pushCinematic(new Cinematic(girl, GameRoleState::State::Say, -1, GameRoleState::SayContent::Story2));
+                    pushCinematic(new Cinematic(girl, GameRoleState::State::Say, -1, GameRoleState::SayContent::Cry));
+                    isFirstTalk = false;
+                }else{
+                    girl->doAction(GameRoleState::State::Say, GameRoleState::SayContent::Love);
+                }
             }
             else
                 doll->doAction(GameRoleState::State::Think, GameRoleState::ThinkContent::Walk);
@@ -75,3 +101,4 @@ void GameScene_2::enterStage(){
     UserDefault::getInstance()->setIntegerForKey("currentStage", 3);
     Director::getInstance()->replaceScene(TransitionFade::create(2, GameScene_3::createScene()));
 }
+

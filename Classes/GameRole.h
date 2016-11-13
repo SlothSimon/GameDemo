@@ -25,6 +25,7 @@ public:
     void doAction(const string& , map<string, void*>& userdata) const;
     void doAction(const string& , string userdata = "") const;
     void doAction(const string& , Vec2 pos) const;
+    void doAction(const string& , GameRole* role) const;
 //    void doAction(const string&) const;
     
     bool IsMovable() const;
@@ -38,6 +39,7 @@ private:
     Texture2D* origText;
     GameRoleFSM* mFSM;
     bool _isMovable = true;
+    GameRole* roleFollowed;
     
     void initAnim();
     
@@ -62,6 +64,13 @@ private:
     void cry();
     
     void think(const string &, CallFunc* callback = nullptr);
+    
+    void follow(GameRole* role);
+    
+    void unfollow();
+    
+    // scheduler
+    void updateFollow(float dt);
 };
 
 

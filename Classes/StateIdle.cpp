@@ -36,5 +36,12 @@ void StateIdle::execute(GameRole* role, EventCustom* event){
     }else if (eventName == GameRoleState::State::Cry){
         role->cry();
         role->changeState(new StateCry());
+    }else if (eventName == GameRoleState::State::Follow){
+        auto m = static_cast<map<string, void*>*>(event->getUserData());
+        auto roleFollowed = static_cast<GameRole*>(m->at("Data"));
+        if (role->getName() != "")
+            role->follow(roleFollowed);
+    }else if (eventName == GameRoleState::State::Unfollow){
+        role->unfollow();
     }
 }
