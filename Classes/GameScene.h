@@ -38,8 +38,6 @@ public:
     
     static Scene* createScene();
     
-    virtual ~GameScene();
-    
     virtual bool init();
     
     virtual void onEnterTransitionDidFinish();
@@ -48,9 +46,6 @@ public:
     CREATE_FUNC(GameScene);
     
     void setPhyWorld(PhysicsWorld* world){m_world = world;}
-    
-    [[deprecated]]
-    bool createCinematic(const string & cineName);
     
     // 剧情动画
     bool isPlayCinematic = false;

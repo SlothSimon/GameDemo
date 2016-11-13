@@ -19,16 +19,30 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "cocos2d::EventListener::isEnabled() const:CCEventListener.h">
+         contextName = "GameRole::think(std::__1::basic_string&lt;char, std::__1::char_traits&lt;char&gt;, std::__1::allocator&lt;char&gt; &gt; const&amp;, cocos2d::CallFunc*)::$_0::operator()() const:GameRole.cpp">
+         <PersistentStrings>
+            <PersistentString
+               value = "(string*)(thinkbubble-&gt;getUserData())">
+            </PersistentString>
+         </PersistentStrings>
       </ContextState>
       <ContextState
          contextName = "cocos2d::TMXObjectGroup::getObject(std::__1::basic_string&lt;char, std::__1::char_traits&lt;char&gt;, std::__1::allocator&lt;char&gt; &gt; const&amp;) const:CCTMXObjectGroup.cpp">
       </ContextState>
       <ContextState
-         contextName = "GameRole::think(std::__1::basic_string&lt;char, std::__1::char_traits&lt;char&gt;, std::__1::allocator&lt;char&gt; &gt; const&amp;, cocos2d::CallFunc*)::$_0::operator()() const:GameRole.cpp">
+         contextName = "cocos2d::PhysicsBody::beforeSimulation(cocos2d::Mat4 const&amp;, cocos2d::Mat4 const&amp;, float, float, float):CCPhysicsBody.cpp">
          <PersistentStrings>
             <PersistentString
-               value = "(string*)(thinkbubble-&gt;getUserData())">
+               value = "_owner-&gt;getName()">
+            </PersistentString>
+            <PersistentString
+               value = "_owner-&gt;getPosition()">
+            </PersistentString>
+            <PersistentString
+               value = "_owner-&gt;getAnchorPoint()">
+            </PersistentString>
+            <PersistentString
+               value = "_offset">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -52,10 +66,10 @@
          contextName = "GameScene::init()::$_0::operator()(cocos2d::Ref*) const:GameScene.cpp">
       </ContextState>
       <ContextState
-         contextName = "GameScene::beSunny():GameScene.cpp">
+         contextName = "GameRole::doAction(std::__1::basic_string&lt;char, std::__1::char_traits&lt;char&gt;, std::__1::allocator&lt;char&gt; &gt; const&amp;, cocos2d::Vec2) const:GameRole.cpp">
       </ContextState>
       <ContextState
-         contextName = "GameRole::doAction(std::__1::basic_string&lt;char, std::__1::char_traits&lt;char&gt;, std::__1::allocator&lt;char&gt; &gt; const&amp;, cocos2d::Vec2) const:GameRole.cpp">
+         contextName = "GameScene::beSunny():GameScene.cpp">
       </ContextState>
       <ContextState
          contextName = "GameRoleFSM::initWithGameRole(GameRole*):GameRoleFSM.cpp">
@@ -99,17 +113,6 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "CocosDenshion::SimpleAudioEngine::getInstance():SimpleAudioEngine.mm">
-      </ContextState>
-      <ContextState
-         contextName = "GameScene::enterStage(int const&amp;):GameScene.cpp">
-         <PersistentStrings>
-            <PersistentString
-               value = "UserDefault::getInstance()">
-            </PersistentString>
-         </PersistentStrings>
-      </ContextState>
-      <ContextState
          contextName = "GameScene::playCinematic(Cinematic&amp;):GameScene.cpp">
          <PersistentStrings>
             <PersistentString
@@ -121,6 +124,17 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
+         contextName = "GameScene::enterStage(int const&amp;):GameScene.cpp">
+         <PersistentStrings>
+            <PersistentString
+               value = "UserDefault::getInstance()">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "CocosDenshion::SimpleAudioEngine::getInstance():SimpleAudioEngine.mm">
+      </ContextState>
+      <ContextState
          contextName = "GameScene::beRainy():GameScene.cpp">
       </ContextState>
       <ContextState
@@ -130,15 +144,15 @@
          contextName = "cocos2d::GLView::renderScene(cocos2d::Scene*, cocos2d::Renderer*):CCGLView.cpp">
       </ContextState>
       <ContextState
-         contextName = "StringToPoints(std::__1::basic_string&lt;char, std::__1::char_traits&lt;char&gt;, std::__1::allocator&lt;char&gt; &gt; const&amp;):GameScene.cpp">
-         <PersistentStrings>
-            <PersistentString
-               value = "result[1]">
-            </PersistentString>
-         </PersistentStrings>
+         contextName = "GameRoleFSM::onRecvWalk(cocos2d::EventCustom*):GameRoleFSM.cpp">
       </ContextState>
       <ContextState
-         contextName = "GameScene::initListener()::$_5::operator()(cocos2d::Touch*, cocos2d::Event*) const:GameScene.cpp">
+         contextName = "Cinematic::Cinematic(GameRole*, std::__1::basic_string&lt;char, std::__1::char_traits&lt;char&gt;, std::__1::allocator&lt;char&gt; &gt;, double, void*):GameScene.h">
+         <PersistentStrings>
+            <PersistentString
+               value = "(string*)u">
+            </PersistentString>
+         </PersistentStrings>
       </ContextState>
       <ContextState
          contextName = "GameScene::createScene():GameScene.cpp">
@@ -152,6 +166,9 @@
          contextName = "cocos2d::EventDispatcher::dispatchEventToListeners(cocos2d::EventDispatcher::EventListenerVector*, std::__1::function&lt;bool (cocos2d::EventListener*)&gt; const&amp;):CCEventDispatcher.cpp">
       </ContextState>
       <ContextState
+         contextName = "GameScene::initListener()::$_5::operator()(cocos2d::Touch*, cocos2d::Event*) const:GameScene.cpp">
+      </ContextState>
+      <ContextState
          contextName = "cocos2d::TMXTiledMap::getLayerByActionName(std::__1::basic_string&lt;char, std::__1::char_traits&lt;char&gt;, std::__1::allocator&lt;char&gt; &gt; const&amp;) const:CCTMXTiledMap.cpp">
          <PersistentStrings>
             <PersistentString
@@ -160,19 +177,16 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "GameRoleFSM::onRecvWalk(cocos2d::EventCustom*):GameRoleFSM.cpp">
-      </ContextState>
-      <ContextState
          contextName = "cocos2d::EventDispatcher::addEventListenerWithSceneGraphPriority(cocos2d::EventListener*, cocos2d::Node*):CCEventDispatcher.cpp">
       </ContextState>
       <ContextState
          contextName = "cocos2d::EventListener::isPaused() const:CCEventListener.h">
       </ContextState>
       <ContextState
-         contextName = "Cinematic::Cinematic(GameRole*, std::__1::basic_string&lt;char, std::__1::char_traits&lt;char&gt;, std::__1::allocator&lt;char&gt; &gt;, double, void*):GameScene.h">
+         contextName = "StringToPoints(std::__1::basic_string&lt;char, std::__1::char_traits&lt;char&gt;, std::__1::allocator&lt;char&gt; &gt; const&amp;):GameScene.cpp">
          <PersistentStrings>
             <PersistentString
-               value = "(string*)u">
+               value = "result[1]">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -203,6 +217,9 @@
       </ContextState>
       <ContextState
          contextName = "GameRole::initAnim():GameRole.cpp">
+      </ContextState>
+      <ContextState
+         contextName = "GameRole::initListener()::$_3::operator()(cocos2d::Touch*, cocos2d::Event*) const:GameRole.cpp">
       </ContextState>
       <ContextState
          contextName = "GameScene::initMap(std::__1::basic_string&lt;char, std::__1::char_traits&lt;char&gt;, std::__1::allocator&lt;char&gt; &gt; const&amp;):GameScene.cpp">
@@ -286,21 +303,15 @@
          contextName = "GameRole::think(std::__1::basic_string&lt;char, std::__1::char_traits&lt;char&gt;, std::__1::allocator&lt;char&gt; &gt; const&amp;, cocos2d::CallFunc*)::$_0::operator()() const::&apos;lambda&apos;()::operator()() const:GameRole.cpp">
       </ContextState>
       <ContextState
-         contextName = "cocos2d::PhysicsBody::beforeSimulation(cocos2d::Mat4 const&amp;, cocos2d::Mat4 const&amp;, float, float, float):CCPhysicsBody.cpp">
+         contextName = "GameScene::initInteraction()::$_0::operator()(cocos2d::Touch*, cocos2d::Event*) const:GameScene.cpp">
          <PersistentStrings>
             <PersistentString
-               value = "_owner-&gt;getName()">
-            </PersistentString>
-            <PersistentString
-               value = "_owner-&gt;getPosition()">
-            </PersistentString>
-            <PersistentString
-               value = "_owner-&gt;getAnchorPoint()">
-            </PersistentString>
-            <PersistentString
-               value = "_offset">
+               value = "touch-&gt;getLocation()">
             </PersistentString>
          </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "cocos2d::EventListener::isEnabled() const:CCEventListener.h">
       </ContextState>
    </ContextStates>
 </VariablesViewState>

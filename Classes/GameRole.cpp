@@ -8,8 +8,6 @@
 
 #include "GameRole.h"
 #include "Constants.h"
-#include "lua.hpp"
-
 #include "GameScene.h"
 
 constexpr static int PATH_SIZE = 50;

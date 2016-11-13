@@ -44,22 +44,7 @@
  </tileset>
  <layer name="ground" width="20" height="10">
   <data encoding="base64" compression="zlib">
-   eJzNzMsNglAQQFGKQdE9Au4VsS8+FiBqAX4oQNACRC1AwHK8y5dJ3mo2TnIWM5lcx/mfSZEhR4GNsrdFiR32OCh7R5xwxgWVsndFjQY33JW9B1o88cJb2fugQ48BX4wwhoeJZTdvU9F0xf8MAUJElt28zUXPF/9LxFghsezmbS16C/H/A/GSHzw=
-  </data>
- </layer>
- <layer name="wood" width="20" height="10">
-  <properties>
-   <property name="Action" value="Move"/>
-   <property name="Delay" type="float" value="2"/>
-   <property name="Duration" type="float" value="3"/>
-   <property name="IsWeather" type="bool" value="true"/>
-   <property name="RainyTileX" type="int" value="0"/>
-   <property name="RainyTileY" type="int" value="0"/>
-   <property name="SunnyTileX" type="int" value="0"/>
-   <property name="SunnyTileY" type="int" value="-2"/>
-  </properties>
-  <data encoding="base64" compression="zlib">
-   eJxjYBgFo4C2gBGImYCYeaAdQgYAAAdoAAc=
+   eJzNzNkNgkAUhWGaAWlAtAHQwlwoAJcCQC1AxQLYCsClHP5JZpLJJPN0XzzJ93BzT04Q/E822GKHPXLhXoEDjjjhLNwrUeGCK27CvTseeKLGS7jXoEWHHoNwb8QbH3zxQ4gIM6er7lj/fR2TyOrPkWDhdNS91H9fxySx+ikyrJyOutf67+uYZFZ/AosLHAw=
   </data>
  </layer>
  <layer name="water" width="20" height="10" opacity="0.5">
@@ -74,10 +59,10 @@
    <property name="SunnyTileY" type="int" value="-2"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJxjYBgFo4C2QJKZYcFNJoYFIJoa5kkxIzCtzQMAR6wDog==
+   eJxjYBgFo2AU4AIAAyAAAQ==
   </data>
  </layer>
- <layer name="panel" width="20" height="10">
+ <layer name="panel" width="20" height="10" visible="0">
   <data encoding="base64" compression="zlib">
    eJxjYBgFwxFMZKaueduobN5QAQB0AQFO
   </data>

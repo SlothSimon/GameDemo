@@ -16,8 +16,6 @@
 #include "GameRole.h"
 #include "Constants.h"
 
-#include "lua.hpp"
-
 USING_NS_CC;
 using namespace CocosDenshion;
 using namespace cocos2d::ui;
@@ -97,10 +95,7 @@ bool GameScene::init()
     return true;
 }
 
-void GameScene::onEnterTransitionDidFinish(){
-    if (!createCinematic("EnterCinematic"))
-        log("No Such Cinematics Or Init Cinematic Error!");
-}
+void GameScene::onEnterTransitionDidFinish(){}
 
 void GameScene::updateWeather(float dt){
     log("I am updating weather~");
@@ -563,79 +558,6 @@ bool GameScene::initBGM(){
     return true;
 }
 
-// Deprecated Reason: 并不必须要热更新；实现复杂。
-bool GameScene::createCinematic(const string & cineName){
-    
-    lua_State* pL = luaL_newstate();
-    //
-    //    luaopen_base(pL);
-    //    luaopen_math(pL);
-    //    luaopen_string(pL);
-    
-    auto luaname = tileMap->getProperty("Script").asString();
-    auto path = FileUtils::getInstance()->fullPathForFilename(luaname);
-    
-    // 必须使用绝对路径
-    int err = luaL_dofile(pL, path.c_str());
-    if (err != 0){
-        log("Lua Open Error: %d", err);
-        lua_close(pL);
-        return false;
-    }else{
-        log("Open %s successfully.", luaname.c_str());
-    }
-
-    auto isExist = lua_getglobal(pL, cineName.c_str());
-    
-    if (isExist == 0){
-        log("%s Cinematic Doesn't Exist.", cineName.c_str());
-        lua_close(pL);
-        return false;
-    }else{
-        log("%s Cinematic Exists.", cineName.c_str());
-    }
-    
-    int tableIdx = lua_gettop(pL);
-    lua_pushnil(pL);
-    
-    int count = 0;
-    while (lua_next(pL, tableIdx)){
-        // Every circle, push the key first then the value, so -1 --> value, -2 --> key
-        if (lua_istable(pL, -1)){
-            log("%s", to_string(count++).c_str());
-            int subtableIdx = lua_gettop(pL);
-            lua_pushnil(pL);
-            auto i = lua_getfield(pL, subtableIdx, "ObjectName");
-            auto role = dynamic_cast<GameRole*>(getChildByName(lua_tostring(pL, -1)));
-            if (role == NULL)
-                continue;
-            
-            lua_pop(pL, 1);
-            
-            lua_getfield(pL, subtableIdx, "EventName");
-            string eventname = lua_tostring(pL, -1);
-            lua_pop(pL, 1);
-            
-            // lua_gettable 说是返回the type of value，但是是个int，未找到为0，table为5，字符串为4，数字为3
-            auto hasEventData = lua_getfield(pL, subtableIdx, "EventData");
-            string data = lua_tostring(pL, -1);
-            lua_pop(pL, 1);
-            
-            lua_getfield(pL, subtableIdx, "Delay");
-            double delay = lua_tonumber(pL, -1);
-            lua_pop(pL, 1);
-            
-            lua_pop(pL, 1);
-            pushCinematic(new Cinematic(role, eventname, delay, hasEventData ? data : NULL));
-        }
-        lua_pop(pL, 1);
-    }
-    
-    lua_close(pL);
-    
-    return true;
-}
-
 void GameScene::playCinematic(Cinematic cine){
     map<string, void*> m;
     m["Data"] = &cine.userdata;
@@ -687,10 +609,4 @@ bool GameScene::initSpecfic(){
 }
 
 // TODO: This function should be empty
-void GameScene::enterStage(){
-    UserDefault::getInstance()->setIntegerForKey("currentStage", currentStage + 1);
-    Director::getInstance()->replaceScene(TransitionFade::create(2, GameScene::createScene()));
-}
-
-GameScene::~GameScene(){
-}
+void GameScene::enterStage(){}
