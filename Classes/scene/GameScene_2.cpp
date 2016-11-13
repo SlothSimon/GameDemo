@@ -75,26 +75,3 @@ void GameScene_2::enterStage(){
     UserDefault::getInstance()->setIntegerForKey("currentStage", 3);
     Director::getInstance()->replaceScene(TransitionFade::create(2, GameScene_3::createScene()));
 }
-
-Scene* GameScene_2::createScene(){
-    auto scene = Scene::createWithPhysics();
-    scene->getPhysicsWorld()->setGravity(Vec2(0, -200));
-    if (DebugParameters::DoDebug)
-        scene->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);//调试
-    
-    // 设定每秒帧数，防止刚体乱跳
-    scene->getPhysicsWorld()->setFixedUpdateRate(50);
-    
-    auto layer = create();
-    if (layer != NULL){
-        layer->setPhyWorld(scene->getPhysicsWorld());//将创建的物理世界传递到子层中
-        scene->addChild(layer);
-    }
-    else{
-        
-        Director::getInstance()->end();
-        exit(0);
-    }
-    
-    return scene;
-}

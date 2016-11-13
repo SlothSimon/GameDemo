@@ -11,6 +11,7 @@
 
 #include "GameRole.h"
 #include "Cinematic.hpp"
+#include "Macros.h"
 
 #define WEATHER_SUNNY "Sunny"
 #define WEATHER_RAINY "Rainy"

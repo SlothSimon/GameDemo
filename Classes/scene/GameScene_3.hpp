@@ -11,12 +11,6 @@
 
 #include "GameScene.h"
 
-class GameScene_3 : public GameScene{
-    bool initSpecfic();
-    
-    void onEnterTransitionDidFinish();
-    
-    void enterStage();
-};
+CREATE_GAMESCENE_SUBCLASS(GameScene_3);
 
 #endif /* GameScene_3_hpp */
