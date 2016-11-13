@@ -91,7 +91,7 @@ bool GameScene::init()
     if (!initBGM())
         return false;
     
-    if (!initSpecfic())
+    if (!this->initSpecfic())
         return false;
     
     return true;
@@ -633,7 +633,6 @@ bool GameScene::createCinematic(const string & cineName){
     
     lua_close(pL);
     
-    
     return true;
 }
 
@@ -680,6 +679,7 @@ void GameScene::pushCinematic(Cinematic* cine){
     }else{
         seqCinematic.push(*cine);
     }
+    CC_SAFE_DELETE(cine);
 }
 
 bool GameScene::initSpecfic(){
@@ -690,4 +690,7 @@ bool GameScene::initSpecfic(){
 void GameScene::enterStage(){
     UserDefault::getInstance()->setIntegerForKey("currentStage", currentStage + 1);
     Director::getInstance()->replaceScene(TransitionFade::create(2, GameScene::createScene()));
+}
+
+GameScene::~GameScene(){
 }

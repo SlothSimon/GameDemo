@@ -35,6 +35,7 @@ GameRole* GameRole::create(const string & roleName)
         role->addChild(role->mFSM);
         role->initListener();
         
+        delete []path;
         return role;
     }
     CC_SAFE_DELETE(role);
@@ -71,6 +72,7 @@ void GameRole::addAnim(const string & animName){
         auto path = ImagePath::getRoleFramePath(getName(), animName, i);
         if (FileUtils::getInstance()->isFileExist(path)){
             anim->addSpriteFrameWithFile(path);
+            delete []path;
         }else{
             break;
         }

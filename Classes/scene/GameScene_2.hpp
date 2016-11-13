@@ -12,6 +12,11 @@
 #include "GameScene.h"
 
 class GameScene_2 : public GameScene{
+public:
+    static Scene* createScene();
+    
+    CREATE_FUNC(GameScene_2);
+    
     bool initSpecfic() override;
     
     void onEnterTransitionDidFinish() override;

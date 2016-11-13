@@ -19,6 +19,7 @@
 #define ROLE_ZORDER 1000
 #define INTERACTION_ZORDER 999
 
+
 USING_NS_CC;
 using namespace std;
 
@@ -35,7 +36,9 @@ public:
     int currentStage;
     
     
-    static cocos2d::Scene* createScene();
+    static Scene* createScene();
+    
+    virtual ~GameScene();
     
     virtual bool init();
     
