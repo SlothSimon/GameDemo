@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="20" height="10" tilewidth="32" tileheight="32" nextobjectid="38">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="20" height="10" tilewidth="32" tileheight="32" nextobjectid="57">
  <properties>
-  <property name="Script" value="map_3.lua"/>
-  <property name="Weather" value="Sunny"/>
+  <property name="Script" value="map_2.lua"/>
+  <property name="Weather" value="Rainy"/>
  </properties>
  <tileset firstgid="1" name="wood" tilewidth="32" tileheight="32" tilecount="3" columns="3">
   <image source="wood.png" width="96" height="32"/>
  </tileset>
  <tileset firstgid="4" name="grass" tilewidth="32" tileheight="32" tilecount="320" columns="16">
   <image source="grass.png" width="512" height="640"/>
+  <tile id="55">
+   <objectgroup draworder="index"/>
+  </tile>
  </tileset>
  <tileset firstgid="324" name="terrain_atlas" tilewidth="32" tileheight="32" tilecount="1024" columns="32">
   <image source="terrain_atlas.png" width="1024" height="1024"/>
@@ -42,9 +45,20 @@
  <tileset firstgid="1348" name="speech_bubble" tilewidth="32" tileheight="32" tilecount="4" columns="2">
   <image source="speech_bubble.png" width="64" height="83"/>
  </tileset>
- <layer name="ground" width="20" height="10">
+ <tileset firstgid="1352" name="sheet" tilewidth="70" tileheight="70" tilecount="98" columns="14">
+  <image source="sheet.png" width="980" height="490"/>
+ </tileset>
+ <tileset firstgid="1450" name="balloon" tilewidth="32" tileheight="32" tilecount="2" columns="1">
+  <image source="balloon.png" width="32" height="64"/>
+ </tileset>
+ <layer name="grass" width="20" height="10">
   <data encoding="base64" compression="zlib">
-   eJzNzNkNgkAUhWGaAWlAtAHQwlwoAJcCQC1AxQLYCsClHP5JZpLJJPN0XzzJ93BzT04Q/E822GKHPXLhXoEDjjjhLNwrUeGCK27CvTseeKLGS7jXoEWHHoNwb8QbH3zxQ4gIM6er7lj/fR2TyOrPkWDhdNS91H9fxySx+ikyrJyOutf67+uYZFZ/AosLHAw=
+   eJxjYBgFgxkIsyLwZRbs4iA8UOYNdwAA22cC/w==
+  </data>
+ </layer>
+ <layer name="mushroom" width="20" height="10">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFowA3uM8y0C4YWAAA5hwA5A==
   </data>
  </layer>
  <layer name="water" width="20" height="10" opacity="0.5">
@@ -56,56 +70,40 @@
    <property name="RainyTileX" type="int" value="0"/>
    <property name="RainyTileY" type="int" value="0"/>
    <property name="SunnyTileX" type="int" value="0"/>
-   <property name="SunnyTileY" type="int" value="-2"/>
+   <property name="SunnyTileY" type="int" value="-3"/>
   </properties>
   <data encoding="base64" compression="zlib">
    eJxjYBgFo2AU4AIAAyAAAQ==
   </data>
  </layer>
- <layer name="panel" width="20" height="10" visible="0">
+ <layer name="ground" width="20" height="10">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFwxFMZKaueduobN5QAQB0AQFO
+   eJxjYBgFowABprEyNMDY9iwMDA4sqPKqUKwGxOpArEEh3xSKzYDYHIgtKOS7QrEbELsDsQeFfAD/oQ5g
+  </data>
+ </layer>
+ <layer name="balloon" width="20" height="10">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFtASrWKlr3moqmzcK8AMAMnQBYA==
+  </data>
+ </layer>
+ <layer name="wall" width="20" height="10">
+  <data encoding="base64" compression="zlib">
+   eJxjYKAdqGSl3Ax/VlSaWiCASubB3EUt86gNslkhOAfqvmloNAwA+Q10ddgQAQAyCwXH
+  </data>
+ </layer>
+ <layer name="house" width="20" height="10">
+  <data encoding="base64" compression="zlib">
+   eJxjYKAuqGRFpYc7CBrk/kwi4L6pg9z9Aw0AlTMCVQ==
   </data>
  </layer>
  <objectgroup name="roles">
-  <object id="1" name="doll" type="Position" x="20" y="224">
-   <properties>
-    <property name="Collision" type="bool" value="false"/>
-   </properties>
-  </object>
-  <object id="37" name="girl" type="Position" x="294" y="224">
-   <properties>
-    <property name="IsDynamic" type="bool" value="false"/>
-   </properties>
-  </object>
+  <object id="1" name="doll" type="Role" x="14.8582" y="224.556"/>
  </objectgroup>
- <objectgroup name="interaction">
-  <object id="27" name="panel" type="Message" x="576.143" y="174.793" width="32" height="26.0868">
-   <properties>
-    <property name="LayerName" value="message_1"/>
-   </properties>
-  </object>
- </objectgroup>
- <layer name="message_1" width="20" height="10" visible="0">
-  <data encoding="base64" compression="zlib">
-   eJxjYBgFAw1cWBkYXFmpZ54b0Cx3Kpo3kgEAsSsBKw==
-  </data>
- </layer>
+ <objectgroup name="interaction"/>
  <objectgroup color="#000000" name="barriers">
-  <object id="28" name="g_1" type="Ground" x="0" y="224" width="416" height="96">
+  <object id="28" name="g_1" type="Slope" x="0" y="223.953" width="639.016" height="96.0473">
    <properties>
-    <property name="VecPoints" value="(0,0);(0,3);(13,3);(13,0)"/>
-   </properties>
-  </object>
-  <object id="29" name="g_2" type="Ground" x="512" y="224" width="128" height="96">
-   <properties>
-    <property name="VecPoints" value="(16,0);(16,3);(20,3);(20,0)"/>
-   </properties>
-  </object>
-  <object id="31" name="w_1" type="Wood" x="416" y="224" width="96" height="96">
-   <properties>
-    <property name="VecPoints" value="(13,0);(13,3);(16,3);(16,0)"/>
-    <property name="parentLayer" value="wood"/>
+    <property name="VecPoints" value="(0,0);(0,3);(1,3);(3,1);(3,0)"/>
    </properties>
   </object>
  </objectgroup>

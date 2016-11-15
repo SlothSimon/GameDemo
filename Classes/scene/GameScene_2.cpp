@@ -10,8 +10,6 @@
 #include "GameScene_3.hpp"
 
 bool GameScene_2::initSpecfic(){
-    beSunny();
-    
     auto contactListener = EventListenerPhysicsContact::create();
     contactListener->onContactBegin = [this](PhysicsContact & contact){
         if (isTogether)

@@ -48,6 +48,14 @@
  <tileset firstgid="1352" name="sheet" tilewidth="70" tileheight="70" tilecount="98" columns="14">
   <image source="sheet.png" width="980" height="490"/>
  </tileset>
+ <tileset firstgid="1450" name="balloon" tilewidth="32" tileheight="32" tilecount="2" columns="1">
+  <image source="balloon.png" width="32" height="64"/>
+ </tileset>
+ <layer name="balloon" width="20" height="10">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFowABVrFS17zVVDaP3gAAQRUBYA==
+  </data>
+ </layer>
  <layer name="grass" width="20" height="10">
   <data encoding="base64" compression="zlib">
    eJxjYBgFowAB2ICYnQrmSAGxNBCLAbE4FcwbKAAAWzQAcA==

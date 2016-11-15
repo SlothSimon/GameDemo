@@ -15,6 +15,7 @@
 class GameScene_1: public GameScene{
 public:
     CREATE_GAMESCENE_SUBCLASS(GameScene_1);
+    // TODO：每关一个红气球
 };
     
 #endif /* GameScene_1_hpp */
