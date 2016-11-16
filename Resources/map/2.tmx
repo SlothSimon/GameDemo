@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="20" height="10" tilewidth="32" tileheight="32" nextobjectid="57">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="20" height="10" tilewidth="32" tileheight="32" nextobjectid="59">
  <properties>
   <property name="Script" value="map_2.lua"/>
   <property name="Weather" value="Rainy"/>
@@ -95,8 +95,10 @@
   <object id="1" name="doll" type="Role" x="14.8582" y="224.556"/>
   <object id="38" name="girl" type="Role" x="277" y="192"/>
  </objectgroup>
- <objectgroup name="interaction"/>
- <objectgroup color="#000000" name="barriers">
+ <objectgroup name="interaction">
+  <object id="58" name="balloon" type="Item" x="381" y="184.957" width="32" height="26.0868"/>
+ </objectgroup>
+ <objectgroup color="#000000" name="barriers" visible="0">
   <object id="28" name="g_1" type="Slope" x="0" y="289" width="94.2456" height="31">
    <properties>
     <property name="VecPoints" value="(0,0);(0,3);(1,3);(3,1);(3,0)"/>

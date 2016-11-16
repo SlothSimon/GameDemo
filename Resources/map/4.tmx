@@ -1,16 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="20" height="10" tilewidth="32" tileheight="32" nextobjectid="38">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="20" height="10" tilewidth="32" tileheight="32" nextobjectid="41">
  <properties>
   <property name="Script" value="map_3.lua"/>
   <property name="Weather" value="Sunny"/>
  </properties>
- <tileset firstgid="1" name="wood" tilewidth="32" tileheight="32" tilecount="3" columns="3">
-  <image source="wood.png" width="96" height="32"/>
- </tileset>
- <tileset firstgid="4" name="grass" tilewidth="32" tileheight="32" tilecount="320" columns="16">
+ <tileset firstgid="1" name="grass" tilewidth="32" tileheight="32" tilecount="320" columns="16">
   <image source="grass.png" width="512" height="640"/>
  </tileset>
- <tileset firstgid="324" name="terrain_atlas" tilewidth="32" tileheight="32" tilecount="1024" columns="32">
+ <tileset firstgid="321" name="terrain_atlas" tilewidth="32" tileheight="32" tilecount="1024" columns="32">
   <image source="terrain_atlas.png" width="1024" height="1024"/>
   <terraintypes>
    <terrain name="水" tile="-1"/>
@@ -44,54 +41,32 @@
   <tile id="588" terrain="1,1,1,1"/>
   <tile id="620" terrain="1,1,1,1"/>
  </tileset>
- <tileset firstgid="1348" name="speech_bubble" tilewidth="32" tileheight="32" tilecount="4" columns="2">
-  <image source="speech_bubble.png" width="64" height="83"/>
- </tileset>
- <tileset firstgid="1352" name="petal" tilewidth="32" tileheight="32" tilecount="320" columns="16">
-  <image source="petal.png" width="512" height="640"/>
- </tileset>
- <tileset firstgid="1672" name="balloon" tilewidth="32" tileheight="32" tilecount="2" columns="1">
+ <tileset firstgid="1345" name="balloon" tilewidth="32" tileheight="32" tilecount="2" columns="1">
   <image source="balloon.png" width="32" height="64"/>
  </tileset>
  <layer name="ground" width="20" height="10">
   <data encoding="base64" compression="zlib">
-   eJzN0DcOwkAQhWGLsxBMTzA9wdyL2BN7Yg0m9MSeeBv+YkdaTTsNlj69sWb0ig2C//haaKODLnroG/oGGGKEMSaYGvpmmGOBJVZYG/q2SLDDHgccDX0nnHHBFTfcDX0PPPHCGx98kUEWeXWfRuj2ciOZU3PoZRElVFRfAZHby41kWc2RlzXU0cQmxTsjQZX/2O3lRrKh5tjLH1ZwJX4=
+   eJzNzLcOwlAMheG8CiXslLBTwnuFtlP30HYgsFN36vPwD9fSlVcvWPp0LNk6QfAfk6CLHvoYYGjoG2GMCaaYYW7oS7HAEiussTH0bbHDHhkOOBr6TjjjgituuBv6HnjihTc++CKPAkrqP4fQ3eVHsqj20MsKqqirvjIid5cfyZraIy+baKGj+hqI3V1+JNtqj738AcfAIlc=
   </data>
  </layer>
- <layer name="wood" width="20" height="10">
-  <properties>
-   <property name="Action" value="Move"/>
-   <property name="Delay" type="float" value="2"/>
-   <property name="Duration" type="float" value="3"/>
-   <property name="IsWeather" type="bool" value="true"/>
-   <property name="RainyTileX" type="int" value="0"/>
-   <property name="RainyTileY" type="int" value="0"/>
-   <property name="SunnyTileX" type="int" value="0"/>
-   <property name="SunnyTileY" type="int" value="-2"/>
-  </properties>
+ <layer name="fire" width="20" height="10">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFo2AU4AIAAyAAAQ==
+   eJxjYBgFowACNjIxMGxiGmhXUA9sYKLcTwAJqAOB
   </data>
  </layer>
- <layer name="panel" width="20" height="10" visible="0">
+ <layer name="balloon" width="20" height="10">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFwxFMZKaueduobN5QAQB0AQFO
+   eJxjYBgFQx04slLXPCcqmzeUAQCskgCO
   </data>
  </layer>
  <objectgroup name="roles">
-  <object id="1" name="doll" type="Position" x="20" y="224">
-   <properties>
-    <property name="Collision" type="bool" value="false"/>
-   </properties>
-  </object>
+  <object id="39" name="girl" type="Role" x="11.3509" y="220.956"/>
+  <object id="40" name="doll" type="Role" x="28" y="220"/>
  </objectgroup>
- <objectgroup name="interaction"/>
- <layer name="message_1" width="20" height="10" visible="0">
-  <data encoding="base64" compression="zlib">
-   eJxjYBgFAw1cWBkYXFmpZ54b0Cx3Kpo3kgEAsSsBKw==
-  </data>
- </layer>
- <objectgroup color="#000000" name="barriers" visible="0">
+ <objectgroup name="interaction">
+  <object id="38" name="balloon" type="Item" x="416" y="156.957" width="32" height="67.0868"/>
+ </objectgroup>
+ <objectgroup color="#000000" name="barriers">
   <object id="28" name="g_1" type="Ground" x="0" y="224" width="97" height="96">
    <properties>
     <property name="VecPoints" value="(0,0);(0,3);(13,3);(13,0)"/>
@@ -102,16 +77,5 @@
     <property name="VecPoints" value="(16,0);(16,3);(20,3);(20,0)"/>
    </properties>
   </object>
-  <object id="31" name="w_1" type="Wood" x="96" y="224" width="96" height="96">
-   <properties>
-    <property name="VecPoints" value="(13,0);(13,3);(16,3);(16,0)"/>
-    <property name="parentLayer" value="wood"/>
-   </properties>
-  </object>
  </objectgroup>
- <layer name="petal" width="20" height="10">
-  <data encoding="base64" compression="zlib">
-   eJxjYBgc4AQrdc27QWXzqAE2MGOK/aKCOzvYUPncUD4vG6ZafCCECYI7idSHzT/DDQAAuuoF/Q==
-  </data>
- </layer>
 </map>

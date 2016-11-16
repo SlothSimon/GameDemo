@@ -15,13 +15,24 @@
          contextName = "GameRole::initListener()::$_3::operator()(cocos2d::Touch*, cocos2d::Event*) const:GameRole.cpp">
       </ContextState>
       <ContextState
+         contextName = "GameScene_1::initSpecfic():GameScene_1.cpp">
+         <PersistentStrings>
+            <PersistentString
+               value = "bl-&gt;getScale()">
+            </PersistentString>
+            <PersistentString
+               value = "doll-&gt;getScale()">
+            </PersistentString>
+            <PersistentString
+               value = "tileMap-&gt;getScale()">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "cocos2d::TMXTiledMap::getLayerWithWeather() const:CCTMXTiledMap.cpp">
       </ContextState>
       <ContextState
          contextName = "GameScene_2::initSpecfic()::$_0::operator()(cocos2d::PhysicsContact&amp;) const:GameScene_2.cpp">
-      </ContextState>
-      <ContextState
-         contextName = "GameScene::playCinematic(Cinematic&amp;)::$_10::operator()() const:GameScene.cpp">
       </ContextState>
       <ContextState
          contextName = "GameRole::updateFollow(float):GameRole.cpp">
@@ -36,6 +47,9 @@
                value = "getContentSize().width">
             </PersistentString>
          </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "GameScene::playCinematic(Cinematic&amp;)::$_10::operator()() const:GameScene.cpp">
       </ContextState>
       <ContextState
          contextName = "GameScene::updateWeather(float):GameScene.cpp">
@@ -277,6 +291,9 @@
             <PersistentString
                value = "touchLayer-&gt;getContentSize()">
             </PersistentString>
+            <PersistentString
+               value = "uiInfo[&quot;Type&quot;].asString()">
+            </PersistentString>
          </PersistentStrings>
       </ContextState>
       <ContextState
@@ -296,10 +313,10 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "cocos2d::TMXObjectGroup::getObject(std::__1::basic_string&lt;char, std::__1::char_traits&lt;char&gt;, std::__1::allocator&lt;char&gt; &gt; const&amp;) const:CCTMXObjectGroup.cpp">
+         contextName = "cocos2d::EventListener::isEnabled() const:CCEventListener.h">
       </ContextState>
       <ContextState
-         contextName = "cocos2d::EventListener::isEnabled() const:CCEventListener.h">
+         contextName = "cocos2d::TMXObjectGroup::getObject(std::__1::basic_string&lt;char, std::__1::char_traits&lt;char&gt;, std::__1::allocator&lt;char&gt; &gt; const&amp;) const:CCTMXObjectGroup.cpp">
       </ContextState>
       <ContextState
          contextName = "GameScene::initListener()::$_6::operator()(cocos2d::Touch*, cocos2d::Event*) const:GameScene.cpp">

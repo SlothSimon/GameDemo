@@ -22,11 +22,11 @@ public:
     
     GameRoleFSM* getFSM() const;
     
-    void doAction(const string& , map<string, void*>& userdata) const;
-    void doAction(const string& , string userdata = "") const;
-    void doAction(const string& , Vec2 pos) const;
-    void doAction(const string& , GameRole* role) const;
-//    void doAction(const string&) const;
+    void doAction(const string& actionName, map<string, void*>& userdata) const;
+    void doAction(const string& actionName, string userdata = "") const;
+    void doAction(const string& actionName, Vec2 pos) const;
+    void doAction(const string& actionName, GameRole* role) const;
+    void addItem(const string& itemName, int count = 1);
     
     bool IsMovable() const;
     
@@ -40,6 +40,7 @@ private:
     GameRoleFSM* mFSM;
     bool _isMovable = true;
     GameRole* roleFollowed;
+    map<string, int> itemList;
     
     void initAnim();
     

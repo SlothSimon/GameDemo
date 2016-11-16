@@ -34,7 +34,6 @@ bool GameScene_2::initSpecfic(){
         if (doll == NULL || girl == NULL)
             return true;
         
-        // TODO: contact cinematics
         doll->doAction(GameRoleState::State::Idle);
         pushCinematic(new Cinematic(girl, GameRoleState::State::Say, -1, GameRoleState::SayContent::Love));
         girl->doAction(GameRoleState::State::Follow, doll);
@@ -62,7 +61,7 @@ bool GameScene_2::initSpecfic(){
             if (doll == NULL)
                 return false;
             
-            if (doll->getPosition().distance(touch->getLocation()) <= INTERACTION_RANGE){
+            if (doll->getPosition().distance(touch->getLocation()) <= INTERACTION_MESSAGE_RANGE){
                 if (isFirstTalk){
                     pushCinematic(new Cinematic(doll, GameRoleState::State::Say, -1, GameRoleState::SayContent::Ask));
                     pushCinematic(new Cinematic(girl, GameRoleState::State::Say, -1, GameRoleState::SayContent::Think));
@@ -72,7 +71,8 @@ bool GameScene_2::initSpecfic(){
                     pushCinematic(new Cinematic(girl, GameRoleState::State::Say, -1, GameRoleState::SayContent::Cry));
                     isFirstTalk = false;
                 }else{
-                    girl->doAction(GameRoleState::State::Say, GameRoleState::SayContent::Love);
+                    pushCinematic(new Cinematic(girl, GameRoleState::State::Say, -1, GameRoleState::SayContent::Love));
+                    pushCinematic(new Cinematic(girl, GameRoleState::State::Say, -1, GameRoleState::SayContent::Story1));
                 }
             }
             else

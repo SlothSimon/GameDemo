@@ -15,6 +15,7 @@
 #include "ui/UILayout.h"
 #include "GameRole.h"
 #include "Constants.h"
+#include "Bubble.hpp"
 
 USING_NS_CC;
 using namespace CocosDenshion;
@@ -257,63 +258,85 @@ bool GameScene::initInteraction(){
     
     for (const auto & obj : (objs->getObjects())){
         auto uiInfo = obj.asValueMap();
-        auto msg = Sprite::create(uiInfo["ImagePath"].asString());
-        if (msg == nullptr)
-            return false;
-        msg->setPosition(Vec2(0, 20));
-        
         auto touchNode = Node::create();
         touchNode->setContentSize(Size(uiInfo["width"].asFloat() * tileMap->getScale(), uiInfo["height"].asFloat()*tileMap->getScale()));
         touchNode->setPosition(origin + Vec2(uiInfo["x"].asFloat(), uiInfo["y"].asFloat())*tileMap->getScale());
-        touchNode->setVisible(false);
         addChild(touchNode, INTERACTION_ZORDER);
-        touchNode->addChild(msg);
         
         auto touchNodeListener = EventListenerTouchOneByOne::create();
         touchNodeListener->setSwallowTouches(true);
         
-        touchNodeListener->onTouchBegan = [=](Touch* touch, Event* event){
-            Vec2 locationInNode = touchNode->convertTouchToNodeSpace(touch);
-            Size s = touchNode->getContentSize();
-            Rect rect = Rect(0, 0, s.width, s.height);
-            //判断触摸区域是否在目标上
-            if (rect.containsPoint(locationInNode)){
-                
-                // 判断交互对象和主角的距离
-                auto doll = dynamic_cast<GameRole*>(getChildByName("doll"));
-                if (doll == NULL)
-                    return false;
-                
-                auto dist = doll->getPosition().distance(touchNode->getPosition());
-                if (dist <= INTERACTION_RANGE){
-                    msg->stopAllActions();
-                    auto scale = ScaleBy::create(0.1f, 4.0f);
-                    auto callfunc1 = CallFunc::create([touchNode]{touchNode->setVisible(true);});
-                    auto callfunc2 = CallFunc::create([touchNode]{touchNode->setVisible(false);});
+        if (uiInfo["type"].asString() == "Message"){
+            
+        
+            auto msg = Bubble::create(uiInfo["BubbleName"].asString());
+            if (msg == nullptr)
+                return false;
+            msg->setPosition(Vec2(0, 20));
+            msg->setVisible(false);
+            
+            touchNode->addChild(msg);
+            
+            touchNodeListener->onTouchBegan = [=](Touch* touch, Event* event){
+                Vec2 locationInNode = touchNode->convertTouchToNodeSpace(touch);
+                Size s = touchNode->getContentSize();
+                Rect rect = Rect(0, 0, s.width, s.height);
+                //判断触摸区域是否在目标上
+                if (rect.containsPoint(locationInNode)){
                     
-                    // 若对话气泡已经显示，则再次点击会延长显示时间，否则进行显示  TODO: 若在缩放过程中stopAllActions，会造成缩放状态延长时间
-                    if (touchNode->isVisible()){
-                        msg->runAction(Sequence::create(DelayTime::create(2.0f),
-                                                       scale->reverse(),
-                                                       callfunc2,
-                                                       NULL));
+                    // 判断交互对象和主角的距离
+                    auto doll = dynamic_cast<GameRole*>(getChildByName("doll"));
+                    if (doll == NULL)
+                        return false;
+                    
+                    auto dist = doll->getPosition().distance(touchNode->getPosition());
+                    if (dist <= INTERACTION_MESSAGE_RANGE){
+                        msg->show();
                     }else{
-                        msg->setScale(0.25);
-                        msg->runAction(Sequence::create(callfunc1,
-                                                        scale,
-                                                        DelayTime::create(2.0f),
-                                                        scale->reverse(),
-                                                        callfunc2,
-                                                        NULL));
+                        doll->doAction(GameRoleState::State::Think, GameRoleState::ThinkContent::Walk);
                     }
-                }else{
-                    doll->doAction(GameRoleState::State::Think, GameRoleState::ThinkContent::Walk);
-                }
 
-                return true;    // return true 会使其他listener失效
-            }
-            return false;       // return false 会继续执行其他listener
-        };
+                    return true;    // return true 会使其他listener失效
+                }
+                return false;       // return false 会继续执行其他listener
+            };
+        }else if (uiInfo["type"].asString() == "Item"){
+            string itemName = uiInfo["name"].asString();
+            touchNodeListener->onTouchBegan = [=](Touch* touch, Event* event){
+                Vec2 locationInNode = touchNode->convertTouchToNodeSpace(touch);
+                Size s = touchNode->getContentSize();
+                Rect rect = Rect(0, 0, s.width, s.height);
+                //判断触摸区域是否在目标上
+                if (rect.containsPoint(locationInNode)){
+                    
+                    // 判断交互对象和主角的距离
+                    auto doll = dynamic_cast<GameRole*>(getChildByName("doll"));
+                    if (doll == NULL)
+                        return false;
+                    
+                    auto dist = doll->getPosition().distance(touchNode->getPosition());
+                    if (dist <= INTERACTION_ITEM_RANGE){
+                        this->pushCinematic(new Cinematic(doll, GameRoleState::State::Say, -1, GameRoleState::SayContent::Ask));
+                        auto blLayer = tileMap->getLayer(itemName);
+                        blLayer->setLocalZOrder(INTERACTION_ZORDER);
+                        blLayer->setCascadeOpacityEnabled(true);
+                        blLayer->runAction(Sequence::create(DelayTime::create(3),
+                                                            FadeOut::create(1),  // TODO: 引擎bug，子节点并不会透明
+                                                            CallFunc::create([blLayer, doll, itemName]{
+                                                                blLayer->setVisible(false);
+                                                                doll->addItem(itemName);
+                                                            }),
+                                                             NULL));
+                        this->pushCinematic(new Cinematic(doll, GameRoleState::State::Say, -1, GameRoleState::SayContent::Love));
+                    }else{
+                        doll->doAction(GameRoleState::State::Think, GameRoleState::ThinkContent::Walk);
+                    }
+                    
+                    return true;    // return true 会使其他listener失效
+                }
+                return false;       // return false 会继续执行其他listener
+            };
+        }
         Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(touchNodeListener, touchNode);
     }
     

@@ -33,7 +33,7 @@ GameRole* GameRole::create(const string & roleName)
         role->addChild(role->mFSM);
         role->initListener();
         
-        delete []path;
+        CC_SAFE_DELETE_ARRAY(path);
         return role;
     }
     CC_SAFE_DELETE(role);
@@ -70,7 +70,7 @@ void GameRole::addAnim(const string & animName){
         auto path = ImagePath::getRoleFramePath(getName(), animName, i);
         if (FileUtils::getInstance()->isFileExist(path)){
             anim->addSpriteFrameWithFile(path);
-            delete []path;
+            CC_SAFE_DELETE_ARRAY(path);
         }else{
             break;
         }
@@ -107,6 +107,17 @@ void GameRole::walk(const Vec2 & pos){
         setFlippedX(true);
     }
     
+    int isNegative = isFlippedX() ? -1 : 1;
+    for(auto c : getChildren()){
+        auto s = dynamic_cast<Sprite*>(c);
+        if (s != NULL && s->getName() == "balloon"){
+            if (s->isFlippedX() == isFlippedX()){
+                s->setRotation(-s->getRotation());
+            }
+            s->setFlippedX(!isFlippedX());
+        }
+    }
+    
     float speed = 100.0;
     getPhysicsBody()->setSurfaceVelocity(Vec2(speed * (dist>0 ? ((dist==0) ? 0 : -1) : 1), 0));
     
@@ -137,13 +148,13 @@ void GameRole::drown(){
 }
 
 void GameRole::think(const string & content, CallFunc* callback){
-    if (ImagePath::BubbleMap.find(content) != ImagePath::BubbleMap.cend()){
+    if (ImagePath::getBubblePath(content) != nullptr){
         auto scale = ScaleBy::create(0.1f, 4.0f);
         Sprite* thinkbubble = static_cast<Sprite*>(getChildByName("bubble"));
         if (thinkbubble != nullptr){
             thinkbubble->removeFromParent();
         }
-        thinkbubble = Sprite::create(ImagePath::BubbleMap.at(content));
+        thinkbubble = Sprite::create(ImagePath::getBubblePath(content));
         // This is a relative postion
         thinkbubble->setPosition(getContentSize().width/2, getContentSize().height*1.2);
         thinkbubble->setScale(this->getContentSize().width/thinkbubble->getContentSize().width/4);
@@ -257,3 +268,23 @@ void GameRole::updateFollow(float dt){
     }
 }
 
+void GameRole::addItem(const string &itemName, int count){
+    if (itemList.find(itemName) == itemList.cend())
+        itemList[itemName] = 0;
+    itemList[itemName] += count;
+    if (itemName == "balloon"){
+        auto bl = Sprite::create(ImagePath::Balloon);
+        if (bl){
+            bl->setScale(1/getScale());
+            bl->setFlippedX(true);
+            bl->setRotation(-30 + 15 * (itemList[itemName] - 1));
+            addChild(bl);
+            bl->setPosition(getContentSize().width/2, getContentSize().height*0.8);
+            bl->setLocalZOrder(-1);
+            bl->setOpacity(0);
+            bl->runAction(FadeIn::create(1));
+            bl->setName("balloon");
+            bl->setAnchorPoint(Vec2(0.4, 0));
+        }
+    }
+}

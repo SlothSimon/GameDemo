@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="20" height="10" tilewidth="32" tileheight="32" nextobjectid="37">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="20" height="10" tilewidth="32" tileheight="32" nextobjectid="38">
  <properties>
   <property name="Script" value="map_1.lua"/>
   <property name="Weather" value="Sunny"/>
@@ -39,15 +39,12 @@
   <tile id="452" terrain="0,0,0,0"/>
   <tile id="453" terrain="0,0,,0"/>
  </tileset>
- <tileset firstgid="1348" name="speech_bubble" tilewidth="32" tileheight="32" tilecount="4" columns="2">
-  <image source="speech_bubble.png" width="64" height="83"/>
- </tileset>
- <tileset firstgid="1352" name="balloon" tilewidth="32" tileheight="32" tilecount="2" columns="1">
+ <tileset firstgid="1348" name="balloon" tilewidth="32" tileheight="32" tilecount="2" columns="1">
   <image source="balloon.png" width="32" height="64"/>
  </tileset>
  <layer name="balloon" width="20" height="10">
   <data encoding="base64" compression="zlib">
-   eJxjYBjewIOVuuZ5Utm8UTC4AQBHhQCc
+   eJxjYBjewIWVuua5Utm8UTC4AQA2xQCU
   </data>
  </layer>
  <layer name="ground" width="20" height="10">
@@ -96,15 +93,11 @@
  <objectgroup name="interaction">
   <object id="27" name="panel" type="Message" x="576.143" y="174.793" width="32" height="26.0868">
    <properties>
-    <property name="ImagePath" value="map/speech_bubble.png"/>
+    <property name="BubbleName" value="house"/>
    </properties>
   </object>
+  <object id="37" name="balloon" type="Item" x="512" y="57.9566" width="32" height="26.0868"/>
  </objectgroup>
- <layer name="message_1" width="20" height="10" visible="0">
-  <data encoding="base64" compression="zlib">
-   eJxjYBgFAw1cWBkYXFmpZ54b0Cx3Kpo3kgEAsSsBKw==
-  </data>
- </layer>
  <objectgroup color="#000000" name="barriers">
   <object id="28" name="g_1" type="Ground" x="0" y="224" width="416" height="96">
    <properties>

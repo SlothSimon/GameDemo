@@ -63,6 +63,7 @@ const string GameRoleState::SayContent::Think = "say_think";
 const string GameRoleState::SayContent::Rain = "say_rain";
 const string GameRoleState::SayContent::Story1 = "say_story1";
 const string GameRoleState::SayContent::Story2 = "say_story2";
+const string GameRoleState::SayContent::House = "house";
 
 
 const char* MusicPath::normalBGM   = "music/firstlove_light.mp3";
@@ -72,6 +73,7 @@ const char* ImagePath::MenuButton  = "button_menu.png";
 const char* ImagePath::SunnyButton = "button_sun.png";
 const char* ImagePath::RainyButton = "button_rain.png";
 const char* ImagePath::Sun         = "sun.png";
+const char* ImagePath::Balloon     = "map/balloon.png";
 const map<string, const char*> ImagePath::BubbleMap = ImagePath::CreateBubbleMap();
 
 const string ImagePath::getMapPath(const string& mapName) {
@@ -87,6 +89,14 @@ const char* ImagePath::getRoleFramePath(const string &roleName, const string &an
     return path;
 }
 
+const char* ImagePath::getBubblePath(const string& bubbleName){
+    auto res = BubbleMap.find(bubbleName);
+    if (res != ImagePath::BubbleMap.cend())
+        return res->second;
+    else
+        return nullptr;
+}
+
 const map<string, const char*> ImagePath::CreateBubbleMap(){
     map<string, const char*> m;
     m[GameRoleState::ThinkContent::Drown] = "roles/bubble/think_nowalk.png";
@@ -99,5 +109,6 @@ const map<string, const char*> ImagePath::CreateBubbleMap(){
     m[GameRoleState::SayContent::Think] = "roles/bubble/say_think.png";
     m[GameRoleState::SayContent::Story1] = "roles/bubble/say_story1.png";
     m[GameRoleState::SayContent::Story2] = "roles/bubble/say_story2.png";
+    m[GameRoleState::SayContent::House] = "roles/bubble/say_house.png";
     return m;
 }

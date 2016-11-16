@@ -10,6 +10,19 @@
 #include "GameScene_2.hpp"
 
 bool GameScene_1::initSpecfic(){
+    auto doll = dynamic_cast<GameRole*>(getChildByName(GameRoleName::Doll));
+//
+//    auto bl = Sprite::create(ImagePath::Balloon);
+//    if (bl){
+//        bl->setScale(1/doll->getScale());
+//        bl->setFlippedX(true);
+//        bl->setRotation(-30 + 15 * 0);
+//        doll->addChild(bl);
+//        bl->setPosition(0, doll->getContentSize().height*0.9);
+//        bl->setLocalZOrder(-1);
+//    }
+    doll->addItem("balloon");
+    
     
     return true;
 }
