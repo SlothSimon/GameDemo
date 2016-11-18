@@ -18,6 +18,8 @@ private:
     bool isTogether = false;
     bool isFirstTalk = true;
     // TODO: 女孩入水三秒不救会挂，影响结局
+
+    void onEnterTransitionDidFinish();
 };
 
 #endif /* GameScene_2_hpp */

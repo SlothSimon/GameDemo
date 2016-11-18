@@ -243,7 +243,7 @@ bool GameScene::initMap(const string & mapName){
     if (!initWeather())
         return false;
     
-    if (!initDoll())
+    if (!initRole())
         return false;
     
     return true;
@@ -269,13 +269,20 @@ bool GameScene::initInteraction(){
         if (uiInfo["type"].asString() == "Message"){
             
         
-            auto msg = Bubble::create(uiInfo["BubbleName"].asString());
-            if (msg == nullptr)
+            auto sunnyMsg = Bubble::create(uiInfo["SunnyBubbleName"].asString());
+            if (sunnyMsg == nullptr)
                 return false;
-            msg->setPosition(Vec2(0, 20));
-            msg->setVisible(false);
+            sunnyMsg->setPosition(Vec2(0, 20));
+            sunnyMsg->setVisible(false);
             
-            touchNode->addChild(msg);
+            auto rainyMsg = Bubble::create(uiInfo["RainyBubbleName"].asString());
+            if (rainyMsg == nullptr)
+                return false;
+            rainyMsg->setPosition(Vec2(0, 20));
+            rainyMsg->setVisible(false);
+            
+            touchNode->addChild(sunnyMsg);
+            touchNode->addChild(rainyMsg);
             
             touchNodeListener->onTouchBegan = [=](Touch* touch, Event* event){
                 Vec2 locationInNode = touchNode->convertTouchToNodeSpace(touch);
@@ -291,7 +298,14 @@ bool GameScene::initInteraction(){
                     
                     auto dist = doll->getPosition().distance(touchNode->getPosition());
                     if (dist <= INTERACTION_MESSAGE_RANGE){
-                        msg->show();
+                        if (weather == WEATHER_SUNNY){
+                            rainyMsg->hide();
+                            sunnyMsg->show();
+                        }
+                        else{
+                            sunnyMsg->hide();
+                            rainyMsg->show();
+                        }
                     }else{
                         doll->doAction(GameRoleState::State::Think, GameRoleState::ThinkContent::Walk);
                     }
@@ -520,7 +534,7 @@ bool GameScene::initWeather(){
     return true;
 }
 
-bool GameScene::initDoll(){
+bool GameScene::initRole(){
     float pixelPerTile = tileMap->getContentSize().width/tileMap->getMapSize().width;
     float scale = tileMap->getScale();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
@@ -529,8 +543,10 @@ bool GameScene::initDoll(){
     for (auto & r : roles){
         auto role = r.asValueMap();
         auto roleSprite = GameRole::create(role["name"].asString());
-        if (role["name"].asString() == GameRoleName::Doll)
+        if (role["name"].asString() == GameRoleName::Doll){
             addChild(roleSprite, DOLL_ZORDER, role["name"].asString());
+            loadGameRole(roleSprite);
+        }
         else
             addChild(roleSprite, ROLE_ZORDER, role["name"].asString());
         
@@ -632,5 +648,10 @@ bool GameScene::initSpecfic(){
     return true;
 }
 
-// TODO: This function should be empty
 void GameScene::enterStage(){}
+
+void GameScene::onExitTransitionDidStart(){
+    auto doll = dynamic_cast<GameRole*>(getChildByName(GameRoleName::Doll));
+    if (doll != NULL)
+        saveGameRole(doll);
+}

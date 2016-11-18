@@ -96,7 +96,6 @@ void GameScene_2::onEnterTransitionDidFinish(){
 }
 
 void GameScene_2::enterStage(){
-    UserDefault::getInstance()->setIntegerForKey("currentStage", 3);
+    saveStage(3);
     Director::getInstance()->replaceScene(TransitionFade::create(2, GameScene_3::createScene()));
 }
-

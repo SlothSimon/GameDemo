@@ -63,7 +63,7 @@ const string GameRoleState::SayContent::Think = "say_think";
 const string GameRoleState::SayContent::Rain = "say_rain";
 const string GameRoleState::SayContent::Story1 = "say_story1";
 const string GameRoleState::SayContent::Story2 = "say_story2";
-const string GameRoleState::SayContent::House = "house";
+const string GameRoleState::SayContent::House = "say_house";
 
 
 const char* MusicPath::normalBGM   = "music/firstlove_light.mp3";
@@ -74,7 +74,7 @@ const char* ImagePath::SunnyButton = "button_sun.png";
 const char* ImagePath::RainyButton = "button_rain.png";
 const char* ImagePath::Sun         = "sun.png";
 const char* ImagePath::Balloon     = "map/balloon.png";
-const map<string, const char*> ImagePath::BubbleMap = ImagePath::CreateBubbleMap();
+const map<string, const char*> ImagePath::BubbleMap = CreateBubbleMap();
 
 const string ImagePath::getMapPath(const string& mapName) {
     return "map/" + mapName + ".tmx";
@@ -112,3 +112,12 @@ const map<string, const char*> ImagePath::CreateBubbleMap(){
     m[GameRoleState::SayContent::House] = "roles/bubble/say_house.png";
     return m;
 }
+
+const vector<string> ItemInfo::CreateNameList(){
+    vector<string> v;
+    v.push_back("balloon");
+    
+    return v;
+}
+
+const vector<string> ItemInfo::NameList = CreateNameList();

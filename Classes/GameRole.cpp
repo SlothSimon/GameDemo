@@ -271,20 +271,24 @@ void GameRole::updateFollow(float dt){
 void GameRole::addItem(const string &itemName, int count){
     if (itemList.find(itemName) == itemList.cend())
         itemList[itemName] = 0;
-    itemList[itemName] += count;
     if (itemName == "balloon"){
-        auto bl = Sprite::create(ImagePath::Balloon);
-        if (bl){
-            bl->setScale(1/getScale());
-            bl->setFlippedX(true);
-            bl->setRotation(-30 + 15 * (itemList[itemName] - 1));
-            addChild(bl);
-            bl->setPosition(getContentSize().width/2, getContentSize().height*0.8);
-            bl->setLocalZOrder(-1);
-            bl->setOpacity(0);
-            bl->runAction(FadeIn::create(1));
-            bl->setName("balloon");
-            bl->setAnchorPoint(Vec2(0.4, 0));
+        for (int i = 0 ; i < count ; i++){
+            auto bl = Sprite::create(ImagePath::Balloon);
+            if (bl){
+                bl->setScale(1/getScale());
+                bl->setPosition(getContentSize().width/2, getContentSize().height*0.8);
+                bl->setOpacity(0);
+                bl->setName("balloon");
+                bl->setAnchorPoint(Vec2(0.4, 0));
+                bl->setRotation(-30 + 15 * (itemList[itemName] + i));
+                addChild(bl);
+                bl->setFlippedX(true);
+                bl->setLocalZOrder(-1);
+                bl->runAction(FadeIn::create(1));
+            }
         }
     }
+    itemList[itemName] += count;
 }
+
+const map<string, int> GameRole::getItemList() const {return itemList;}

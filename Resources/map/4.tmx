@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="20" height="10" tilewidth="32" tileheight="32" nextobjectid="41">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="20" height="10" tilewidth="32" tileheight="32" nextobjectid="42">
  <properties>
   <property name="Script" value="map_3.lua"/>
   <property name="Weather" value="Sunny"/>
@@ -62,6 +62,11 @@
  <objectgroup name="roles">
   <object id="39" name="girl" type="Role" x="11.3509" y="220.956"/>
   <object id="40" name="doll" type="Role" x="28" y="220"/>
+  <object id="41" name="g_1" type="Ground" x="96.5" y="191" width="95" height="32">
+   <properties>
+    <property name="VecPoints" value="(3,3);(3,4);(6,4);(6,3)"/>
+   </properties>
+  </object>
  </objectgroup>
  <objectgroup name="interaction">
   <object id="38" name="balloon" type="Item" x="416" y="156.957" width="32" height="67.0868"/>
@@ -69,12 +74,12 @@
  <objectgroup color="#000000" name="barriers">
   <object id="28" name="g_1" type="Ground" x="0" y="224" width="97" height="96">
    <properties>
-    <property name="VecPoints" value="(0,0);(0,3);(13,3);(13,0)"/>
+    <property name="VecPoints" value="(0,0);(0,3);(3,3);(3,0)"/>
    </properties>
   </object>
   <object id="29" name="g_2" type="Ground" x="193" y="224" width="447" height="96">
    <properties>
-    <property name="VecPoints" value="(16,0);(16,3);(20,3);(20,0)"/>
+    <property name="VecPoints" value="(6,0);(6,3);(20,3);(20,0)"/>
    </properties>
   </object>
  </objectgroup>

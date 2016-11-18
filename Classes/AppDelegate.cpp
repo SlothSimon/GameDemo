@@ -96,13 +96,12 @@ bool AppDelegate::applicationDidFinishLaunching() {
     
 
     register_all_packages();
-
-    // create a scene. it's an autorelease object
-    
     
     
     Scene* scene;
     if (DebugParameters::DoDebug){
+        UserDefault::destroyInstance();
+        remove(UserDefault::getInstance()->getXMLFilePath().c_str());
         UserDefault::getInstance()->setIntegerForKey("currentStage", DebugParameters::StartStage);
 //        scene = GameScene::createScene();
         scene = GameScene_1::createScene();
@@ -114,8 +113,6 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
     // run
     director->runWithScene(scene);
-    
-    
 
     return true;
 }

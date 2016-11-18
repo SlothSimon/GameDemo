@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="20" height="10" tilewidth="32" tileheight="32" nextobjectid="59">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="20" height="10" tilewidth="32" tileheight="32" nextobjectid="63">
  <properties>
   <property name="Script" value="map_2.lua"/>
   <property name="Weather" value="Rainy"/>
@@ -51,6 +51,16 @@
   </data>
  </layer>
  <layer name="mushroom" width="20" height="10">
+  <properties>
+   <property name="Action" value="Move"/>
+   <property name="Delay" type="float" value="2"/>
+   <property name="Duration" type="float" value="1"/>
+   <property name="IsWeather" type="bool" value="true"/>
+   <property name="RainyTileX" type="int" value="0"/>
+   <property name="RainyTileY" type="int" value="0"/>
+   <property name="SunnyTileX" type="int" value="0"/>
+   <property name="SunnyTileY" type="int" value="-1"/>
+  </properties>
   <data encoding="base64" compression="zlib">
    eJxjYBgFowA3uMMy0C4YWAAA4xwA4Q==
   </data>
@@ -101,11 +111,23 @@
  </objectgroup>
  <objectgroup name="interaction">
   <object id="57" name="balloon" type="Item" x="255.369" y="126.198" width="32" height="65.725"/>
+  <object id="59" name="crop2" type="Message" x="373.038" y="137.176" width="17.2782" height="17.2782">
+   <properties>
+    <property name="RainyBubbleName" value="say_love"/>
+    <property name="SunnyBubbleName" value="say_rain"/>
+   </properties>
+  </object>
+  <object id="62" name="crop1" type="Message" x="184.47" y="135.685" width="17.2782" height="17.2782">
+   <properties>
+    <property name="RainyBubbleName" value="say_love"/>
+    <property name="SunnyBubbleName" value="say_rain"/>
+   </properties>
+  </object>
  </objectgroup>
  <objectgroup color="#000000" name="barriers">
   <object id="28" name="g_1" type="Slope" x="0" y="223.953" width="639.016" height="96.0473">
    <properties>
-    <property name="VecPoints" value="(0,0);(0,3);(1,3);(3,1);(3,0)"/>
+    <property name="VecPoints" value="(0,0);(20,0);(20,3);(0,3)"/>
    </properties>
   </object>
  </objectgroup>

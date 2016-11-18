@@ -40,5 +40,6 @@ void Bubble::show(){
 }
 
 void Bubble::hide(){
-    
+    setVisible(false);
+    stopAllActions();
 }

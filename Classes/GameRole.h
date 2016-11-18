@@ -21,6 +21,7 @@ public:
     static GameRole * create(const string & roleName);
     
     GameRoleFSM* getFSM() const;
+    const map<string, int> getItemList() const;
     
     void doAction(const string& actionName, map<string, void*>& userdata) const;
     void doAction(const string& actionName, string userdata = "") const;

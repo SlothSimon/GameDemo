@@ -77,8 +77,8 @@
 		5B93D3561D6F506900D882AD /* roles in Resources */ = {isa = PBXBuildFile; fileRef = 5B93D3531D6F506900D882AD /* roles */; };
 		5B93D35E1D6F6D4600D882AD /* GameRole.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B93D35C1D6F6D4600D882AD /* GameRole.cpp */; };
 		5B93D35F1D6F6D4600D882AD /* GameRole.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B93D35C1D6F6D4600D882AD /* GameRole.cpp */; };
-		5B93D3611D70237C00D882AD /* utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B93D3601D70237C00D882AD /* utils.cpp */; };
-		5B93D3621D70237C00D882AD /* utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B93D3601D70237C00D882AD /* utils.cpp */; };
+		5B93D3611D70237C00D882AD /* Utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B93D3601D70237C00D882AD /* Utils.cpp */; };
+		5B93D3621D70237C00D882AD /* Utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B93D3601D70237C00D882AD /* Utils.cpp */; };
 		5B93D3651D7198CD00D882AD /* map in Resources */ = {isa = PBXBuildFile; fileRef = 5B93D3641D7198CD00D882AD /* map */; };
 		5B93D3661D7198CD00D882AD /* map in Resources */ = {isa = PBXBuildFile; fileRef = 5B93D3641D7198CD00D882AD /* map */; };
 		5B93D3681D71CDDA00D882AD /* music in Resources */ = {isa = PBXBuildFile; fileRef = 5B93D3671D71CDDA00D882AD /* music */; };
@@ -213,8 +213,8 @@
 		5B93D3531D6F506900D882AD /* roles */ = {isa = PBXFileReference; lastKnownFileType = folder; path = roles; sourceTree = "<group>"; };
 		5B93D35C1D6F6D4600D882AD /* GameRole.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameRole.cpp; sourceTree = "<group>"; };
 		5B93D35D1D6F6D4600D882AD /* GameRole.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameRole.h; sourceTree = "<group>"; };
-		5B93D3601D70237C00D882AD /* utils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = utils.cpp; sourceTree = "<group>"; };
-		5B93D3631D7023FE00D882AD /* utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = utils.h; sourceTree = "<group>"; };
+		5B93D3601D70237C00D882AD /* Utils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Utils.cpp; sourceTree = "<group>"; };
+		5B93D3631D7023FE00D882AD /* Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = "<group>"; };
 		5B93D3641D7198CD00D882AD /* map */ = {isa = PBXFileReference; lastKnownFileType = folder; path = map; sourceTree = "<group>"; };
 		5B93D3671D71CDDA00D882AD /* music */ = {isa = PBXFileReference; lastKnownFileType = folder; path = music; sourceTree = "<group>"; };
 		5BAF15CD1D797A1C0097902A /* sloth.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sloth.png; sourceTree = "<group>"; };
@@ -408,8 +408,8 @@
 				5B39DEC31D96703700275FAE /* GameRoleFSM.h */,
 				5B93D35C1D6F6D4600D882AD /* GameRole.cpp */,
 				5B93D35D1D6F6D4600D882AD /* GameRole.h */,
-				5B93D3601D70237C00D882AD /* utils.cpp */,
-				5B93D3631D7023FE00D882AD /* utils.h */,
+				5B93D3601D70237C00D882AD /* Utils.cpp */,
+				5B93D3631D7023FE00D882AD /* Utils.h */,
 				5BDD54B41DCECC6C0000F6A1 /* Cinematic.cpp */,
 				5BDD54B51DCECC6C0000F6A1 /* Cinematic.hpp */,
 				5BC6C8CA1DD868710073DFEE /* Macros.h */,
@@ -655,7 +655,7 @@
 				5B525B3D1DB7594200F15F19 /* StateCry.cpp in Sources */,
 				5BC6C8CE1DDC7C8F0073DFEE /* Bubble.cpp in Sources */,
 				46880B8A19C43A87006E1F66 /* HelloWorldScene.cpp in Sources */,
-				5B93D3611D70237C00D882AD /* utils.cpp in Sources */,
+				5B93D3611D70237C00D882AD /* Utils.cpp in Sources */,
 				503AE10017EB989F00D1A890 /* AppController.mm in Sources */,
 				5BDD54B61DCECC6C0000F6A1 /* Cinematic.cpp in Sources */,
 				503AE10217EB989F00D1A890 /* RootViewController.mm in Sources */,
@@ -672,7 +672,7 @@
 				5B93D35F1D6F6D4600D882AD /* GameRole.cpp in Sources */,
 				46880B8919C43A87006E1F66 /* AppDelegate.cpp in Sources */,
 				503AE10517EB98FF00D1A890 /* main.cpp in Sources */,
-				5B93D3621D70237C00D882AD /* utils.cpp in Sources */,
+				5B93D3621D70237C00D882AD /* Utils.cpp in Sources */,
 				5B93D3431D67646800D882AD /* GameScene.cpp in Sources */,
 				46880B8B19C43A87006E1F66 /* HelloWorldScene.cpp in Sources */,
 			);

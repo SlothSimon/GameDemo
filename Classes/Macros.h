@@ -17,7 +17,6 @@
 #define CREATE_GAMESCENE_SUBCLASS(__TYPE__) \
     CREATE_GAMESCENE_SUBCLASS_FUNC(__TYPE__); \
     bool initSpecfic(); \
-    void onEnterTransitionDidFinish(); \
     void enterStage(); \
 
 /** @def CREATE_GAMESCENE_SUBCLASS(__TYPE__)

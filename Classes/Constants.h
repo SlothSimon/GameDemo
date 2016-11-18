@@ -103,4 +103,12 @@ private:
     const static map<string, const char*> CreateBubbleMap();
 };
 
+/**
+ * Constants about item
+ */
+struct ItemInfo{
+    const static vector<string> NameList;
+private:
+    const static vector<string> CreateNameList();
+};
 #endif /* Constants_h */

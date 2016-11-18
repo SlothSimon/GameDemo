@@ -50,12 +50,7 @@ bool GameScene_3::initSpecfic(){
     return true;
 }
 
-
-void GameScene_3::onEnterTransitionDidFinish(){
-    
-}
-
 void GameScene_3::enterStage(){
-    UserDefault::getInstance()->setIntegerForKey("currentStage", 4);
+    saveStage(4);
     Director::getInstance()->replaceScene(TransitionFade::create(2, EndScene::createScene()));
 }

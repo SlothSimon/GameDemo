@@ -12,6 +12,7 @@
 #include "GameRole.h"
 #include "Cinematic.hpp"
 #include "Macros.h"
+#include "Utils.h"
 
 #define WEATHER_SUNNY "Sunny"
 #define WEATHER_RAINY "Rainy"
@@ -43,6 +44,8 @@ public:
     virtual bool init();
     
     virtual void onEnterTransitionDidFinish();
+    
+    virtual void onExitTransitionDidStart();
     
     // implement the "static create()" method manually
     CREATE_FUNC(GameScene);
@@ -81,7 +84,7 @@ public:
     
     bool initWeather();
     
-    bool initDoll();
+    bool initRole();
     
     bool initListener();
     
