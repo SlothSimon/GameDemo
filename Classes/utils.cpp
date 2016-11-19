@@ -10,7 +10,8 @@
 
 bool saveGameRole(const GameRole* role){
     try {
-        for (auto i : role->getItemList()){
+        auto m = role->getItemList();
+        for (const auto i : m){
             UserDefault::getInstance()->setIntegerForKey(("Item:" + i.first).c_str(), i.second);
         }
         UserDefault::getInstance()->flush();
@@ -57,5 +58,17 @@ bool loadStage(int & stage){
         return false;
     }
     
+    return true;
+}
+
+bool initUserDefault(){
+    try {
+        UserDefault::getInstance()->deleteValueForKey("currentStage");
+        for (auto i : ItemInfo::NameList){
+            UserDefault::getInstance()->deleteValueForKey(("Item:" + i).c_str());
+        }
+    } catch (exception e) {
+        return false;
+    }
     return true;
 }

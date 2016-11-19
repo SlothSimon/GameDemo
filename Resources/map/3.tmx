@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" renderorder="right-down" width="20" height="10" tilewidth="32" tileheight="32" nextobjectid="63">
  <properties>
-  <property name="Script" value="map_2.lua"/>
-  <property name="Weather" value="Rainy"/>
+  <property name="Weather" value="Sunny"/>
  </properties>
  <tileset firstgid="1" name="grass" tilewidth="32" tileheight="32" tilecount="320" columns="16">
   <image source="grass.png" width="512" height="640"/>
@@ -66,16 +65,6 @@
   </data>
  </layer>
  <layer name="stone" width="20" height="10">
-  <properties>
-   <property name="Action" value="Move"/>
-   <property name="Delay" type="float" value="2"/>
-   <property name="Duration" type="float" value="3"/>
-   <property name="IsWeather" type="bool" value="true"/>
-   <property name="RainyTileX" type="int" value="0"/>
-   <property name="RainyTileY" type="int" value="0"/>
-   <property name="SunnyTileX" type="int" value="0"/>
-   <property name="SunnyTileY" type="int" value="-3"/>
-  </properties>
   <data encoding="base64" compression="zlib">
    eJxjYBgFowA7sGFhYLBlGWhXDCwAAIUYAII=
   </data>
@@ -97,12 +86,12 @@
  </layer>
  <layer name="wall" width="20" height="10">
   <data encoding="base64" compression="zlib">
-   eJxjYBjcwIMVlaYW8KSSeTB3Ucs8aoMUVghOhbqvH42GASC/ga4OGyIAAFeWBPw=
+   eJxjYBjcwIMVQnuyUtdcaplHK/dRC6SwQnAq1H39aDQMAPkNdHXYEAEAWg4E/Q==
   </data>
  </layer>
  <layer name="house" width="20" height="10">
   <data encoding="base64" compression="zlib">
-   eJwrYmUAgyIoPQpIA96DPNyiCbivb5C7f6ABAJqrAjI=
+   eJwrYmUAgyJWCB4FpAHvQR5m0QTc1zfI3T/QAAAJEAKp
   </data>
  </layer>
  <objectgroup name="roles">
@@ -111,13 +100,13 @@
  </objectgroup>
  <objectgroup name="interaction">
   <object id="57" name="balloon" type="Item" x="255.369" y="126.198" width="32" height="65.725"/>
-  <object id="59" name="crop2" type="Message" x="373.038" y="137.176" width="17.2782" height="17.2782">
+  <object id="59" name="crop2" type="Message" x="321.204" y="158.52" width="127.045" height="64.0309">
    <properties>
     <property name="RainyBubbleName" value="say_love"/>
     <property name="SunnyBubbleName" value="say_rain"/>
    </properties>
   </object>
-  <object id="62" name="crop1" type="Message" x="184.47" y="135.685" width="17.2782" height="17.2782">
+  <object id="62" name="crop1" type="Message" x="132.635" y="158.045" width="123.996" height="64.0309">
    <properties>
     <property name="RainyBubbleName" value="say_love"/>
     <property name="SunnyBubbleName" value="say_rain"/>

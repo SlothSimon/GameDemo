@@ -28,6 +28,8 @@ public:
     void doAction(const string& actionName, Vec2 pos) const;
     void doAction(const string& actionName, GameRole* role) const;
     void addItem(const string& itemName, int count = 1);
+    void follow(GameRole* role);    
+    void unfollow();
     
     bool IsMovable() const;
     
@@ -66,10 +68,6 @@ private:
     void cry();
     
     void think(const string &, CallFunc* callback = nullptr);
-    
-    void follow(GameRole* role);
-    
-    void unfollow();
     
     // scheduler
     void updateFollow(float dt);

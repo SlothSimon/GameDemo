@@ -10,10 +10,6 @@
 #include "GameScene_2.hpp"
 
 bool GameScene_1::initSpecfic(){
-    auto doll = dynamic_cast<GameRole*>(getChildByName(GameRoleName::Doll));
-
-    doll->addItem("balloon");
-    
     
     return true;
 }
@@ -25,6 +21,7 @@ void GameScene_1::onEnterTransitionDidFinish(){
 }
 
 void GameScene_1::enterStage(){
+    GameScene::enterStage();
     saveStage(2);
     Director::getInstance()->replaceScene(TransitionFade::create(2, GameScene_2::createScene()));
 }

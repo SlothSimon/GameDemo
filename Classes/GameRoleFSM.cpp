@@ -48,8 +48,6 @@ bool GameRoleFSM::initWithGameRole(GameRole *role){
     DISPATCH->addEventListenerWithSceneGraphPriority(listener, this);
     listener = EventListenerCustom::create(GameRoleState::convertToEventName(role, GameRoleState::State::Say), CC_CALLBACK_1(GameRoleFSM::onRecvState, this));
     DISPATCH->addEventListenerWithSceneGraphPriority(listener, this);
-    listener = EventListenerCustom::create(GameRoleState::convertToEventName(role, GameRoleState::State::Follow), CC_CALLBACK_1(GameRoleFSM::onRecvState, this));
-    DISPATCH->addEventListenerWithSceneGraphPriority(listener, this);
     
     return true;
 }

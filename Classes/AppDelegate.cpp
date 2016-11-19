@@ -1,9 +1,10 @@
 #include "AppDelegate.h"
 #include "GameScene_1.hpp"
-#include "GameScene_2.hpp"
+#include "GameScene_4.hpp"
 #include "HelloWorldScene.h"
 #include "EndScene.h"
 #include "Constants.h"
+#include "Utils.h"
 
 USING_NS_CC;
 
@@ -100,11 +101,9 @@ bool AppDelegate::applicationDidFinishLaunching() {
     
     Scene* scene;
     if (DebugParameters::DoDebug){
-        UserDefault::destroyInstance();
-        remove(UserDefault::getInstance()->getXMLFilePath().c_str());
+        initUserDefault();
         UserDefault::getInstance()->setIntegerForKey("currentStage", DebugParameters::StartStage);
-//        scene = GameScene::createScene();
-        scene = GameScene_1::createScene();
+        scene = GameScene_4::createScene();
     }
     else{
         UserDefault::getInstance()->setIntegerForKey("currentStage", 1);

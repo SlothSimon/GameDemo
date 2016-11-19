@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" renderorder="right-down" width="20" height="10" tilewidth="32" tileheight="32" nextobjectid="59">
  <properties>
-  <property name="Script" value="map_2.lua"/>
   <property name="Weather" value="Rainy"/>
  </properties>
  <tileset firstgid="1" name="wood" tilewidth="32" tileheight="32" tilecount="3" columns="3">
@@ -83,12 +82,12 @@
  </layer>
  <layer name="wall" width="20" height="10">
   <data encoding="base64" compression="zlib">
-   eJxjYBh8wJ8Vlaa2udQyh9ruoxbIZoXgUUA5AADGiQKF
+   eJxjYBh8wJ8VlaYU+A0R86gFsoDmZVPZzJEKAAJtAyk=
   </data>
  </layer>
  <layer name="house" width="20" height="10">
   <data encoding="base64" compression="zlib">
-   eJxjYKAcVLKi0iMBBA1yvyYNcvcNFQAA+akBuw==
+   eJxjYKAMVLJCMIw9UkDQIPdr0iB331ABAGQCAjk=
   </data>
  </layer>
  <objectgroup name="roles">

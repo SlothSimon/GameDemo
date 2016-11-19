@@ -249,13 +249,11 @@ void GameRole::cry(){
 void GameRole::follow(GameRole *role){
     roleFollowed = role;
     schedule(schedule_selector(GameRole::updateFollow), 0.1f, kRepeatForever, 0);
-    doAction(GameRoleState::State::Idle);
 }
 
 void GameRole::unfollow(){
     roleFollowed = nullptr;
     unschedule(schedule_selector(GameRole::updateFollow));
-    doAction(GameRoleState::State::Idle);
 }
 
 void GameRole::updateFollow(float dt){

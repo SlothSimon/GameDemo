@@ -1,15 +1,15 @@
 //
-//  GameScene_3.cpp
+//  GameScene_4.cpp
 //  Sunny Doll
 //
-//  Created by zhangsimon on 2016/11/12.
+//  Created by zhangsimon on 2016/11/19.
 //
 //
 
-#include "GameScene_3.hpp"
 #include "GameScene_4.hpp"
+#include "GameScene_5.hpp"
 
-bool GameScene_3::initSpecfic(){
+bool GameScene_4::initSpecfic(){
     auto girl = dynamic_cast<GameRole*>(getChildByName(GameRoleName::Girl));
     auto doll = dynamic_cast<GameRole*>(getChildByName(GameRoleName::Doll));
     
@@ -50,8 +50,9 @@ bool GameScene_3::initSpecfic(){
     return true;
 }
 
-void GameScene_3::enterStage(){
+
+void GameScene_4::enterStage(){
     GameScene::enterStage();
-    saveStage(4);
-    Director::getInstance()->replaceScene(TransitionFade::create(2, GameScene_4::createScene()));
+    saveStage(5);
+    Director::getInstance()->replaceScene(TransitionFade::create(2, GameScene_5::createScene()));
 }

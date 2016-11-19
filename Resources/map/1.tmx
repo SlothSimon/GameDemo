@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" renderorder="right-down" width="20" height="10" tilewidth="32" tileheight="32" nextobjectid="38">
  <properties>
-  <property name="Script" value="map_1.lua"/>
   <property name="Weather" value="Sunny"/>
  </properties>
  <tileset firstgid="1" name="wood" tilewidth="32" tileheight="32" tilecount="3" columns="3">
@@ -88,7 +87,7 @@
   </data>
  </layer>
  <objectgroup name="roles">
-  <object id="1" name="doll" type="Position" x="20" y="224"/>
+  <object id="1" name="doll" type="Position" x="530" y="223"/>
  </objectgroup>
  <objectgroup name="interaction">
   <object id="27" name="panel" type="Message" x="576.143" y="174.793" width="32" height="26.0868">

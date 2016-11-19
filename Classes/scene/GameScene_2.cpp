@@ -36,7 +36,7 @@ bool GameScene_2::initSpecfic(){
         
         doll->doAction(GameRoleState::State::Idle);
         pushCinematic(new Cinematic(girl, GameRoleState::State::Say, -1, GameRoleState::SayContent::Love));
-        girl->doAction(GameRoleState::State::Follow, doll);
+        girl->follow(doll);
         isTogether = true;
         
         return true;
@@ -96,6 +96,7 @@ void GameScene_2::onEnterTransitionDidFinish(){
 }
 
 void GameScene_2::enterStage(){
+    GameScene::enterStage();
     saveStage(3);
     Director::getInstance()->replaceScene(TransitionFade::create(2, GameScene_3::createScene()));
 }

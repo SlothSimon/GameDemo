@@ -93,10 +93,10 @@ bool GameScene::init()
     if (!this->initSpecfic())
         return false;
     
+    loadGameRole(dynamic_cast<GameRole*>(getChildByName(GameRoleName::Doll)));
+    
     return true;
 }
-
-void GameScene::onEnterTransitionDidFinish(){}
 
 void GameScene::updateWeather(float dt){
     log("I am updating weather~");
@@ -258,10 +258,14 @@ bool GameScene::initInteraction(){
     
     for (const auto & obj : (objs->getObjects())){
         auto uiInfo = obj.asValueMap();
-        auto touchNode = Node::create();
+        auto touchNode = LayerColor::create(Color4B::BLACK);
         touchNode->setContentSize(Size(uiInfo["width"].asFloat() * tileMap->getScale(), uiInfo["height"].asFloat()*tileMap->getScale()));
         touchNode->setPosition(origin + Vec2(uiInfo["x"].asFloat(), uiInfo["y"].asFloat())*tileMap->getScale());
         addChild(touchNode, INTERACTION_ZORDER);
+        if (DebugParameters::DoDebug)
+            touchNode->setOpacity(0.3);
+        else
+            touchNode->setOpacity(0);
         
         auto touchNodeListener = EventListenerTouchOneByOne::create();
         touchNodeListener->setSwallowTouches(true);
@@ -272,13 +276,15 @@ bool GameScene::initInteraction(){
             auto sunnyMsg = Bubble::create(uiInfo["SunnyBubbleName"].asString());
             if (sunnyMsg == nullptr)
                 return false;
-            sunnyMsg->setPosition(Vec2(0, 20));
+            sunnyMsg->setPosition(Vec2(touchNode->getContentSize().width/2, touchNode->getContentSize().height));
+            sunnyMsg->setAnchorPoint(Vec2(0.5, 0));
             sunnyMsg->setVisible(false);
             
             auto rainyMsg = Bubble::create(uiInfo["RainyBubbleName"].asString());
             if (rainyMsg == nullptr)
                 return false;
-            rainyMsg->setPosition(Vec2(0, 20));
+            rainyMsg->setPosition(Vec2(touchNode->getContentSize().width/2, touchNode->getContentSize().height));
+            rainyMsg->setAnchorPoint(Vec2(0.5, 0));
             rainyMsg->setVisible(false);
             
             touchNode->addChild(sunnyMsg);
@@ -296,7 +302,7 @@ bool GameScene::initInteraction(){
                     if (doll == NULL)
                         return false;
                     
-                    auto dist = doll->getPosition().distance(touchNode->getPosition());
+                    auto dist = doll->getPosition().distance(touchNode->getPosition() + touchNode->getContentSize()/2);
                     if (dist <= INTERACTION_MESSAGE_RANGE){
                         if (weather == WEATHER_SUNNY){
                             rainyMsg->hide();
@@ -328,7 +334,7 @@ bool GameScene::initInteraction(){
                     if (doll == NULL)
                         return false;
                     
-                    auto dist = doll->getPosition().distance(touchNode->getPosition());
+                    auto dist = doll->getPosition().distance(touchNode->getPosition() + touchNode->getContentSize()/2);
                     if (dist <= INTERACTION_ITEM_RANGE){
                         this->pushCinematic(new Cinematic(doll, GameRoleState::State::Say, -1, GameRoleState::SayContent::Ask));
                         auto blLayer = tileMap->getLayer(itemName);
@@ -403,44 +409,49 @@ bool GameScene::initCollision(){
     auto barriers = tileMap->getObjectGroup("barriers")->getObjects();
     for (auto & b : barriers){
         auto bInfo = b.asValueMap();
-        
-        auto vecArr = StringToPoints(bInfo["VecPoints"].asString());
-        for_each(vecArr.begin(), vecArr.end(), [pixelPerTile](Vec2 & pos){
-            pos = pos * pixelPerTile;
-        });
-        
-        if (vecArr.size() == 0){
-            log("error! vecArr's size is 0");
-            exit(0);
-        }
+        if (bInfo["type"].asString() == "Ground"){
+            auto vecArr = StringToPoints(bInfo["VecPoints"].asString());
+            for_each(vecArr.begin(), vecArr.end(), [pixelPerTile](Vec2 & pos){
+                pos = pos * pixelPerTile;
+            });
             
-        auto body = PhysicsBody::createPolygon(&vecArr[0], int(vecArr.size()), PhysicsMaterial(0,0,1.0f));
-        
-        body->setDynamic(false);
-        for (auto &s : body->getShapes()){
-            s->setRestitution(0);       // TODO: 禁止弹跳，根本不起作用，可能是引擎bug
-            s->setFriction(PhysicsBodyParameters::getFriction(bInfo["type"].asString()));
-        }
-        
-        
-        auto n = Sprite::create();
-        n->setPhysicsBody(body);
-        n->setPosition(Vec2::ZERO);
-        n->setAnchorPoint(Vec2::ZERO);
-        n->setName(bInfo["type"].asString());
-        tileMap->addChild(n);
-        
-        // 会随其他layer有动画的障碍物
-        auto parentLayerName = bInfo["parentLayer"].asString();
-        if (parentLayerName != ""){
-            collisionNodeWithAction.insert({parentLayerName, n});
-            if (parentLayerName == "water"){
-                body->setCategoryBitmask(0xFF);
-                body->setCollisionBitmask(0xFF);
-                body->setContactTestBitmask(0x02);
+            if (vecArr.size() == 0){
+                log("error! vecArr's size is 0");
+                exit(0);
             }
+                
+            auto body = PhysicsBody::createPolygon(&vecArr[0], int(vecArr.size()), PhysicsMaterial(0,0,1.0f));
+            
+            body->setDynamic(false);
+            for (auto &s : body->getShapes()){
+                s->setRestitution(0);       // TODO: 禁止弹跳，根本不起作用，可能是引擎bug
+                s->setFriction(PhysicsBodyParameters::getFriction(bInfo["type"].asString()));
+            }
+            
+            
+            auto n = Sprite::create();
+            n->setPhysicsBody(body);
+            n->setPosition(Vec2::ZERO);
+            n->setAnchorPoint(Vec2::ZERO);
+            n->setName(bInfo["type"].asString());
+            tileMap->addChild(n);
+            
+            // 会随其他layer有动画的障碍物
+            auto parentLayerName = bInfo["parentLayer"].asString();
+            if (parentLayerName != ""){
+                collisionNodeWithAction.insert({parentLayerName, n});
+                if (parentLayerName == "water"){
+                    body->setCategoryBitmask(0xFF);
+                    body->setCollisionBitmask(0xFF);
+                    body->setContactTestBitmask(0x02);
+                }
+            }
+        }else if (bInfo["type"].asString() == "Fire"){
+            auto pf = ParticleSystemQuad::create("map/fire.plist");
+            pf->setStartSize(bInfo["width"].asFloat()*tileMap->getScale());
+            pf->setPosition(Vec2(bInfo["x"].asFloat() + bInfo["width"].asFloat()/2, bInfo["y"].asFloat() + bInfo["width"].asFloat())*tileMap->getScale());
+            addChild(pf, 9999);
         }
- 
     }
     
     return true;
@@ -545,7 +556,6 @@ bool GameScene::initRole(){
         auto roleSprite = GameRole::create(role["name"].asString());
         if (role["name"].asString() == GameRoleName::Doll){
             addChild(roleSprite, DOLL_ZORDER, role["name"].asString());
-            loadGameRole(roleSprite);
         }
         else
             addChild(roleSprite, ROLE_ZORDER, role["name"].asString());
@@ -648,10 +658,9 @@ bool GameScene::initSpecfic(){
     return true;
 }
 
-void GameScene::enterStage(){}
-
-void GameScene::onExitTransitionDidStart(){
+void GameScene::enterStage(){
     auto doll = dynamic_cast<GameRole*>(getChildByName(GameRoleName::Doll));
     if (doll != NULL)
         saveGameRole(doll);
 }
+

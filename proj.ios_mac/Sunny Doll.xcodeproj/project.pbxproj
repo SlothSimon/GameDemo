@@ -86,6 +86,8 @@
 		5BAF15CE1D797A1C0097902A /* sloth.png in Resources */ = {isa = PBXBuildFile; fileRef = 5BAF15CD1D797A1C0097902A /* sloth.png */; };
 		5BC6C8C61DD7700E0073DFEE /* GameScene_3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BC6C8C41DD7700E0073DFEE /* GameScene_3.cpp */; };
 		5BC6C8CE1DDC7C8F0073DFEE /* Bubble.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BC6C8CC1DDC7C8F0073DFEE /* Bubble.cpp */; };
+		5BC6C8D41DE0471C0073DFEE /* GameScene_4.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BC6C8D21DE0471C0073DFEE /* GameScene_4.cpp */; };
+		5BC6C8D71DE047280073DFEE /* GameScene_5.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BC6C8D51DE047280073DFEE /* GameScene_5.cpp */; };
 		5BDD54B01DCE0CD30000F6A1 /* GameScene_1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BDD54AE1DCE0CD30000F6A1 /* GameScene_1.cpp */; };
 		5BDD54B31DCE25990000F6A1 /* GameScene_2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BDD54B11DCE25990000F6A1 /* GameScene_2.cpp */; };
 		5BDD54B61DCECC6C0000F6A1 /* Cinematic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BDD54B41DCECC6C0000F6A1 /* Cinematic.cpp */; };
@@ -223,6 +225,10 @@
 		5BC6C8CA1DD868710073DFEE /* Macros.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Macros.h; sourceTree = "<group>"; };
 		5BC6C8CC1DDC7C8F0073DFEE /* Bubble.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Bubble.cpp; sourceTree = "<group>"; };
 		5BC6C8CD1DDC7C8F0073DFEE /* Bubble.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Bubble.hpp; sourceTree = "<group>"; };
+		5BC6C8D21DE0471C0073DFEE /* GameScene_4.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameScene_4.cpp; sourceTree = "<group>"; };
+		5BC6C8D31DE0471C0073DFEE /* GameScene_4.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GameScene_4.hpp; sourceTree = "<group>"; };
+		5BC6C8D51DE047280073DFEE /* GameScene_5.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameScene_5.cpp; sourceTree = "<group>"; };
+		5BC6C8D61DE047280073DFEE /* GameScene_5.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GameScene_5.hpp; sourceTree = "<group>"; };
 		5BDD54AE1DCE0CD30000F6A1 /* GameScene_1.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameScene_1.cpp; sourceTree = "<group>"; };
 		5BDD54AF1DCE0CD30000F6A1 /* GameScene_1.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GameScene_1.hpp; sourceTree = "<group>"; };
 		5BDD54B11DCE25990000F6A1 /* GameScene_2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameScene_2.cpp; sourceTree = "<group>"; };
@@ -474,6 +480,10 @@
 				5BDD54B21DCE25990000F6A1 /* GameScene_2.hpp */,
 				5BC6C8C41DD7700E0073DFEE /* GameScene_3.cpp */,
 				5BC6C8C51DD7700E0073DFEE /* GameScene_3.hpp */,
+				5BC6C8D21DE0471C0073DFEE /* GameScene_4.cpp */,
+				5BC6C8D31DE0471C0073DFEE /* GameScene_4.hpp */,
+				5BC6C8D51DE047280073DFEE /* GameScene_5.cpp */,
+				5BC6C8D61DE047280073DFEE /* GameScene_5.hpp */,
 			);
 			path = scene;
 			sourceTree = "<group>";
@@ -648,6 +658,7 @@
 				5B39DECE1D96757100275FAE /* StateDrown.cpp in Sources */,
 				5B93D35E1D6F6D4600D882AD /* GameRole.cpp in Sources */,
 				5B39DECB1D96747500275FAE /* StateWalk.cpp in Sources */,
+				5BC6C8D41DE0471C0073DFEE /* GameScene_4.cpp in Sources */,
 				5BDD54B31DCE25990000F6A1 /* GameScene_2.cpp in Sources */,
 				5B39DEC41D96703700275FAE /* GameRoleFSM.cpp in Sources */,
 				46880B8819C43A87006E1F66 /* AppDelegate.cpp in Sources */,
@@ -657,6 +668,7 @@
 				46880B8A19C43A87006E1F66 /* HelloWorldScene.cpp in Sources */,
 				5B93D3611D70237C00D882AD /* Utils.cpp in Sources */,
 				503AE10017EB989F00D1A890 /* AppController.mm in Sources */,
+				5BC6C8D71DE047280073DFEE /* GameScene_5.cpp in Sources */,
 				5BDD54B61DCECC6C0000F6A1 /* Cinematic.cpp in Sources */,
 				503AE10217EB989F00D1A890 /* RootViewController.mm in Sources */,
 				5B39DEC81D96728E00275FAE /* StateIdle.cpp in Sources */,

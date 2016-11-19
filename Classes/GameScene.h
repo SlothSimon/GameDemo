@@ -43,10 +43,6 @@ public:
     
     virtual bool init();
     
-    virtual void onEnterTransitionDidFinish();
-    
-    virtual void onExitTransitionDidStart();
-    
     // implement the "static create()" method manually
     CREATE_FUNC(GameScene);
     

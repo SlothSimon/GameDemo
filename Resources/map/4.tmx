@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="20" height="10" tilewidth="32" tileheight="32" nextobjectid="42">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="20" height="10" tilewidth="32" tileheight="32" nextobjectid="49">
  <properties>
-  <property name="Script" value="map_3.lua"/>
-  <property name="Weather" value="Sunny"/>
+  <property name="Weather" value="Rainy"/>
  </properties>
  <tileset firstgid="1" name="grass" tilewidth="32" tileheight="32" tilecount="320" columns="16">
   <image source="grass.png" width="512" height="640"/>
@@ -44,6 +43,9 @@
  <tileset firstgid="1345" name="balloon" tilewidth="32" tileheight="32" tilecount="2" columns="1">
   <image source="balloon.png" width="32" height="64"/>
  </tileset>
+ <tileset firstgid="1347" name="wood" tilewidth="32" tileheight="32" tilecount="3" columns="3">
+  <image source="wood.png" width="96" height="32"/>
+ </tileset>
  <layer name="ground" width="20" height="10">
   <data encoding="base64" compression="zlib">
    eJzNzLcOwlAMheG8CiXslLBTwnuFtlP30HYgsFN36vPwD9fSlVcvWPp0LNk6QfAfk6CLHvoYYGjoG2GMCaaYYW7oS7HAEiussTH0bbHDHhkOOBr6TjjjgituuBv6HnjihTc++CKPAkrqP4fQ3eVHsqj20MsKqqirvjIid5cfyZraIy+baKGj+hqI3V1+JNtqj738AcfAIlc=
@@ -51,7 +53,12 @@
  </layer>
  <layer name="fire" width="20" height="10">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFowACNjIxMGxiGmhXUA9sYKLcTwAJqAOB
+   eJxjYBgFo2B4gkVMCEwuAAB+GgHt
+  </data>
+ </layer>
+ <layer name="wood" width="20" height="10">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFo2B4AmdWBgYXIHZlJd8MADnJANw=
   </data>
  </layer>
  <layer name="balloon" width="20" height="10">
@@ -62,11 +69,6 @@
  <objectgroup name="roles">
   <object id="39" name="girl" type="Role" x="11.3509" y="220.956"/>
   <object id="40" name="doll" type="Role" x="28" y="220"/>
-  <object id="41" name="g_1" type="Ground" x="96.5" y="191" width="95" height="32">
-   <properties>
-    <property name="VecPoints" value="(3,3);(3,4);(6,4);(6,3)"/>
-   </properties>
-  </object>
  </objectgroup>
  <objectgroup name="interaction">
   <object id="38" name="balloon" type="Item" x="416" y="156.957" width="32" height="67.0868"/>
@@ -82,5 +84,14 @@
     <property name="VecPoints" value="(6,0);(6,3);(20,3);(20,0)"/>
    </properties>
   </object>
+  <object id="42" name="g_1" type="Ground" x="97.5" y="192" width="95" height="32">
+   <properties>
+    <property name="VecPoints" value="(3,3);(3,4);(6,4);(6,3)"/>
+   </properties>
+  </object>
+  <object id="45" name="f1" type="Fire" x="373" y="198" width="16" height="2"/>
+  <object id="46" name="f1" type="Fire" x="109" y="276" width="8" height="2"/>
+  <object id="47" name="f1" type="Fire" x="138" y="276" width="16" height="2"/>
+  <object id="48" name="f1" type="Fire" x="165" y="276" width="8" height="2"/>
  </objectgroup>
 </map>

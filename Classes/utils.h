@@ -21,4 +21,6 @@ bool loadGameRole(GameRole* role);
 
 bool loadStage(int & stage);
 
+bool initUserDefault();
+
 #endif /* Utils_h */
