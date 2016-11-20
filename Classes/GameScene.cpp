@@ -109,6 +109,7 @@ void GameScene::updateWeather(float dt){
         }
         else{
             SimpleAudioEngine::getInstance()->stopEffect(effects["rain"]);
+            SimpleAudioEngine::getInstance()->setEffectsVolume(1.0);
             rain->setEmissionRate(0);
             rain->setSpeed(0);
             auto bt = static_cast<Button*>(getChildByName("sideBar")->getChildByName("rain"));
@@ -169,6 +170,7 @@ void GameScene::beRainy(){
     
     // rain effect
     effects["rain"] = SimpleAudioEngine::getInstance()->playEffect(MusicPath::RainEffect, true);
+    SimpleAudioEngine::getInstance()->setEffectsVolume(0);
     runAction(EffectTo::create(4.0f, 1.0));
     
     // rain change
@@ -450,7 +452,15 @@ bool GameScene::initCollision(){
             auto pf = ParticleSystemQuad::create("map/fire.plist");
             pf->setStartSize(bInfo["width"].asFloat()*tileMap->getScale());
             pf->setPosition(Vec2(bInfo["x"].asFloat() + bInfo["width"].asFloat()/2, bInfo["y"].asFloat() + bInfo["width"].asFloat())*tileMap->getScale());
-            addChild(pf, 9999);
+            pf->setName(bInfo["type"].asString());
+            addChild(pf, ROLE_ZORDER);
+            if (effects.find("fire") == effects.cend())
+                effects["fire"] = SimpleAudioEngine::getInstance()->playEffect(MusicPath::FireEffect, true);
+        }else if (bInfo["type"].asString() == "Leaves"){
+            auto pf = ParticleSystemQuad::create("map/leaves.plist");
+            pf->setPosition(Vec2(bInfo["x"].asFloat() + bInfo["width"].asFloat()/2, bInfo["y"].asFloat() + bInfo["width"].asFloat())*tileMap->getScale());
+            pf->setName(bInfo["type"].asString());
+            addChild(pf, ROLE_ZORDER - 1);
         }
     }
     
@@ -603,6 +613,7 @@ bool GameScene::initBGM(){
     if (!SimpleAudioEngine::getInstance()->isBackgroundMusicPlaying()){
         SimpleAudioEngine::getInstance()->preloadBackgroundMusic(MusicPath::normalBGM);
         SimpleAudioEngine::getInstance()->playBackgroundMusic(MusicPath::normalBGM, true);
+        SimpleAudioEngine::getInstance()->setBackgroundMusicVolume(0.1);
     }
     
     return true;

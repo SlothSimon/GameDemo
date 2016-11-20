@@ -17,6 +17,10 @@ class GameScene_4: public GameScene{
 public:
     CREATE_GAMESCENE_SUBCLASS(GameScene_4);
 private:
+    void updateFire(float dt);
+    
+    void beRainyGround();
+
 };
 
 #endif /* GameScene_4_hpp */

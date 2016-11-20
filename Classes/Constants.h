@@ -84,6 +84,7 @@ public:
 struct MusicPath {
     const static char* normalBGM;
     const static char* RainEffect;
+    const static char* FireEffect;
     
 };
 

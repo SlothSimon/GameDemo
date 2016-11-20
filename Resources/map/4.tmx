@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="20" height="10" tilewidth="32" tileheight="32" nextobjectid="49">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="20" height="10" tilewidth="32" tileheight="32" nextobjectid="56">
  <properties>
   <property name="Weather" value="Rainy"/>
  </properties>
@@ -72,8 +72,9 @@
  </objectgroup>
  <objectgroup name="interaction">
   <object id="38" name="balloon" type="Item" x="416" y="156.957" width="32" height="67.0868"/>
+  <object id="55" name="fly" type="Float" x="97" y="176" width="95" height="48"/>
  </objectgroup>
- <objectgroup color="#000000" name="barriers">
+ <objectgroup color="#000000" name="barriers" visible="0">
   <object id="28" name="g_1" type="Ground" x="0" y="224" width="97" height="96">
    <properties>
     <property name="VecPoints" value="(0,0);(0,3);(3,3);(3,0)"/>
@@ -93,5 +94,7 @@
   <object id="46" name="f1" type="Fire" x="109" y="276" width="8" height="2"/>
   <object id="47" name="f1" type="Fire" x="138" y="276" width="16" height="2"/>
   <object id="48" name="f1" type="Fire" x="165" y="276" width="8" height="2"/>
+  <object id="49" name="l1" type="Leaves" x="372" y="93" width="17" height="1"/>
+  <object id="52" name="l1" type="Leaves" x="137" y="178" width="14" height="2"/>
  </objectgroup>
 </map>
