@@ -74,7 +74,7 @@
   <object id="38" name="balloon" type="Item" x="416" y="156.957" width="32" height="67.0868"/>
   <object id="55" name="fly" type="Float" x="97" y="176" width="95" height="48"/>
  </objectgroup>
- <objectgroup color="#000000" name="barriers" visible="0">
+ <objectgroup color="#000000" name="barriers">
   <object id="28" name="g_1" type="Ground" x="0" y="224" width="97" height="96">
    <properties>
     <property name="VecPoints" value="(0,0);(0,3);(3,3);(3,0)"/>
@@ -85,9 +85,9 @@
     <property name="VecPoints" value="(6,0);(6,3);(20,3);(20,0)"/>
    </properties>
   </object>
-  <object id="42" name="g_1" type="Ground" x="97.5" y="192" width="95" height="32">
+  <object id="42" name="g_1" type="Ground" x="104.5" y="192" width="78" height="32">
    <properties>
-    <property name="VecPoints" value="(3,3);(3,4);(6,4);(6,3)"/>
+    <property name="VecPoints" value="(3.5,3);(3.5,4);(5.5,4);(5.5,3)"/>
    </properties>
   </object>
   <object id="45" name="f1" type="Fire" x="373" y="198" width="16" height="2"/>

@@ -17,7 +17,7 @@
 #define WEATHER_SUNNY "Sunny"
 #define WEATHER_RAINY "Rainy"
 #define INTERACTION_MESSAGE_RANGE 50
-#define INTERACTION_ITEM_RANGE 120
+#define INTERACTION_ITEM_RANGE 130
 #define DOLL_ZORDER 1001
 #define ROLE_ZORDER 1000
 #define INTERACTION_ZORDER 999
@@ -88,6 +88,8 @@ public:
     
     // Each GameScene derived class should implement it: story cinematics and so on
     virtual bool initSpecfic();
+    
+    virtual void doAfterAddItem(const string &);
     
 };
 

@@ -48,16 +48,6 @@
   </data>
  </layer>
  <layer name="sea" width="20" height="10">
-  <properties>
-   <property name="Action" value="Move"/>
-   <property name="Delay" type="float" value="2"/>
-   <property name="Duration" type="float" value="3"/>
-   <property name="IsWeather" type="bool" value="true"/>
-   <property name="RainyTileX" type="int" value="0"/>
-   <property name="RainyTileY" type="int" value="0"/>
-   <property name="SunnyTileX" type="int" value="0"/>
-   <property name="SunnyTileY" type="int" value="-2"/>
-  </properties>
   <data encoding="base64" compression="zlib">
    eJxjYBgFo4A6QIyZYQGpGJ954sykY2qbBwCEcAwK
   </data>
@@ -86,9 +76,9 @@
     <property name="VecPoints" value="(0,0);(7,0);(7,3);(0,3)"/>
    </properties>
   </object>
-  <object id="45" name="g_1" type="Ground" x="223.5" y="160" width="33" height="64">
+  <object id="45" name="g_1" type="Ground" x="223.5" y="191" width="33" height="33">
    <properties>
-    <property name="VecPoints" value="(7,3);(7,5);(8,5);(8,3)"/>
+    <property name="VecPoints" value="(7,3);(7,4);(8,4);(8,3)"/>
    </properties>
   </object>
  </objectgroup>

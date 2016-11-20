@@ -17,7 +17,7 @@ using namespace std;
  * Constants about debug, development and system
  */
 struct DebugParameters{
-    const static int StartStage = 4;
+    const static int StartStage = 1;
     const static bool DoDebug = true;
     const static int EndStage = 5;
 };

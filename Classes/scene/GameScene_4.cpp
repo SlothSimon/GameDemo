@@ -50,6 +50,10 @@ bool GameScene_4::initSpecfic(){
     };
     Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(touchListener, getChildByName(GameRoleName::Girl));
     
+    
+    
+    
+    
     return true;
 }
 

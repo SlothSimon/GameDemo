@@ -67,6 +67,7 @@ bool initUserDefault(){
         for (auto i : ItemInfo::NameList){
             UserDefault::getInstance()->deleteValueForKey(("Item:" + i).c_str());
         }
+        UserDefault::getInstance()->setIntegerForKey("currentStage", 1);
     } catch (exception e) {
         return false;
     }

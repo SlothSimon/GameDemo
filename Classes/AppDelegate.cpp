@@ -1,6 +1,7 @@
 #include "AppDelegate.h"
 #include "GameScene_1.hpp"
 #include "GameScene_4.hpp"
+#include "GameScene_5.hpp"
 #include "HelloWorldScene.h"
 #include "EndScene.h"
 #include "Constants.h"
@@ -102,11 +103,11 @@ bool AppDelegate::applicationDidFinishLaunching() {
     Scene* scene;
     if (DebugParameters::DoDebug){
         initUserDefault();
-        UserDefault::getInstance()->setIntegerForKey("currentStage", DebugParameters::StartStage);
-        scene = GameScene_4::createScene();
+//        UserDefault::getInstance()->setIntegerForKey("currentStage", DebugParameters::StartStage);
+//        UserDefault::getInstance()->setIntegerForKey("Item:balloon", 3);
+        scene = GameScene_1::createScene();
     }
     else{
-        UserDefault::getInstance()->setIntegerForKey("currentStage", 1);
         scene = HelloWorld::createScene();
     }
 

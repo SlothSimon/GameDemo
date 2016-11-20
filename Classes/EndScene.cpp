@@ -6,19 +6,36 @@
 USING_NS_CC;
 using namespace cocos2d::ui;
 using namespace CocosDenshion;
+using namespace std;
 
-Scene* EndScene::createScene()
+Scene* EndScene::createScene(const string & msg)
 {
     SimpleAudioEngine::getInstance()->stopAllEffects();
     SimpleAudioEngine::getInstance()->stopBackgroundMusic();
     
     auto scene = Scene::create();
     
-    auto layer = EndScene::create();
+    auto layer = EndScene::create(msg);
 
     scene->addChild(layer);
 
     return scene;
+}
+
+EndScene * EndScene::create(const string & msg){
+    EndScene *pRet = new(std::nothrow) EndScene();
+    pRet->endMessage = msg;
+    if (pRet && pRet->init())
+    {
+        pRet->autorelease();
+        return pRet;
+    }
+    else
+    {
+        delete pRet;
+        pRet = nullptr;
+        return nullptr;
+    }
 }
 
 bool EndScene::init()
@@ -34,21 +51,19 @@ bool EndScene::init()
     auto bg = LayerColor::create(Color4B::BLACK, visibleSize.width, visibleSize.height);
     bg->setPosition(origin);
     addChild(bg);
-    
-    auto message = Text::create("TO BE CONTINUED...", "fonts/arial.ttf", 20);
-    
-    message->setPosition(origin + visibleSize/2);
-    message->setAnchorPoint(Vec2(0.5, 0.5));
-    message->setOpacity(0);
-    message->setTextColor(Color4B::WHITE);
-    
-    
-    addChild(message);
-    message->runAction(Sequence::create(FadeIn::create(2),
-                                     DelayTime::create(2),
-                                     CallFunc::create([](){
+
+    auto ending = Text::create(endMessage, "fonts/arial.ttf", 20);
+    ending->setPosition(origin + visibleSize/2);
+    ending->setAnchorPoint(Vec2(0.5,0.5));
+    ending->setOpacity(0);
+    ending->setTextColor(Color4B::WHITE);
+    addChild(ending);
+    ending->runAction(Sequence::create(FadeIn::create(2),
+                                        DelayTime::create(2),
+                                       CallFunc::create([](){
         Director::getInstance()->replaceScene(TransitionFade::create(2, HelloWorld::createScene()));
-    }), NULL));
+    }),
+                                        NULL));
     
     return true;
 }

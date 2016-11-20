@@ -40,8 +40,10 @@ bool HelloWorld::init()
                                      DelayTime::create(2),
                                      CallFunc::create([](){
         // TODO: 应当转入关卡选择scene
+        initUserDefault();
         Director::getInstance()->replaceScene(TransitionFade::create(2, GameScene_1::createScene()));
     }), NULL));
+    
     
     return true;
 }

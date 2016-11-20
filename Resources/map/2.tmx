@@ -125,7 +125,7 @@
     <property name="VecPoints" value="(15,0);(15,3);(16,4);(20,4);(20,0)"/>
    </properties>
   </object>
-  <object id="48" x="98.5873" y="290.68" width="28.4582" height="26.4254">
+  <object id="48" type="Ground" x="98.5873" y="290.68" width="28.4582" height="26.4254">
    <properties>
     <property name="VecPoints" value="(3,0);(3,1);(4,1);(4,0)"/>
    </properties>
@@ -135,7 +135,7 @@
     <property name="VecPoints" value="(10,0);(10,3);(12,2);(12,0)"/>
    </properties>
   </object>
-  <object id="51" x="374.53" y="256.124" width="47.7691" height="75.2109">
+  <object id="51" type="Ground" x="374.53" y="256.124" width="47.7691" height="75.2109">
    <properties>
     <property name="VecPoints" value="(12,0);(12,2);(13,2);(13,0)"/>
    </properties>

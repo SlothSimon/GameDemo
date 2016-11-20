@@ -9,6 +9,7 @@
 #include "GameRole.h"
 #include "Constants.h"
 #include "GameScene.h"
+#include "ui/UIButton.h"
 
 constexpr static int PATH_SIZE = 50;
 constexpr static int MAX_ANIM_SIZE = 10;
@@ -118,9 +119,13 @@ void GameRole::walk(const Vec2 & pos){
         }
     }
     
-    float speed = 100.0;
-    getPhysicsBody()->setSurfaceVelocity(Vec2(speed * (dist>0 ? ((dist==0) ? 0 : -1) : 1), 0));
-    
+    if (flyNode == nullptr){
+        float speed = 100.0;
+        getPhysicsBody()->setSurfaceVelocity(Vec2(speed * (dist>0 ? ((dist==0) ? 0 : -1) : 1), 0));
+    }else{
+        float flyspeed = 50.0;
+        getPhysicsBody()->setVelocity(Vec2(flyspeed * (dist>0 ? ((dist==0) ? 0 : 1) : -1), 0));
+    }
     
     // 如果没有走动的动画，生成动画
     if (!getActionByTag(1011)){
@@ -256,6 +261,30 @@ void GameRole::unfollow(){
     unschedule(schedule_selector(GameRole::updateFollow));
 }
 
+void GameRole::fly(Node * flynode){
+    flyNode = flynode;
+    getPhysicsBody()->setGravityEnable(false);
+    runAction(Sequence::create(
+                               MoveTo::create(1, getPosition() + Vec2(0, 20)),
+                             Repeat::create(Sequence::create(MoveBy::create(1, Vec2(0,5)),
+                                                             MoveBy::create(1, Vec2(0,-5)),
+                                                             NULL),
+                                            -1),
+                             NULL));
+    schedule(schedule_selector(GameRole::updateFly), 0.5f, kRepeatForever, 0);
+    auto bt = static_cast<Button*>(getParent()->getChildByName("sideBar")->getChildByName("rain"));
+    bt->setEnabled(false);
+}
+
+void GameRole::unfly(){
+    flyNode = nullptr;
+    getPhysicsBody()->setGravityEnable(true);
+    stopAllActions();
+    unschedule(schedule_selector(GameRole::updateFly));
+    auto bt = static_cast<Button*>(getParent()->getChildByName("sideBar")->getChildByName("rain"));
+    bt->setEnabled(true);
+}
+
 void GameRole::updateFollow(float dt){
     auto dist = getPosition().distance(roleFollowed->getPosition());
     float followDist = getContentSize().width * getScale();
@@ -263,6 +292,12 @@ void GameRole::updateFollow(float dt){
         doAction(GameRoleState::State::Walk, roleFollowed->getPosition());
     }else{
         doAction(GameRoleState::State::Idle);
+    }
+}
+
+void GameRole::updateFly(float dt){
+    if (getPositionX() > flyNode->getPositionX() + flyNode->getContentSize().width || getPositionX() < flyNode->getPositionX()){
+        unfly();
     }
 }
 

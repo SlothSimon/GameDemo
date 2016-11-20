@@ -17,6 +17,7 @@ class GameScene_5: public GameScene{
 public:
     CREATE_GAMESCENE_SUBCLASS(GameScene_5);
 private:
+    void doAfterAddItem(const string &);
 };
 
 

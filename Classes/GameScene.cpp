@@ -50,8 +50,8 @@ Scene* GameScene::createScene()
     if (DebugParameters::DoDebug)
         scene->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);//调试
     
-    // 设定每秒帧数，防止刚体乱跳
-    scene->getPhysicsWorld()->setFixedUpdateRate(50);
+//    // 设定每秒帧数，防止刚体乱跳
+//    scene->getPhysicsWorld()->setFixedUpdateRate(50);
     
     auto layer = create();
     if (layer != NULL){
@@ -260,10 +260,11 @@ bool GameScene::initInteraction(){
     
     for (const auto & obj : (objs->getObjects())){
         auto uiInfo = obj.asValueMap();
-        auto touchNode = LayerColor::create(Color4B::BLACK);
+        auto touchNode = Node::create();
+//        auto touchNode = LayerColor::create(Color4B::BLACK);
         touchNode->setContentSize(Size(uiInfo["width"].asFloat() * tileMap->getScale(), uiInfo["height"].asFloat()*tileMap->getScale()));
         touchNode->setPosition(origin + Vec2(uiInfo["x"].asFloat(), uiInfo["y"].asFloat())*tileMap->getScale());
-        addChild(touchNode, INTERACTION_ZORDER);
+        addChild(touchNode, INTERACTION_ZORDER, uiInfo["name"].asString());
         if (DebugParameters::DoDebug)
             touchNode->setOpacity(0.3);
         else
@@ -349,11 +350,38 @@ bool GameScene::initInteraction(){
                                                                 doll->addItem(itemName);
                                                             }),
                                                              NULL));
-                        this->pushCinematic(new Cinematic(doll, GameRoleState::State::Say, -1, GameRoleState::SayContent::Love));
+                        pushCinematic(new Cinematic(doll, GameRoleState::State::Say, -1, GameRoleState::SayContent::Love));
+                        doAfterAddItem(itemName);
                     }else{
                         doll->doAction(GameRoleState::State::Think, GameRoleState::ThinkContent::Walk);
                     }
                     
+                    return true;    // return true 会使其他listener失效
+                }
+                return false;       // return false 会继续执行其他listener
+            };
+        }else if (uiInfo["type"].asString() == "Float"){
+            touchNodeListener->onTouchBegan = [=](Touch* touch, Event* event){
+                Vec2 locationInNode = touchNode->convertTouchToNodeSpace(touch);
+                Size s = touchNode->getContentSize();
+                Rect rect = Rect(0, 0, s.width, s.height);
+                //判断触摸区域是否在目标上
+                if (rect.containsPoint(locationInNode)){
+                    
+                    // 判断交互对象和主角的距离
+                    auto doll = dynamic_cast<GameRole*>(getChildByName("doll"));
+                    if (doll == NULL)
+                        return false;
+                    
+                    auto dist = doll->getPosition().distance(touchNode->getPosition() + touchNode->getContentSize()/2);
+                    if (dist <= INTERACTION_ITEM_RANGE){
+                        // TODO: 小女孩坐在娃娃肩膀处的动画
+                        if (weather == WEATHER_SUNNY){
+                            doll->fly(touchNode);   
+                        }
+                    }else{
+                        doll->doAction(GameRoleState::State::Think, GameRoleState::ThinkContent::Walk);
+                    }
                     return true;    // return true 会使其他listener失效
                 }
                 return false;       // return false 会继续执行其他listener
@@ -380,11 +408,7 @@ bool GameScene::initCollision(){
     auto listener = EventListenerPhysicsContact::create();
     listener->onContactBegin = [visibleSize,this](PhysicsContact& contact){
         if (contact.getShapeB()->getBody()->getNode()->getName() == "edge"){
-            if (currentStage == DebugParameters::EndStage){
-                Director::getInstance()->replaceScene(TransitionFade::create(2, EndScene::createScene()));
-            }else{
-                enterStage();
-            }
+            enterStage();
             return false;
         }
         return true;
@@ -411,7 +435,7 @@ bool GameScene::initCollision(){
     auto barriers = tileMap->getObjectGroup("barriers")->getObjects();
     for (auto & b : barriers){
         auto bInfo = b.asValueMap();
-        if (bInfo["type"].asString() == "Ground"){
+        if (bInfo["type"].asString() == "Ground" || bInfo["type"].asString() == "Slope" || bInfo["type"].asString() == "Water" || bInfo["type"].asString() == "Wood"){
             auto vecArr = StringToPoints(bInfo["VecPoints"].asString());
             for_each(vecArr.begin(), vecArr.end(), [pixelPerTile](Vec2 & pos){
                 pos = pos * pixelPerTile;
@@ -670,8 +694,10 @@ bool GameScene::initSpecfic(){
 }
 
 void GameScene::enterStage(){
+    SimpleAudioEngine::getInstance()->stopAllEffects();
     auto doll = dynamic_cast<GameRole*>(getChildByName(GameRoleName::Doll));
     if (doll != NULL)
         saveGameRole(doll);
 }
 
+void GameScene::doAfterAddItem(const string &){}

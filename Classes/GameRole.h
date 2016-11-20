@@ -30,6 +30,8 @@ public:
     void addItem(const string& itemName, int count = 1);
     void follow(GameRole* role);    
     void unfollow();
+    void fly(Node * flynode);
+    void unfly();
     
     bool IsMovable() const;
     
@@ -44,6 +46,7 @@ private:
     bool _isMovable = true;
     GameRole* roleFollowed;
     map<string, int> itemList;
+    Node * flyNode;
     
     void initAnim();
     
@@ -71,6 +74,7 @@ private:
     
     // scheduler
     void updateFollow(float dt);
+    void updateFly(float dt);
 };
 
 

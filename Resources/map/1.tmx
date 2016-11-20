@@ -87,7 +87,7 @@
   </data>
  </layer>
  <objectgroup name="roles">
-  <object id="1" name="doll" type="Position" x="530" y="223"/>
+  <object id="1" name="doll" type="Position" x="13" y="225"/>
  </objectgroup>
  <objectgroup name="interaction">
   <object id="27" name="panel" type="Message" x="576.143" y="174.793" width="32" height="26.0868">
