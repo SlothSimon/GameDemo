@@ -60,6 +60,10 @@
 		5B39DECB1D96747500275FAE /* StateWalk.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B39DEC91D96747500275FAE /* StateWalk.cpp */; };
 		5B39DECE1D96757100275FAE /* StateDrown.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B39DECC1D96757100275FAE /* StateDrown.cpp */; };
 		5B525B3D1DB7594200F15F19 /* StateCry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B525B3B1DB7594200F15F19 /* StateCry.cpp */; };
+		5B7B73361DE298B300B0D7F0 /* StartScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B7B73341DE298B300B0D7F0 /* StartScene.cpp */; };
+		5B7B733B1DE2CFA900B0D7F0 /* name.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B7B73381DE2CFA900B0D7F0 /* name.png */; };
+		5B7B733C1DE2CFA900B0D7F0 /* startbg2.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B7B73391DE2CFA900B0D7F0 /* startbg2.png */; };
+		5B7B733D1DE2CFA900B0D7F0 /* startbg.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B7B733A1DE2CFA900B0D7F0 /* startbg.png */; };
 		5B8D66991D7DBA74005EFFF7 /* EndScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B8D66971D7DBA74005EFFF7 /* EndScene.cpp */; };
 		5B93D3421D67646800D882AD /* GameScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B93D3411D67646800D882AD /* GameScene.cpp */; };
 		5B93D3431D67646800D882AD /* GameScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B93D3411D67646800D882AD /* GameScene.cpp */; };
@@ -69,8 +73,6 @@
 		5B93D34A1D676F8100D882AD /* button_sun.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B93D3451D676F8100D882AD /* button_sun.png */; };
 		5B93D34B1D676F8100D882AD /* button_menu.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B93D3461D676F8100D882AD /* button_menu.png */; };
 		5B93D34C1D676F8100D882AD /* button_menu.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B93D3461D676F8100D882AD /* button_menu.png */; };
-		5B93D34E1D678BF600D882AD /* cloud.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B93D34D1D678BF600D882AD /* cloud.png */; };
-		5B93D34F1D678BF600D882AD /* cloud.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B93D34D1D678BF600D882AD /* cloud.png */; };
 		5B93D3511D6DB69C00D882AD /* sun.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B93D3501D6DB69C00D882AD /* sun.png */; };
 		5B93D3521D6DB69C00D882AD /* sun.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B93D3501D6DB69C00D882AD /* sun.png */; };
 		5B93D3551D6F506900D882AD /* roles in Resources */ = {isa = PBXBuildFile; fileRef = 5B93D3531D6F506900D882AD /* roles */; };
@@ -84,6 +86,9 @@
 		5B93D3681D71CDDA00D882AD /* music in Resources */ = {isa = PBXBuildFile; fileRef = 5B93D3671D71CDDA00D882AD /* music */; };
 		5B93D3691D71CDDA00D882AD /* music in Resources */ = {isa = PBXBuildFile; fileRef = 5B93D3671D71CDDA00D882AD /* music */; };
 		5BAF15CE1D797A1C0097902A /* sloth.png in Resources */ = {isa = PBXBuildFile; fileRef = 5BAF15CD1D797A1C0097902A /* sloth.png */; };
+		5BC60C6A1DE33BC900FB7975 /* button_credits.png in Resources */ = {isa = PBXBuildFile; fileRef = 5BC60C671DE33BC900FB7975 /* button_credits.png */; };
+		5BC60C6B1DE33BC900FB7975 /* button_continue.png in Resources */ = {isa = PBXBuildFile; fileRef = 5BC60C681DE33BC900FB7975 /* button_continue.png */; };
+		5BC60C6C1DE33BC900FB7975 /* button_start.png in Resources */ = {isa = PBXBuildFile; fileRef = 5BC60C691DE33BC900FB7975 /* button_start.png */; };
 		5BC6C8C61DD7700E0073DFEE /* GameScene_3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BC6C8C41DD7700E0073DFEE /* GameScene_3.cpp */; };
 		5BC6C8CE1DDC7C8F0073DFEE /* Bubble.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BC6C8CC1DDC7C8F0073DFEE /* Bubble.cpp */; };
 		5BC6C8D41DE0471C0073DFEE /* GameScene_4.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BC6C8D21DE0471C0073DFEE /* GameScene_4.cpp */; };
@@ -203,6 +208,11 @@
 		5B39DECD1D96757100275FAE /* StateDrown.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StateDrown.h; sourceTree = "<group>"; };
 		5B525B3B1DB7594200F15F19 /* StateCry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StateCry.cpp; sourceTree = "<group>"; };
 		5B525B3C1DB7594200F15F19 /* StateCry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StateCry.h; sourceTree = "<group>"; };
+		5B7B73341DE298B300B0D7F0 /* StartScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StartScene.cpp; sourceTree = "<group>"; };
+		5B7B73351DE298B300B0D7F0 /* StartScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = StartScene.hpp; sourceTree = "<group>"; };
+		5B7B73381DE2CFA900B0D7F0 /* name.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = name.png; sourceTree = "<group>"; };
+		5B7B73391DE2CFA900B0D7F0 /* startbg2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = startbg2.png; sourceTree = "<group>"; };
+		5B7B733A1DE2CFA900B0D7F0 /* startbg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = startbg.png; sourceTree = "<group>"; };
 		5B8D66971D7DBA74005EFFF7 /* EndScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EndScene.cpp; sourceTree = "<group>"; };
 		5B8D66981D7DBA74005EFFF7 /* EndScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EndScene.h; sourceTree = "<group>"; };
 		5B93D33F1D6763EF00D882AD /* GameScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameScene.h; sourceTree = "<group>"; };
@@ -210,7 +220,6 @@
 		5B93D3441D676F8100D882AD /* button_rain.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = button_rain.png; sourceTree = "<group>"; };
 		5B93D3451D676F8100D882AD /* button_sun.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = button_sun.png; sourceTree = "<group>"; };
 		5B93D3461D676F8100D882AD /* button_menu.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = button_menu.png; sourceTree = "<group>"; };
-		5B93D34D1D678BF600D882AD /* cloud.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cloud.png; sourceTree = "<group>"; };
 		5B93D3501D6DB69C00D882AD /* sun.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sun.png; sourceTree = "<group>"; };
 		5B93D3531D6F506900D882AD /* roles */ = {isa = PBXFileReference; lastKnownFileType = folder; path = roles; sourceTree = "<group>"; };
 		5B93D35C1D6F6D4600D882AD /* GameRole.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameRole.cpp; sourceTree = "<group>"; };
@@ -220,6 +229,9 @@
 		5B93D3641D7198CD00D882AD /* map */ = {isa = PBXFileReference; lastKnownFileType = folder; path = map; sourceTree = "<group>"; };
 		5B93D3671D71CDDA00D882AD /* music */ = {isa = PBXFileReference; lastKnownFileType = folder; path = music; sourceTree = "<group>"; };
 		5BAF15CD1D797A1C0097902A /* sloth.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sloth.png; sourceTree = "<group>"; };
+		5BC60C671DE33BC900FB7975 /* button_credits.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = button_credits.png; sourceTree = "<group>"; };
+		5BC60C681DE33BC900FB7975 /* button_continue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = button_continue.png; sourceTree = "<group>"; };
+		5BC60C691DE33BC900FB7975 /* button_start.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = button_start.png; sourceTree = "<group>"; };
 		5BC6C8C41DD7700E0073DFEE /* GameScene_3.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameScene_3.cpp; sourceTree = "<group>"; };
 		5BC6C8C51DD7700E0073DFEE /* GameScene_3.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GameScene_3.hpp; sourceTree = "<group>"; };
 		5BC6C8CA1DD868710073DFEE /* Macros.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Macros.h; sourceTree = "<group>"; };
@@ -369,12 +381,17 @@
 		46880B7519C43A67006E1F66 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				5BC60C671DE33BC900FB7975 /* button_credits.png */,
+				5BC60C681DE33BC900FB7975 /* button_continue.png */,
+				5BC60C691DE33BC900FB7975 /* button_start.png */,
+				5B7B73381DE2CFA900B0D7F0 /* name.png */,
+				5B7B73391DE2CFA900B0D7F0 /* startbg2.png */,
+				5B7B733A1DE2CFA900B0D7F0 /* startbg.png */,
 				5BAF15CD1D797A1C0097902A /* sloth.png */,
 				5B93D3671D71CDDA00D882AD /* music */,
 				5B93D3641D7198CD00D882AD /* map */,
 				5B93D3531D6F506900D882AD /* roles */,
 				5B93D3501D6DB69C00D882AD /* sun.png */,
-				5B93D34D1D678BF600D882AD /* cloud.png */,
 				5B93D3441D676F8100D882AD /* button_rain.png */,
 				5B93D3451D676F8100D882AD /* button_sun.png */,
 				5B93D3461D676F8100D882AD /* button_menu.png */,
@@ -419,6 +436,8 @@
 				5BDD54B41DCECC6C0000F6A1 /* Cinematic.cpp */,
 				5BDD54B51DCECC6C0000F6A1 /* Cinematic.hpp */,
 				5BC6C8CA1DD868710073DFEE /* Macros.h */,
+				5B7B73341DE298B300B0D7F0 /* StartScene.cpp */,
+				5B7B73351DE298B300B0D7F0 /* StartScene.hpp */,
 			);
 			name = Classes;
 			path = ../Classes;
@@ -597,6 +616,8 @@
 			files = (
 				5087E78117EB970100C73F5D /* Icon-120.png in Resources */,
 				5087E78617EB970100C73F5D /* Icon-76.png in Resources */,
+				5BC60C6C1DE33BC900FB7975 /* button_start.png in Resources */,
+				5B7B733D1DE2CFA900B0D7F0 /* startbg.png in Resources */,
 				5087E77F17EB970100C73F5D /* Default@2x.png in Resources */,
 				50EF629917ECD46A001EB2F8 /* Icon-100.png in Resources */,
 				5087E78317EB970100C73F5D /* Icon-152.png in Resources */,
@@ -608,11 +629,14 @@
 				5087E78517EB970100C73F5D /* Icon-72.png in Resources */,
 				521A8E6519F0C34300D177D7 /* Default-736h@3x.png in Resources */,
 				521A8EA919F11F5000D177D7 /* fonts in Resources */,
+				5BC60C6A1DE33BC900FB7975 /* button_credits.png in Resources */,
 				50EF62A317ECD613001EB2F8 /* Icon-50.png in Resources */,
-				5B93D34E1D678BF600D882AD /* cloud.png in Resources */,
+				5B7B733B1DE2CFA900B0D7F0 /* name.png in Resources */,
 				5BAF15CE1D797A1C0097902A /* sloth.png in Resources */,
 				5087E78017EB970100C73F5D /* Icon-114.png in Resources */,
 				50EF62A217ECD613001EB2F8 /* Icon-29.png in Resources */,
+				5B7B733C1DE2CFA900B0D7F0 /* startbg2.png in Resources */,
+				5BC60C6B1DE33BC900FB7975 /* button_continue.png in Resources */,
 				5B93D3471D676F8100D882AD /* button_rain.png in Resources */,
 				5B93D3681D71CDDA00D882AD /* music in Resources */,
 				50EF629617ECD46A001EB2F8 /* Icon-40.png in Resources */,
@@ -641,7 +665,6 @@
 				5B93D3481D676F8100D882AD /* button_rain.png in Resources */,
 				5B93D3521D6DB69C00D882AD /* sun.png in Resources */,
 				521A8EAA19F11F5000D177D7 /* fonts in Resources */,
-				5B93D34F1D678BF600D882AD /* cloud.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -659,6 +682,7 @@
 				5B93D35E1D6F6D4600D882AD /* GameRole.cpp in Sources */,
 				5B39DECB1D96747500275FAE /* StateWalk.cpp in Sources */,
 				5BC6C8D41DE0471C0073DFEE /* GameScene_4.cpp in Sources */,
+				5B7B73361DE298B300B0D7F0 /* StartScene.cpp in Sources */,
 				5BDD54B31DCE25990000F6A1 /* GameScene_2.cpp in Sources */,
 				5B39DEC41D96703700275FAE /* GameRoleFSM.cpp in Sources */,
 				46880B8819C43A87006E1F66 /* AppDelegate.cpp in Sources */,

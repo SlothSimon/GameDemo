@@ -1,6 +1,7 @@
 #include "HelloWorldScene.h"
 #include "SimpleAudioEngine.h"
-#include "GameScene_1.hpp"
+#include "StartScene.hpp"
+#include "Utils.h"
 
 USING_NS_CC;
 
@@ -39,9 +40,7 @@ bool HelloWorld::init()
     logo->runAction(Sequence::create(FadeIn::create(2),
                                      DelayTime::create(2),
                                      CallFunc::create([](){
-        // TODO: 应当转入关卡选择scene
-        initUserDefault();
-        Director::getInstance()->replaceScene(TransitionFade::create(2, GameScene_1::createScene()));
+        Director::getInstance()->replaceScene(TransitionFade::create(2, StartScene::createScene()));
     }), NULL));
     
     

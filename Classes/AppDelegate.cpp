@@ -1,11 +1,14 @@
 #include "AppDelegate.h"
-#include "GameScene_1.hpp"
-#include "GameScene_4.hpp"
-#include "GameScene_5.hpp"
 #include "HelloWorldScene.h"
 #include "EndScene.h"
 #include "Constants.h"
 #include "Utils.h"
+
+
+#include "GameScene_1.hpp"
+#include "GameScene_4.hpp"
+#include "GameScene_5.hpp"
+#include "StartScene.hpp"
 
 USING_NS_CC;
 
@@ -102,10 +105,10 @@ bool AppDelegate::applicationDidFinishLaunching() {
     
     Scene* scene;
     if (DebugParameters::DoDebug){
-        initUserDefault();
+//        initUserDefault();
 //        UserDefault::getInstance()->setIntegerForKey("currentStage", DebugParameters::StartStage);
 //        UserDefault::getInstance()->setIntegerForKey("Item:balloon", 3);
-        scene = GameScene_1::createScene();
+        scene = StartScene::createScene();
     }
     else{
         scene = HelloWorld::createScene();

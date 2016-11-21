@@ -164,6 +164,25 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
+         contextName = "GameScene::initInteraction()::$_2::operator()(cocos2d::Touch*, cocos2d::Event*) const:GameScene.cpp">
+         <PersistentStrings>
+            <PersistentString
+               value = "touchNode">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "GameRole::addItem(std::__1::basic_string&lt;char, std::__1::char_traits&lt;char&gt;, std::__1::allocator&lt;char&gt; &gt; const&amp;, int):GameRole.cpp">
+         <PersistentStrings>
+            <PersistentString
+               value = "itemList[&quot;balloon&quot;]">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "GameRoleFSM::onRecvWalk(cocos2d::EventCustom*):GameRoleFSM.cpp">
+      </ContextState>
+      <ContextState
          contextName = "cocos2d::PhysicsBody::beforeSimulation(cocos2d::Mat4 const&amp;, cocos2d::Mat4 const&amp;, float, float, float):CCPhysicsBody.cpp">
          <PersistentStrings>
             <PersistentString
@@ -181,18 +200,27 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "GameRoleFSM::onRecvWalk(cocos2d::EventCustom*):GameRoleFSM.cpp">
+         contextName = "GameRole::doAction(std::__1::basic_string&lt;char, std::__1::char_traits&lt;char&gt;, std::__1::allocator&lt;char&gt; &gt; const&amp;, cocos2d::Vec2) const:GameRole.cpp">
       </ContextState>
       <ContextState
-         contextName = "GameRole::addItem(std::__1::basic_string&lt;char, std::__1::char_traits&lt;char&gt;, std::__1::allocator&lt;char&gt; &gt; const&amp;, int):GameRole.cpp">
+         contextName = "GameRole::updateFly(float):GameRole.cpp">
          <PersistentStrings>
             <PersistentString
-               value = "itemList[&quot;balloon&quot;]">
+               value = "flyNode-&gt;getPositionX()">
+            </PersistentString>
+            <PersistentString
+               value = "getPositionX()">
+            </PersistentString>
+            <PersistentString
+               value = "flyNode-&gt;getContentSize()">
+            </PersistentString>
+            <PersistentString
+               value = "flyNode-&gt;getPositionX() + flyNode-&gt;getContentSize().width">
+            </PersistentString>
+            <PersistentString
+               value = "flyNode">
             </PersistentString>
          </PersistentStrings>
-      </ContextState>
-      <ContextState
-         contextName = "GameRole::doAction(std::__1::basic_string&lt;char, std::__1::char_traits&lt;char&gt;, std::__1::allocator&lt;char&gt; &gt; const&amp;, cocos2d::Vec2) const:GameRole.cpp">
       </ContextState>
       <ContextState
          contextName = "cocos2d::Node::setPhysicsBody(cocos2d::PhysicsBody*):CCNode.h">
@@ -256,6 +284,9 @@
          contextName = "GameScene::beSunny():GameScene.cpp">
       </ContextState>
       <ContextState
+         contextName = "loadGameRole(GameRole*):Utils.cpp">
+      </ContextState>
+      <ContextState
          contextName = "cocos2d::PhysicsBody::getForce() const:CCPhysicsBody.cpp">
       </ContextState>
       <ContextState
@@ -265,9 +296,6 @@
                value = "_filePath">
             </PersistentString>
          </PersistentStrings>
-      </ContextState>
-      <ContextState
-         contextName = "loadGameRole(GameRole*):Utils.cpp">
       </ContextState>
       <ContextState
          contextName = "GameScene::initListener()::$_5::operator()(cocos2d::Touch*, cocos2d::Event*) const:GameScene.cpp">
@@ -295,16 +323,16 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "GameRole::initAnim():GameRole.cpp">
+         contextName = "GameScene::enterStage():GameScene.cpp">
       </ContextState>
       <ContextState
-         contextName = "Bubble::show():Bubble.cpp">
+         contextName = "GameRole::initAnim():GameRole.cpp">
       </ContextState>
       <ContextState
          contextName = "GameRoleState::convertToEventName(GameRole const*, std::__1::basic_string&lt;char, std::__1::char_traits&lt;char&gt;, std::__1::allocator&lt;char&gt; &gt; const&amp;):Constants.cpp">
       </ContextState>
       <ContextState
-         contextName = "GameScene::enterStage():GameScene.cpp">
+         contextName = "Bubble::show():Bubble.cpp">
       </ContextState>
       <ContextState
          contextName = "cocos2d::GLView::renderScene(cocos2d::Scene*, cocos2d::Renderer*):CCGLView.cpp">

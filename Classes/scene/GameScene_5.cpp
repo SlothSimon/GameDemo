@@ -54,6 +54,7 @@ bool GameScene_5::initSpecfic(){
 void GameScene_5::enterStage(){
     GameScene::enterStage();
     saveStage(6);
+    UserDefault::getInstance()->setBoolForKey("End1", true);
     Director::getInstance()->replaceScene(TransitionFade::create(2, EndScene::createScene("End 1: Up")));
 }
 
@@ -78,6 +79,7 @@ void GameScene_5::doAfterAddItem(const string & itemName){
             doll->runAction(Sequence::create(DelayTime::create(8),
                                              CallFunc::create([this]{
                                                 GameScene::enterStage();
+                                                UserDefault::getInstance()->setBoolForKey("End2", true);
                                                 Director::getInstance()->replaceScene(TransitionFade::create(2, EndScene::createScene("End 2: Le ballon rouge")));
             }),
                                              NULL));
