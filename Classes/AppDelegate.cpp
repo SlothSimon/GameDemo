@@ -106,9 +106,9 @@ bool AppDelegate::applicationDidFinishLaunching() {
     Scene* scene;
     if (DebugParameters::DoDebug){
 //        initUserDefault();
-//        UserDefault::getInstance()->setIntegerForKey("currentStage", DebugParameters::StartStage);
-//        UserDefault::getInstance()->setIntegerForKey("Item:balloon", 3);
-        scene = StartScene::createScene();
+        UserDefault::getInstance()->setIntegerForKey("currentStage", 5);
+        UserDefault::getInstance()->setIntegerForKey("Item:balloon", 4);
+        scene = GameScene_5::createScene();
     }
     else{
         scene = HelloWorld::createScene();

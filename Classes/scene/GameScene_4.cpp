@@ -25,6 +25,7 @@ bool GameScene_4::initSpecfic(){
     touchListener->setSwallowTouches(true);
     
     touchListener->onTouchBegan = [this](Touch * touch, Event * event){
+        auto doll = dynamic_cast<GameRole*>(getChildByName(GameRoleName::Doll));
         auto girl = dynamic_cast<GameRole*>(getChildByName(GameRoleName::Girl));
         if (girl == NULL)
             return false;
@@ -33,17 +34,21 @@ bool GameScene_4::initSpecfic(){
         auto rect = girl->getTextureRect();
         
         if (rect.containsPoint(loc)){
-            auto doll = dynamic_cast<GameRole*>(getChildByName(GameRoleName::Doll));
             if (doll == NULL)
                 return false;
             
             if (doll->getPosition().distance(touch->getLocation()) <= INTERACTION_MESSAGE_RANGE){
-                pushCinematic(new Cinematic(girl, GameRoleState::State::Say, -1, GameRoleState::SayContent::Love));
-                pushCinematic(new Cinematic(girl, GameRoleState::State::Say, -1, GameRoleState::SayContent::Story1));
+                doll->loadGirl();
             }
             else
                 doll->doAction(GameRoleState::State::Think, GameRoleState::ThinkContent::Walk);
             return true;
+        }
+        
+        loc = doll->convertTouchToNodeSpace(touch);
+        rect = doll->getTextureRect();
+        if (rect.containsPoint(loc)){
+            doll->unloadGirl();
         }
         
         return false;

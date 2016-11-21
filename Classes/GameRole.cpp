@@ -43,8 +43,10 @@ GameRole* GameRole::create(const string & roleName)
 
 void GameRole::initAnim(){
     addAnim("walk");
-    if (getName() == GameRoleName::Doll)
+    if (getName() == GameRoleName::Doll){
         addAnim("drown");
+        addAnim("walkwithgirl");
+    }
 }
 
 void GameRole::initPhysicsBody(){
@@ -129,7 +131,12 @@ void GameRole::walk(const Vec2 & pos){
     
     // 如果没有走动的动画，生成动画
     if (!getActionByTag(1011)){
-        auto walk = Animate::create(AnimationCache::getInstance()->getAnimation(getName() + "_walk"));
+        Animate * walk = nullptr;
+        if (withGirl){
+            walk = Animate::create(AnimationCache::getInstance()->getAnimation(getName() + "_walkwithgirl"));
+        }else{
+            walk = Animate::create(AnimationCache::getInstance()->getAnimation(getName() + "_walk"));
+        }
         walk->setTag(1011);
         runAction(walk);
     }
@@ -137,6 +144,7 @@ void GameRole::walk(const Vec2 & pos){
 
 void GameRole::idle(){
     stopActionByTag(1011);
+    
     float speedY = getPhysicsBody()->getVelocity().y;
     speedY = speedY <= 0 ? speedY : 0;
     getPhysicsBody()->setVelocity(Vec2(0, speedY));
@@ -325,3 +333,27 @@ void GameRole::addItem(const string &itemName, int count){
 }
 
 const map<string, int> GameRole::getItemList() const {return itemList;}
+
+void GameRole::loadGirl(){
+    if (getName() == GameRoleName::Doll && !withGirl){
+        withGirl = true;
+//        setTexture("roles/doll_standwithgirl.png");
+        getParent()->getChildByName(GameRoleName::Girl)->runAction(Sequence::create(FadeOut::create(1),
+                                                                                    CallFunc::create([this]{
+                                                                                        setTexture("roles/doll_standwithgirl.png");
+                                                                                        origText = getTexture();
+                                                                                    }),
+                                                                                    NULL));
+    }
+}
+
+void GameRole::unloadGirl(){
+    if (getName() == GameRoleName::Doll && withGirl){
+        withGirl = false;
+        setTexture("roles/doll_stand.png");
+        origText = getTexture();
+        auto girl = getParent()->getChildByName(GameRoleName::Girl);
+        girl->setPosition(getPosition());
+        girl->runAction(FadeIn::create(1));
+    }
+}

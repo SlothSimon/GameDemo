@@ -41,18 +41,15 @@
   <tile id="452" terrain="0,0,0,0"/>
   <tile id="453" terrain="0,0,,0"/>
  </tileset>
- <tileset firstgid="1348" name="speech_bubble" tilewidth="32" tileheight="32" tilecount="4" columns="2">
-  <image source="speech_bubble.png" width="64" height="83"/>
- </tileset>
- <tileset firstgid="1352" name="sheet" tilewidth="70" tileheight="70" tilecount="98" columns="14">
+ <tileset firstgid="1348" name="sheet" tilewidth="70" tileheight="70" tilecount="98" columns="14">
   <image source="sheet.png" width="980" height="490"/>
  </tileset>
- <tileset firstgid="1450" name="balloon" tilewidth="32" tileheight="32" tilecount="2" columns="1">
+ <tileset firstgid="1446" name="balloon" tilewidth="32" tileheight="32" tilecount="2" columns="1">
   <image source="balloon.png" width="32" height="64"/>
  </tileset>
  <layer name="balloon" width="20" height="10">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFowABVrFS17zVVDaP3gAAQRUBYA==
+   eJxjYBgFowABlrFS17zlVDaP3gAAOdUBWA==
   </data>
  </layer>
  <layer name="grass" width="20" height="10">
@@ -82,12 +79,12 @@
  </layer>
  <layer name="wall" width="20" height="10">
   <data encoding="base64" compression="zlib">
-   eJxjYBh8wJ8VlaYU+A0R86gFsoDmZVPZzJEKAAJtAyk=
+   eJxjYBh8wJsVlaYUeA0R86gF0oDmpVPZzJEKALxeAwU=
   </data>
  </layer>
  <layer name="house" width="20" height="10">
   <data encoding="base64" compression="zlib">
-   eJxjYKAMVLJCMIw9UkDQIPdr0iB331ABAGQCAjk=
+   eJxjYKAMlLJCMIw9UoDfIPdr3CB331ABADUCAiU=
   </data>
  </layer>
  <objectgroup name="roles">

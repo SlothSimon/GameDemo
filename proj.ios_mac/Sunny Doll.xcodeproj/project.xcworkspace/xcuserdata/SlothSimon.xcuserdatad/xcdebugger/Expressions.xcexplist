@@ -450,7 +450,7 @@
          contextName = "GameScene::initRole():GameScene.cpp">
          <PersistentStrings>
             <PersistentString
-               value = "role[&quot;name&quot;].asString()">
+               value = "role[&quot;name&quot;]">
             </PersistentString>
          </PersistentStrings>
       </ContextState>

@@ -33,6 +33,9 @@ public:
     void fly(Node * flynode);
     void unfly();
     
+    void loadGirl();
+    void unloadGirl();
+    
     bool IsMovable() const;
     
     friend class StateDrown;
@@ -47,6 +50,7 @@ private:
     GameRole* roleFollowed;
     map<string, int> itemList;
     Node * flyNode;
+    bool withGirl;
     
     void initAnim();
     
