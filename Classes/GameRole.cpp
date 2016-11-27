@@ -304,7 +304,7 @@ void GameRole::updateFollow(float dt){
 }
 
 void GameRole::updateFly(float dt){
-    if (getPositionX() > flyNode->getPositionX() + flyNode->getContentSize().width || getPositionX() < flyNode->getPositionX()){
+    if (getPositionX() - getContentSize().width/2*getScale() > flyNode->getPositionX() + flyNode->getContentSize().width || getPositionX() + getContentSize().width/2*getScale() < flyNode->getPositionX()){
         unfly();
     }
 }

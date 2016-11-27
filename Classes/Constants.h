@@ -18,7 +18,7 @@ using namespace std;
  */
 struct DebugParameters{
     const static int StartStage = 1;
-    const static bool DoDebug = true;
+    const static bool DoDebug = false;
     const static int EndStage = 5;
 };
 

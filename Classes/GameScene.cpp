@@ -497,12 +497,10 @@ bool GameScene::initSideBar(){
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
     
     auto sideBar = Layout::create();
-    sideBar->setPosition(origin + Vec2(10, visibleSize.height - 10));
     
     // Vertical layout with top margin
     sideBar->setLayoutType(Layout::Type::VERTICAL);
     auto sideBarPatameters = LinearLayoutParameter::create();
-    sideBarPatameters->setMargin(Margin(0, 5, 0, 0));
     
     this->addChild(sideBar, 20, "sideBar");
     
@@ -513,6 +511,11 @@ bool GameScene::initSideBar(){
         if (weather != WEATHER_SUNNY)
             beSunny();
     });
+    ButtonSun->setScale(visibleSize.height*0.1/ButtonSun->getContentSize().height);
+    
+    sideBarPatameters->setMargin(Margin(0, 5, 0, 0));
+    sideBar->setAnchorPoint(Vec2(0, 1));
+    sideBar->setPosition(origin + Vec2(10, visibleSize.height - 10));
     
     auto ButtonRain = Button::create(ImagePath::RainyButton);
     ButtonRain->setVisible(false);
@@ -521,6 +524,7 @@ bool GameScene::initSideBar(){
         if (weather != WEATHER_RAINY)
             beRainy();
     });
+    ButtonRain->setScale(visibleSize.height*0.1/ButtonRain->getContentSize().height);
     
     auto ButtonMenu = Button::create(ImagePath::MenuButton);
     ButtonMenu->setLayoutParameter(sideBarPatameters);
@@ -533,6 +537,7 @@ bool GameScene::initSideBar(){
             ButtonRain->setVisible(true);
         }
     });
+    ButtonMenu->setScale(visibleSize.height*0.1/ButtonMenu->getContentSize().height);
     
     sideBar->addChild(ButtonMenu, 1, "menu");
     sideBar->addChild(ButtonSun, 1, "sun");
@@ -565,7 +570,7 @@ bool GameScene::initWeather(){
         auto sun = Sprite::create(ImagePath::Sun);
         sun->setOpacity(0);
         sun->setScale(0.5);
-        sun->setPosition(origin.x + visibleSize.width - sun->getContentSize().width*sun->getScale(),
+        sun->setPosition(visibleSize.width - sun->getContentSize().width*sun->getScale(),
                          origin.y + visibleSize.height - sun->getContentSize().height*sun->getScale());
         weatherLayer->addChild(sun, 1, "sun");
             
@@ -582,6 +587,7 @@ bool GameScene::initWeather(){
 bool GameScene::initRole(){
     float pixelPerTile = tileMap->getContentSize().width/tileMap->getMapSize().width;
     float scale = tileMap->getScale();
+    pixelPerTile *= scale;
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
     
     auto roles = tileMap->getObjectGroup("roles")->getObjects();
@@ -594,7 +600,7 @@ bool GameScene::initRole(){
         else
             addChild(roleSprite, ROLE_ZORDER, role["name"].asString());
         
-        roleSprite->setScale((2*pixelPerTile)/roleSprite->getContentSize().height);
+        roleSprite->setScale(2*pixelPerTile/roleSprite->getContentSize().height);
         roleSprite->setPosition(origin + Vec2(role["x"].asInt()*scale, role["y"].asInt()*scale));
     }
     

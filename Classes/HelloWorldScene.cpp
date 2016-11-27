@@ -33,7 +33,7 @@ bool HelloWorld::init()
     auto logo = Sprite::create("sloth.png");
     logo->setPosition(origin + visibleSize/2);
     logo->setAnchorPoint(Vec2(0.5, 0.5));
-    logo->setScale(logo->getContentSize().width/(visibleSize.width));
+    logo->setScale(visibleSize.width*0.5/logo->getContentSize().width);
     logo->setOpacity(0);
     
     addChild(logo);
