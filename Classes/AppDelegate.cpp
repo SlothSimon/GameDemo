@@ -6,6 +6,8 @@
 
 
 #include "GameScene_1.hpp"
+#include "GameScene_2.hpp"
+#include "GameScene_3.hpp"
 #include "GameScene_4.hpp"
 #include "GameScene_5.hpp"
 #include "StartScene.hpp"

@@ -169,7 +169,7 @@ void GameRole::think(const string & content, CallFunc* callback){
         }
         thinkbubble = Sprite::create(ImagePath::getBubblePath(content));
         // This is a relative postion
-        thinkbubble->setPosition(getContentSize().width/2, getContentSize().height*1.2);
+        thinkbubble->setPosition(getContentSize().width/2, getContentSize().height*1.5);
         thinkbubble->setScale(this->getContentSize().width/thinkbubble->getContentSize().width/4);
         
         addChild(thinkbubble);

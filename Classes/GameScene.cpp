@@ -352,6 +352,8 @@ bool GameScene::initInteraction(){
                                                              NULL));
                         pushCinematic(new Cinematic(doll, GameRoleState::State::Say, -1, GameRoleState::SayContent::Love));
                         doAfterAddItem(itemName);
+                        // Bug: 此处无论是移除node还是移除listener都会导致下层（本来被swallow）的touchlistener被触发
+                        Director::getInstance()->getEventDispatcher()->pauseEventListenersForTarget(touchNode);
                     }else{
                         doll->doAction(GameRoleState::State::Think, GameRoleState::ThinkContent::Walk);
                     }
@@ -502,7 +504,7 @@ bool GameScene::initSideBar(){
     sideBar->setLayoutType(Layout::Type::VERTICAL);
     auto sideBarPatameters = LinearLayoutParameter::create();
     
-    this->addChild(sideBar, 20, "sideBar");
+    this->addChild(sideBar, INTERACTION_ZORDER + 1, "sideBar");
     
     auto ButtonSun = Button::create(ImagePath::SunnyButton);
     ButtonSun->setVisible(false);
@@ -608,11 +610,13 @@ bool GameScene::initRole(){
 }
 
 bool GameScene::initListener(){
+    auto touchNode = Node::create();
     auto touchLayerListener = EventListenerTouchOneByOne::create();
     touchLayerListener->setSwallowTouches(true);
     
     touchLayerListener->onTouchBegan = [this](Touch* touch, Event* event){
         auto role = dynamic_cast<GameRole*>(getChildByName(GameRoleName::Doll));
+        log("I will move");
         if (role == NULL)
             return false;
         
@@ -633,8 +637,22 @@ bool GameScene::initListener(){
                 role->doAction(GameRoleState::State::Idle);
     };
     
-    Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(touchLayerListener, this);
+    addChild(touchNode, INTERACTION_ZORDER - 1);
+    Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(touchLayerListener, touchNode);
     
+    auto notouchNode = Node::create();
+    auto notouchNodeListener = EventListenerTouchOneByOne::create();
+    notouchNodeListener->setSwallowTouches(true);
+    notouchNodeListener->onTouchBegan = [this](Touch* touch, Event* event){
+        if (isPlayCinematic)
+            return true;
+        else
+            return false;
+    };
+    addChild(notouchNode, INTERACTION_ZORDER + 2, "NoTouchNode");
+    Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(notouchNodeListener, notouchNode);
+    // Bug: pause了但是依然会进入到onTouchBegan
+    Director::getInstance()->getEventDispatcher()->pauseEventListenersForTarget(notouchNode);
     
     return true;
 }
@@ -644,6 +662,8 @@ bool GameScene::initBGM(){
         SimpleAudioEngine::getInstance()->preloadBackgroundMusic(MusicPath::normalBGM);
         SimpleAudioEngine::getInstance()->playBackgroundMusic(MusicPath::normalBGM, true);
         SimpleAudioEngine::getInstance()->setBackgroundMusicVolume(0.1);
+        
+
     }
     
     return true;
@@ -652,8 +672,6 @@ bool GameScene::initBGM(){
 void GameScene::playCinematic(Cinematic cine){
     map<string, void*> m;
     m["Data"] = &cine.userdata;
-    
-    Director::getInstance()->getEventDispatcher()->pauseEventListenersForTarget(this);
     
     if (cine.delay < 0)
         m["Callback"] = CallFunc::create([=]{this->nextCinematic();});
@@ -677,7 +695,7 @@ void GameScene::nextCinematic(){
     // 会发生并发问题吗？
     if (seqCinematic.empty()){
         isPlayCinematic = false;
-        Director::getInstance()->getEventDispatcher()->resumeEventListenersForTarget(this);
+//        Director::getInstance()->getEventDispatcher()->pauseEventListenersForTarget(getChildByName("NoTouchNode"));
     }else{
         auto func = seqCinematic.front();
         playCinematic(func);
@@ -687,6 +705,7 @@ void GameScene::nextCinematic(){
 
 void GameScene::pushCinematic(Cinematic* cine){
     if (!isPlayCinematic){
+//        Director::getInstance()->getEventDispatcher()->resumeEventListenersForTarget(getChildByName("NoTouchNode"));
         isPlayCinematic = true;
         playCinematic(*cine);
     }else{

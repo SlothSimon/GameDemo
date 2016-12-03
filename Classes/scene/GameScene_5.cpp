@@ -58,8 +58,8 @@ bool GameScene_5::initSpecfic(){
 
 
 void GameScene_5::enterStage(){
-    GameScene::enterStage();
-    saveStage(6);
+//    GameScene::enterStage();
+//    saveStage(6);
     UserDefault::getInstance()->setBoolForKey("End1", true);
     Director::getInstance()->replaceScene(TransitionFade::create(2, EndScene::createScene("End 1: Up")));
 }

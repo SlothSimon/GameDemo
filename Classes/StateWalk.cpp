@@ -10,6 +10,7 @@
 #include "StateDrown.h"
 #include "StateIdle.h"
 #include "GameRole.h"
+#include "StateCry.h"
 
 void StateWalk::execute(GameRole* role, EventCustom* event){
     auto eventName = GameRoleState::convertToStateName(event->getEventName());
@@ -21,5 +22,21 @@ void StateWalk::execute(GameRole* role, EventCustom* event){
     else if (eventName == GameRoleState::State::Drown){
         role->drown();
         role->changeState(new StateDrown());
+    }
+    else if (eventName == GameRoleState::State::Think || eventName == GameRoleState::State::Say){
+        auto m = static_cast<map<string, void*>*>(event->getUserData());
+        auto cont = static_cast<string*>(m->at("Data"));
+        if (m->find("Callback") != m->cend()){
+            auto callback = static_cast<CallFunc*>(m->at("Callback"));
+            role->think(*cont, callback);
+        }else
+        role->think(*cont);
+    }
+    else if (eventName == GameRoleState::State::Drown){
+        role->drown();
+        role->changeState(new StateDrown());
+    }else if (eventName == GameRoleState::State::Cry){
+        role->cry();
+        role->changeState(new StateCry());
     }
 }
