@@ -10,6 +10,9 @@
 #include "GameScene_3.hpp"
 
 bool GameScene_2::initSpecfic(){
+    auto girl = dynamic_cast<GameRole*>(getChildByName(GameRoleName::Girl));
+    girl->turnAround();
+    
     auto contactListener = EventListenerPhysicsContact::create();
     contactListener->onContactBegin = [this](PhysicsContact & contact){
         if (isTogether)
@@ -50,6 +53,7 @@ bool GameScene_2::initSpecfic(){
     
     touchListener->onTouchBegan = [this](Touch * touch, Event * event){
         auto girl = dynamic_cast<GameRole*>(getChildByName(GameRoleName::Girl));
+        auto doll = dynamic_cast<GameRole*>(getChildByName(GameRoleName::Doll));
         if (girl == NULL)
             return false;
         
@@ -57,7 +61,6 @@ bool GameScene_2::initSpecfic(){
         auto rect = girl->getTextureRect();
         
         if (rect.containsPoint(loc)){
-            auto doll = dynamic_cast<GameRole*>(getChildByName(GameRoleName::Doll));
             if (doll == NULL)
                 return false;
             
@@ -71,12 +74,18 @@ bool GameScene_2::initSpecfic(){
                     pushCinematic(new Cinematic(girl, GameRoleState::State::Say, -1, GameRoleState::SayContent::Cry));
                     isFirstTalk = false;
                 }else{
-                    pushCinematic(new Cinematic(girl, GameRoleState::State::Say, -1, GameRoleState::SayContent::Love));
-                    pushCinematic(new Cinematic(girl, GameRoleState::State::Say, -1, GameRoleState::SayContent::Story1));
+                    doll->loadGirl();
                 }
             }
             else
                 doll->doAction(GameRoleState::State::Think, GameRoleState::ThinkContent::Walk);
+            return true;
+        }
+        
+        loc = doll->convertTouchToNodeSpace(touch);
+        rect = doll->getTextureRect();
+        if (rect.containsPoint(loc) && doll->IsMovable()){
+            doll->unloadGirl();
             return true;
         }
         

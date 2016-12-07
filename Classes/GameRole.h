@@ -43,6 +43,8 @@ public:
     friend class StateIdle;
     friend class StateCry;
     
+    void turnAround();
+    
 private:
     Texture2D* origText;
     GameRoleFSM* mFSM;
@@ -63,8 +65,6 @@ private:
     
     // State Machine
     void changeState(State* state) const;
-    
-    void turnAround();
     
     void idle();
     

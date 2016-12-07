@@ -47,7 +47,7 @@ bool GameScene_4::initSpecfic(){
         
         loc = doll->convertTouchToNodeSpace(touch);
         rect = doll->getTextureRect();
-        if (rect.containsPoint(loc)){
+        if (rect.containsPoint(loc) && doll->IsMovable()){
             doll->unloadGirl();
         }
         

@@ -204,7 +204,14 @@ void GameRole::initListener(){
         auto role2 = contact.getShapeB()->getBody()->getNode();
         
         if (role1->getName() == GameRoleName::Doll && role2->getName() == "Water"){
-            doAction(GameRoleState::State::Drown);
+            auto doll = dynamic_cast<GameRole*>(role1);
+            if (doll){
+                doll->doAction(GameRoleState::State::Drown);
+                return true;
+            }
+        }else if (role1->getName() == GameRoleName::Girl && role2->getName() == "Water"){
+            auto doll = dynamic_cast<GameRole*>(role1->getParent()->getChildByName(GameRoleName::Doll));
+            doll->loadGirl();
             return true;
         }
         
@@ -216,8 +223,11 @@ void GameRole::initListener(){
         auto role2 = contact.getShapeB()->getBody()->getNode();
         
         if (role1->getName() == GameRoleName::Doll && role2->getName() == "Water"){
-            doAction(GameRoleState::State::Idle);
-            return true;
+            auto doll = dynamic_cast<GameRole*>(role1);
+            if (doll){
+                doAction(GameRoleState::State::Idle);
+                return true;
+            }
         }
         
         return false;
