@@ -17,7 +17,7 @@
 #define WEATHER_SUNNY "Sunny"
 #define WEATHER_RAINY "Rainy"
 #define INTERACTION_MESSAGE_RANGE 50
-#define INTERACTION_ITEM_RANGE 100
+#define INTERACTION_ITEM_RANGE 130
 #define DOLL_ZORDER 1001
 #define ROLE_ZORDER 1000
 #define INTERACTION_ZORDER 999
@@ -28,6 +28,7 @@ using namespace std;
 
 class GameScene : public cocos2d::Layer
 {
+    
 public:
     std::string weather;
     cocos2d::LayerColor* weatherLayer;

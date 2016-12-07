@@ -602,7 +602,7 @@ bool GameScene::initRole(){
         else
             addChild(roleSprite, ROLE_ZORDER, role["name"].asString());
         
-        roleSprite->setScale(2*pixelPerTile/roleSprite->getContentSize().height);
+        roleSprite->setScale(1.2*pixelPerTile/roleSprite->getContentSize().width);
         roleSprite->setPosition(origin + Vec2(role["x"].asInt()*scale, role["y"].asInt()*scale));
     }
     
