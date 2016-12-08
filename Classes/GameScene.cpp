@@ -99,9 +99,7 @@ bool GameScene::init()
 }
 
 void GameScene::updateWeather(float dt){
-    log("I am updating weather~");
     ParticleSystem* rain = static_cast<ParticleSystem*>(this->getChildByName("rain"));
-    log("Rain EmissionRate: %f", rain->getEmissionRate());
     if (weather == WEATHER_SUNNY){
         if (rain && (rain->getEmissionRate() > 200)){
             rain->setEmissionRate(200);
@@ -602,7 +600,7 @@ bool GameScene::initRole(){
         else
             addChild(roleSprite, ROLE_ZORDER, role["name"].asString());
         
-        roleSprite->setScale(1.2*pixelPerTile/roleSprite->getContentSize().width);
+        roleSprite->setScale(1.0*pixelPerTile/(roleSprite->getContentSize().width/2));
         roleSprite->setPosition(origin + Vec2(role["x"].asInt()*scale, role["y"].asInt()*scale));
     }
     
@@ -616,7 +614,6 @@ bool GameScene::initListener(){
     
     touchLayerListener->onTouchBegan = [this](Touch* touch, Event* event){
         auto role = dynamic_cast<GameRole*>(getChildByName(GameRoleName::Doll));
-        log("I will move");
         if (role == NULL)
             return false;
         

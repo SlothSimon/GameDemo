@@ -34,7 +34,7 @@ bool GameScene_5::initSpecfic(){
             if (doll == NULL)
                 return false;
             
-            if (doll->getPosition().distance(touch->getLocation()) <= INTERACTION_MESSAGE_RANGE){
+            if (doll->getPosition().distance(touch->getLocation()) <= INTERACTION_MESSAGE_RANGE && doll->IsMovable()){
                 doll->loadGirl();
             }
             else

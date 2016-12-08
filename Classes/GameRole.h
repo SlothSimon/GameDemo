@@ -35,6 +35,7 @@ public:
     
     void loadGirl();
     void unloadGirl();
+    inline bool isWithGirl() const {return withGirl;};
     
     bool IsMovable() const;
     

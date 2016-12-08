@@ -32,10 +32,7 @@ void StateWalk::execute(GameRole* role, EventCustom* event){
         }else
         role->think(*cont);
     }
-    else if (eventName == GameRoleState::State::Drown){
-        role->drown();
-        role->changeState(new StateDrown());
-    }else if (eventName == GameRoleState::State::Cry){
+    else if (eventName == GameRoleState::State::Cry){
         role->cry();
         role->changeState(new StateCry());
     }

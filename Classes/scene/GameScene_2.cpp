@@ -73,7 +73,7 @@ bool GameScene_2::initSpecfic(){
                     pushCinematic(new Cinematic(girl, GameRoleState::State::Say, -1, GameRoleState::SayContent::Story2));
                     pushCinematic(new Cinematic(girl, GameRoleState::State::Say, -1, GameRoleState::SayContent::Cry));
                     isFirstTalk = false;
-                }else{
+                }else if (doll->IsMovable()){
                     doll->loadGirl();
                 }
             }

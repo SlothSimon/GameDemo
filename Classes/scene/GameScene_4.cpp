@@ -37,7 +37,7 @@ bool GameScene_4::initSpecfic(){
             if (doll == NULL)
                 return false;
             
-            if (doll->getPosition().distance(touch->getLocation()) <= INTERACTION_MESSAGE_RANGE){
+            if (doll->getPosition().distance(touch->getLocation()) <= INTERACTION_MESSAGE_RANGE && doll->IsMovable()){
                 doll->loadGirl();
             }
             else
@@ -64,9 +64,22 @@ bool GameScene_4::initSpecfic(){
 
 
 void GameScene_4::enterStage(){
-    GameScene::enterStage();
-    saveStage(5);
-    Director::getInstance()->replaceScene(TransitionFade::create(2, GameScene_5::createScene()));
+    auto doll = dynamic_cast<GameRole*>(getChildByName(GameRoleName::Doll));
+    auto girl = dynamic_cast<GameRole*>(getChildByName(GameRoleName::Girl));
+    
+    if (girl->getPosition().distance(doll->getPosition()) <= 50 || doll->isWithGirl()){
+        GameScene::enterStage();
+        saveStage(5);
+        Director::getInstance()->replaceScene(TransitionFade::create(2, GameScene_5::createScene()));
+    }else{
+//        auto act = MoveBy::create(1.0f, Vec2(-doll->getContentSize().width*doll->getScale(),0));
+        pushCinematic(new Cinematic(girl, GameRoleState::State::Say, -1, GameRoleState::SayContent::Cry));
+        if (!doll->isFlippedX())
+            doll->turnAround();
+//        doll->runAction(act);
+        doll->doAction(GameRoleState::State::Idle);
+        doll->getPhysicsBody()->setVelocity(Vec2(-80, 0));
+    }
 }
 
 void GameScene_4::updateFire(float dt){

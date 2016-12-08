@@ -28,6 +28,8 @@ GameRole* GameRole::create(const string & roleName)
         role->setName(roleName);
         role->initAnim();
         role->setAnchorPoint(Vec2(0.5,0));
+        
+        // TODO: 应当把所有资源只加载一次，避免重复加载吃内存
         role->origText = role->getTexture();
         role->initPhysicsBody();
         role->mFSM = GameRoleFSM::createWithGameRole(role);
@@ -46,11 +48,12 @@ void GameRole::initAnim(){
     if (getName() == GameRoleName::Doll){
         addAnim("drown");
         addAnim("walkwithgirl");
+        addAnim("drownwithgirl");
     }
 }
 
 void GameRole::initPhysicsBody(){
-    auto body = PhysicsBody::createCircle(getContentSize().width / 2, PhysicsMaterial(1, 0, 1));//创建一个附加在精灵身体上的圆形物理body
+    auto body = PhysicsBody::createCircle(getContentSize().width / 4, PhysicsMaterial(1, 0, 1));//创建一个附加在精灵身体上的圆形物理body
     if (getName() == GameRoleName::Doll){
         body->setContactTestBitmask(0xFF);
         body->setCategoryBitmask(0x0F);
@@ -61,6 +64,7 @@ void GameRole::initPhysicsBody(){
         body->setCollisionBitmask(0xF0);
     }
     
+    body->setPositionOffset(Vec2(0.5, 0.3));
     body->setMass(999);
     body->setRotationEnable(false);
     setPhysicsBody(body);
@@ -79,7 +83,7 @@ void GameRole::addAnim(const string & animName){
         }
     }
     anim->setRestoreOriginalFrame(true);
-    anim->setDelayPerUnit(0.3/3.0);
+    anim->setDelayPerUnit(0.4/4.0);
     anim->setLoops(-1);
     AnimationCache::getInstance()->addAnimation(anim, getName() + "_" + animName);
 }
@@ -143,20 +147,72 @@ void GameRole::walk(const Vec2 & pos){
 }
 
 void GameRole::idle(){
-    stopActionByTag(1011);
     
-    float speedY = getPhysicsBody()->getVelocity().y;
+    stopActionByTag(1011);
+
+    auto physicsbody = getPhysicsBody();
+    float speedY = physicsbody->getVelocity().y;
     speedY = speedY <= 0 ? speedY : 0;
-    getPhysicsBody()->setVelocity(Vec2(0, speedY));
-    getPhysicsBody()->setSurfaceVelocity(Vec2(0, 0));
-    setTexture(origText);
+    physicsbody->setVelocity(Vec2(0, speedY));
+    physicsbody->setSurfaceVelocity(Vec2(0, 0));
+    if (!_isMovable){
+        if (getName() == GameRoleName::Doll){
+            Animate * drown = nullptr;
+            if (withGirl){
+                drown = Animate::create(AnimationCache::getInstance()->getAnimation(getName() + "_drownwithgirl"));
+                setTexture("roles/doll_standwithgirl.png");
+            }
+            else{
+                drown = Animate::create(AnimationCache::getInstance()->getAnimation(getName() + "_drown"));
+                setTexture("roles/doll_stand.png");
+            }
+            origText = getTexture();
+            drown->getAnimation()->setLoops(1);
+            drown->getAnimation()->setRestoreOriginalFrame(false);
+            physicsbody->setDynamic(true);
+            physicsbody->setGravityEnable(false);
+            runAction(Sequence::create(drown->reverse(),
+                                       CallFunc::create([physicsbody]{
+                physicsbody->setGravityEnable(true);
+            }),
+                                       NULL));
+        }
+    }else{
+        setTexture(origText);
+    }
     _isMovable = true;
 }
 
 void GameRole::drown(){
-    getPhysicsBody()->setVelocity(Vec2::ZERO);
-    getPhysicsBody()->setSurfaceVelocity(Vec2::ZERO);
-    stopAllActions();
+    static int count = 0;
+    auto physicsbody = getPhysicsBody();
+    physicsbody->setVelocity(Vec2::ZERO);
+    physicsbody->setSurfaceVelocity(Vec2::ZERO);
+    stopActionByTag(1011);
+    setTexture(origText);
+
+    if (_isMovable){
+        if (getName() == GameRoleName::Doll){
+            Animate * drown = nullptr;
+            if (withGirl){
+                drown = Animate::create(AnimationCache::getInstance()->getAnimation(getName() + "_drownwithgirl"));
+            }
+            else{
+                drown = Animate::create(AnimationCache::getInstance()->getAnimation(getName() + "_drown"));
+            }
+            drown->getAnimation()->setLoops(1);
+            drown->getAnimation()->setRestoreOriginalFrame(false);
+//            drown = Animate::create(AnimationCache::getInstance()->getAnimation(getName() + "_walk"));
+//            runAction(Sequence::create(
+//                                    MoveBy::create(1.0f, Vec2(getPosition().x - getPhysicsBody()->getPosition().x, 0)),
+//                                    CallFunc::create([this]{
+//                _isMovable = false;}),
+//                                       NULL));
+            runAction(drown);
+            if (count == 0)
+                runAction(drown->clone());
+        }
+    }
     _isMovable = false;
 }
 
@@ -170,7 +226,7 @@ void GameRole::think(const string & content, CallFunc* callback){
         thinkbubble = Sprite::create(ImagePath::getBubblePath(content));
         // This is a relative postion
         thinkbubble->setPosition(getContentSize().width/2, getContentSize().height*1.5);
-        thinkbubble->setScale(this->getContentSize().width/thinkbubble->getContentSize().width/4);
+        thinkbubble->setScale(0.8);
         
         addChild(thinkbubble);
         thinkbubble->setName("bubble");
@@ -206,6 +262,8 @@ void GameRole::initListener(){
         if (role1->getName() == GameRoleName::Doll && role2->getName() == "Water"){
             auto doll = dynamic_cast<GameRole*>(role1);
             if (doll){
+                log("Drown: %f, %f", getPhysicsBody()->getPosition().x, getPhysicsBody()->getPosition().y);
+                log("Drown:Sprite: %f, %f", getPosition().x, getPosition().y);
                 doll->doAction(GameRoleState::State::Drown);
                 return true;
             }
@@ -218,6 +276,11 @@ void GameRole::initListener(){
         return false;
     };
     
+    contactListener->onContactPreSolve = [](PhysicsContact & contact, PhysicsContactPreSolve & solve){
+        solve.setRestitution(0);
+        return true;
+    };
+    
     contactListener->onContactSeparate = [this](PhysicsContact & contact){
         auto role1 = contact.getShapeA()->getBody()->getNode();
         auto role2 = contact.getShapeB()->getBody()->getNode();
@@ -225,6 +288,8 @@ void GameRole::initListener(){
         if (role1->getName() == GameRoleName::Doll && role2->getName() == "Water"){
             auto doll = dynamic_cast<GameRole*>(role1);
             if (doll){
+                log("Idle: %f, %f", getPhysicsBody()->getPosition().x, getPhysicsBody()->getPosition().y);
+                log("Idle:Sprite: %f, %f", getPosition().x, getPosition().y);
                 doAction(GameRoleState::State::Idle);
                 return true;
             }
@@ -233,7 +298,8 @@ void GameRole::initListener(){
         return false;
     };
     
-    Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(contactListener, this);
+    if (getName() == GameRoleName::Doll)
+        Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(contactListener, this);
 }
 
 void GameRole::changeState(State *state) const {
@@ -280,18 +346,20 @@ void GameRole::unfollow(){
 }
 
 void GameRole::fly(Node * flynode){
-    flyNode = flynode;
-    getPhysicsBody()->setGravityEnable(false);
-    runAction(Sequence::create(
-                               MoveTo::create(1, getPosition() + Vec2(0, 20)),
-                             Repeat::create(Sequence::create(MoveBy::create(1, Vec2(0,5)),
-                                                             MoveBy::create(1, Vec2(0,-5)),
-                                                             NULL),
-                                            -1),
-                             NULL));
-    schedule(schedule_selector(GameRole::updateFly), 0.5f, kRepeatForever, 0);
-    auto bt = static_cast<Button*>(getParent()->getChildByName("sideBar")->getChildByName("rain"));
-    bt->setEnabled(false);
+    if (flyNode == nullptr){
+        flyNode = flynode;
+        getPhysicsBody()->setGravityEnable(false);
+        runAction(Sequence::create(
+                                   MoveTo::create(1, getPosition() + Vec2(0, 25)),
+                                 Repeat::create(Sequence::create(MoveBy::create(1, Vec2(0,5)),
+                                                                 MoveBy::create(1, Vec2(0,-5)),
+                                                                 NULL),
+                                                -1),
+                                 NULL));
+        schedule(schedule_selector(GameRole::updateFly), 0.5f, kRepeatForever, 0);
+        auto bt = static_cast<Button*>(getParent()->getChildByName("sideBar")->getChildByName("rain"));
+        bt->setEnabled(false);
+    }
 }
 
 void GameRole::unfly(){
@@ -326,14 +394,14 @@ void GameRole::addItem(const string &itemName, int count){
         for (int i = 0 ; i < count ; i++){
             auto bl = Sprite::create(ImagePath::Balloon);
             if (bl){
-                bl->setScale(1/getScale());
+                bl->setScale(5);
                 bl->setPosition(getContentSize().width/2, getContentSize().height*0.8);
                 bl->setOpacity(0);
                 bl->setName("balloon");
                 bl->setAnchorPoint(Vec2(0.4, 0));
                 bl->setRotation(-30 + 15 * (itemList[itemName] + i));
                 addChild(bl);
-                bl->setFlippedX(true);
+                bl->setFlippedX(!isFlippedX());
                 bl->setLocalZOrder(-1);
                 bl->runAction(FadeIn::create(1));
             }
@@ -350,7 +418,10 @@ void GameRole::loadGirl(){
 //        setTexture("roles/doll_standwithgirl.png");
         getParent()->getChildByName(GameRoleName::Girl)->runAction(Sequence::create(FadeOut::create(1),
                                                                                     CallFunc::create([this]{
-                                                                                        setTexture("roles/doll_standwithgirl.png");
+                                                                                        if (_isMovable)
+                                                                                            setTexture("roles/doll_standwithgirl.png");
+                                                                                        else
+                                                                                            setTexture("roles/doll_drownwithgirl_4.png");
                                                                                         origText = getTexture();
                                                                                     }),
                                                                                     NULL));
@@ -360,7 +431,10 @@ void GameRole::loadGirl(){
 void GameRole::unloadGirl(){
     if (getName() == GameRoleName::Doll && withGirl){
         withGirl = false;
-        setTexture("roles/doll_stand.png");
+        if (_isMovable)
+            setTexture("roles/doll_stand.png");
+        else
+            setTexture("roles/doll_drown_4.png");
         origText = getTexture();
         auto girl = getParent()->getChildByName(GameRoleName::Girl);
         girl->setPosition(getPosition());
