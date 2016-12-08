@@ -85,9 +85,9 @@ void GameScene_5::doAfterAddItem(const string & itemName){
             pushCinematic(new Cinematic(doll, GameRoleState::State::Say, -1, GameRoleState::SayContent::Think));
             doll->runAction(Sequence::create(DelayTime::create(8),
                                              CallFunc::create([this]{
-                                                GameScene::enterStage();
+                                                enterStage();
                                                 UserDefault::getInstance()->setBoolForKey("End2", true);
-                                                Director::getInstance()->replaceScene(TransitionFade::create(2, EndScene::createScene("End 2: Le ballon rouge")));
+                                                Director::getInstance()->replaceScene(TransitionFade::create(2, EndScene::createScene("End 2: The Red Balloon")));
             }),
                                              NULL));
         }

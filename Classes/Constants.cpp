@@ -65,7 +65,7 @@ const string GameRoleState::SayContent::House = "say_house";
 
 
 const char* MusicPath::normalBGM   = "music/firstlove_light.mp3";
-const char* MusicPath::RainEffect  = "music/rain.wav";
+const char* MusicPath::RainEffect  = "music/rain.m4a";
 const char* MusicPath::FireEffect  = "music/fire.wav";
 
 const char* ImagePath::MenuButton  = "button_menu.png";
